@@ -11,7 +11,7 @@ Budgeteers
 ### Team Members
 
 - Nehang Patel (CS) - patel3ng@mail.uc.edu
-- Shruti Asolkar (CS) - alsolkasy@mail.uc.edu
+- Shruti Asolkar (CS) - asolkasy@mail.uc.edu
 - Tharun Swaminathan (CS) - ravikutn@mail.uc.edu
  
 
