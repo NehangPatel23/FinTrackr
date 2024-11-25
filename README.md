@@ -1,6 +1,6 @@
-# Flutter Expense Tracker App
+# FinTrackr
 
-A simple Flutter Expense Tracker app that lets users to add and track their categorized expenses, such as Entertainment, Travel, Food, and so on.
+FinTrackr is a comprehensive personal finance management app designed to help users track their expenses, monitor subscriptions, set budgeting goals, and receive personalized stock market investment recommendations.
 
 
 ## Table of Contents
