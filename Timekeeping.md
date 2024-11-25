@@ -6,15 +6,21 @@ A record of hours worked and tasks completed.
 ---
 
 ## Table of Contents
-- [Week 1](#week-1)
-- [Week 2](#week-2)
-- [Week 3](#week-3)
-- [Week 4](#week-4)
-- [Week 5](#week-5)
-- [Week 6](#week-6)
-- [Week 7](#week-7)
-- [Week 8](#week-8)
-- [Summary](#summary)
+- [Timekeeping Log by Tharun Ravi Kumar](#timekeeping-log-by-tharun-ravi-kumar)
+  - [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Week 1](#week-1)
+  - [](#)
+  - [Week 2](#week-2)
+  - [](#-1)
+  - [Week 3](#week-3)
+  - [](#-2)
+  - [Week 4](#week-4)
+  - [](#-3)
+  - [Week 5](#week-5)
+  - [](#-4)
+  - [Week 6](#week-6)
+  - [](#-5)
 
 ---
 
@@ -108,5 +114,3 @@ A record of hours worked and tasks completed.
 - Total Hours: 45 minutes
 <br></br>
 ---
-
-## Summary
