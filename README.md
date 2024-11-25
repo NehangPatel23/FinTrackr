@@ -2,25 +2,26 @@
 
 FinTrackr is a comprehensive personal finance management app designed to help users track their expenses, monitor subscriptions, set budgeting goals, and receive personalized stock market investment recommendations.
 
-
 ## Table of Contents
 
-1. [Getting Started](#getting-started)
+- [FinTrackr](#fintrackr)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
-2. [Usage](#usage)
+  - [Usage](#usage)
     - [Home Screen](#home-screen)
     - [Adding Expenses](#adding-expenses)
-3. [Next Steps](#next-steps)
-4. [Contributing](#contributing)
-5. [Contact](#contact)
-6. [Credits](#credits)
-
+  - [Next Steps](#next-steps)
+  - [Contributing](#contributing)
+  - [Contact](#contact)
+  - [Credits](#credits)
 
 ## Features
 
-* User interface built with Flutter for a smooth and responsive experience.
-* Ability to add and track expenses - categorized and dated for easier tracking.
+- User interface built with Flutter for a smooth and responsive experience.
+- Ability to add and track expenses - categorized and dated for easier tracking.
 
 ## Getting Started
 
@@ -35,7 +36,6 @@ These instructions will help you set up and run the Flutter application locally 
 - **Git:** Make sure you have [Git](https://git-scm.com/) installed on your device to clone the
   repository. (This step is optional, in case you are downloading the ZIP file or not contributing
   to the repository).
-
 
 ### Installation
 
@@ -54,7 +54,7 @@ These instructions will help you set up and run the Flutter application locally 
     repository. Then, run the following command:
 
    ```bash
-   git clone https://github.com/NehangPatel23/flutter-expense-tracker.git
+   git clone https://github.com/NehangPatel23/FinTrackr
    ```
 
 <br>
@@ -66,36 +66,34 @@ These instructions will help you set up and run the Flutter application locally 
     the ```pubspec.yaml``` file:
 
     ```bash
-    cd flutter-expense-tracker
+    cd fintrackr
     flutter pub get
     ```
 
-3. **Open the project in your IDE.**
+2. **Open the project in your IDE.**
 
     Open your chosen IDE and open the project directory. You can install the Flutter and Dart extensions
     for a smoother development experience.
-    
+
     For example, if you're using Visual Studio Code, you can open the project by running:
 
     ```bash
     code .
     ```
 
-4. **Connect a physical device or start an emulator.**
+3. **Connect a physical device or start an emulator.**
 
     Ensure that you have either a physical device connected via USB debugging or an emulator running. You can use any device - iOS or Android.
 
     Note: For iOS devices, the minimum required version to properly run the application is iOS 12.
 
-
-3. **Run the app:**
+4. **Run the app:**
 
     Run the following command to build and launch the app on your connected device or emulator.
 
     ```bash
     flutter run
     ```
-
 
 ## Usage
 
@@ -121,7 +119,7 @@ Clicking on the round ```+``` button next to the ```Home``` button on the bottom
 
 ![alt text](assets/add_expense.png)
 
-Here, the user can add expenses they make and categorize them using the various categories displayed under the 'Categories' menu. 
+Here, the user can add expenses they make and categorize them using the various categories displayed under the 'Categories' menu.
 
 If they are not satisfied with the categories mentioned here, they also have the option to create a new category by clicking the '+' icon on the right side of the Category menu:
 
@@ -150,7 +148,6 @@ Once they click on 'Save', this expense gets added to the Transactions List on t
 
 ![alt text](assets/updated_home_page.png)
 
-
 That's how a user would typically add an expense in the app.
 
 The 'Stats' menu would show the transaction statistics like the spending patterns, which would be depicted as a graph like this:
@@ -158,7 +155,6 @@ The 'Stats' menu would show the transaction statistics like the spending pattern
 ![alt text](assets/stats.png)
 
 Again, that is a feature which I still need to implement.
-
 
 ## Next Steps
 
@@ -168,7 +164,6 @@ These are the next steps to improve the app:
 - Make the Balance Card dynamic.
 - Add the 'Income' feature to keep track of any income the user wants to log.
 - Implement the statistics menu.
-
 
 ## Contributing
 
@@ -182,9 +177,8 @@ repository and submit a pull request with your changes. Please adhere to the fol
 ## Contact
 
 If you have any questions, feedback, or suggestions regarding this project, please feel free to
-contact me via email at patel3ng@mail.uc.edu.
-
+contact me via email at <patel3ng@mail.uc.edu>.
 
 ## Credits
 
-This project was developed taking inspiration from [this Dribble design](https://dribbble.com/shots/15560984-Daily-Expense-Tracker), and using this [YouTube tutorial](https://www.youtube.com/watch?v=pyivtUs4ANo) for help with implementing the BLoCs and debugging issues I encountered while working on the app myself.
+This project was developed taking inspiration from [this Dribble design](https://dribbble.com/shots/15560984-Daily-Expense-Tracker), and using this [YouTube tutorial](https://www.youtube.com/watch?v=pyivtUs4ANo) for help with implementing the BLoC architecture.
