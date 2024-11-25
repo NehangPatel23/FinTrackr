@@ -415,3 +415,5 @@ contact us via email at:
 - Meeting Notes - **LINK TO COME LATER**
 
 ### Semester-wide efforts for each team member
+
+The semester-wide efforts for each team member can be found in the ['Fall Timekeeping' Markdown file](./Fall-Timekeeping.md).
