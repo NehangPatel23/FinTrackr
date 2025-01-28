@@ -53,8 +53,7 @@ class MainScreen extends StatelessWidget {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
-                              color:
-                                  Theme.of(context).colorScheme.onBackground),
+                              color: Theme.of(context).colorScheme.onSurface),
                         )
                       ],
                     ),
@@ -194,7 +193,7 @@ class MainScreen extends StatelessWidget {
                   'Transactions',
                   style: TextStyle(
                       fontSize: 16,
-                      color: Theme.of(context).colorScheme.onBackground,
+                      color: Theme.of(context).colorScheme.onSurface,
                       fontWeight: FontWeight.bold),
                 ),
                 GestureDetector(
@@ -241,7 +240,7 @@ class MainScreen extends StatelessWidget {
                                     Image.asset(
                                       'assets/${expenses[index].category.icon}.png',
                                       scale: 2,
-                                      color: Colors.white,
+                                      color: Colors.black54,
                                     ),
                                   ],
                                 ),
@@ -252,7 +251,7 @@ class MainScreen extends StatelessWidget {
                                       fontSize: 14,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onBackground,
+                                          .onSurface,
                                       fontWeight: FontWeight.w500),
                                 ),
                               ],
@@ -266,7 +265,7 @@ class MainScreen extends StatelessWidget {
                                       fontSize: 14,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onBackground,
+                                          .onSurface,
                                       fontWeight: FontWeight.w300),
                                 ),
                                 Text(
@@ -276,7 +275,7 @@ class MainScreen extends StatelessWidget {
                                       fontSize: 14,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onBackground,
+                                          .onSurface,
                                       fontWeight: FontWeight.w200),
                                 ),
                               ],

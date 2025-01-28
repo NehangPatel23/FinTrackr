@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "734560518340",
+    "project_id": "fintrack-app-6a860",
+    "storage_bucket": "fintrack-app-6a860.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:734560518340:android:e6b5e475662521947b4991",
+        "android_client_info": {
+          "package_name": "com.budgeteers.fintrackrapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTsc856eJtciiksvbURFK4nKKnJSAm-go"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

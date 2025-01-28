@@ -1,12 +1,13 @@
 import 'package:expense_repository/expense_repository.dart';
-import 'package:expense_tracker/screens/add_expense/blocs/create_expense/create_expense_bloc.dart';
-import 'package:expense_tracker/screens/add_expense/blocs/get_categories/get_categories_bloc.dart';
-import 'package:expense_tracker/screens/add_expense/views/category_creation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
+
+import '../blocs/create_expense/create_expense_bloc.dart';
+import '../blocs/get_categories/get_categories_bloc.dart';
+import 'category_creation.dart';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -40,16 +41,16 @@ class _AddExpenseState extends State<AddExpense> {
           isLoading = true;
         } else {
           const Center(
-            child: Text('An Error Occured!'),
+            child: Text('An Error Occurred!'),
           );
         }
       },
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
           ),
           body: BlocBuilder<GetCategoriesBloc, GetCategoriesState>(
             builder: (context, state) {
