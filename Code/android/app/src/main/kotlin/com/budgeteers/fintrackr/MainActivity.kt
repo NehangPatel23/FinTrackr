@@ -1,4 +1,4 @@
-package com.example.expense_tracker
+package com.budgeteers.fintrackr
 
 import io.flutter.embedding.android.FlutterActivity
 

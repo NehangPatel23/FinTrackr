@@ -17,6 +17,7 @@ class FirebaseExpenseRepo implements ExpenseRepository {
           .doc(category.categoryId)
           .set(category.toEntity().toDocument());
     } catch (e) {
+      log("createCategory error");
       log(e.toString());
       rethrow;
     }
@@ -30,6 +31,7 @@ class FirebaseExpenseRepo implements ExpenseRepository {
               (e) => Category.fromEntity(CategoryEntity.fromDocument(e.data())))
           .toList());
     } catch (e) {
+      log("getCategory error");
       log(e.toString());
       rethrow;
     }
@@ -42,6 +44,7 @@ class FirebaseExpenseRepo implements ExpenseRepository {
           .doc(expense.expenseId)
           .set(expense.toEntity().toDocument());
     } catch (e) {
+      log("createExpense error");
       log(e.toString());
       rethrow;
     }
@@ -54,6 +57,7 @@ class FirebaseExpenseRepo implements ExpenseRepository {
           .map((e) => Expense.fromEntity(ExpenseEntity.fromDocument(e.data())))
           .toList());
     } catch (e) {
+      log("getExpense error");
       log(e.toString());
       rethrow;
     }

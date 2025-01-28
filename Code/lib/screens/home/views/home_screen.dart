@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:expense_repository/expense_repository.dart';
-import 'package:expense_tracker/screens/add_expense/blocs/create_category/create_category_bloc.dart';
-import 'package:expense_tracker/screens/add_expense/blocs/create_expense/create_expense_bloc.dart';
-import 'package:expense_tracker/screens/home/blocs/get_expenses/get_expenses_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../add_expense/blocs/create_category/create_category_bloc.dart';
+import '../../add_expense/blocs/create_expense/create_expense_bloc.dart';
 import '../../add_expense/blocs/get_categories/get_categories_bloc.dart';
 import '../../add_expense/views/add_expense.dart';
+import '../blocs/get_expenses_bloc.dart';
 import 'main_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
