@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:expense_repository/expense_repository.dart';
+import 'package:fintrackr/screens/taxes/taxes_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../add_expense/blocs/create_category/create_category_bloc.dart';
@@ -57,49 +58,135 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              var newExpense = await Navigator.push(
-                  context,
-                  MaterialPageRoute<Expense>(
-                    builder: (BuildContext context) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider(
-                          create: (context) =>
-                              CreateCategoryBloc(FirebaseExpenseRepo()),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                builder: (context) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          leading:
+                              const Icon(CupertinoIcons.money_dollar_circle),
+                          title: const Text("Add Expense"),
+                          onTap: () async {
+                            Navigator.pop(context); // Close the bottom sheet
+                            var newExpense = await Navigator.push(
+                              context,
+                              MaterialPageRoute<Expense>(
+                                builder: (BuildContext context) =>
+                                    MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider(
+                                      create: (context) => CreateCategoryBloc(
+                                          FirebaseExpenseRepo()),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) => GetCategoriesBloc(
+                                          FirebaseExpenseRepo())
+                                        ..add(GetCategories()),
+                                    ),
+                                    BlocProvider(
+                                      create: (context) => CreateExpenseBloc(
+                                          FirebaseExpenseRepo()),
+                                    ),
+                                  ],
+                                  child: const AddExpense(),
+                                ),
+                              ),
+                            );
+                            if (newExpense != null) {
+                              setState(() {
+                                state.expenses.insert(0, newExpense);
+                              });
+                            }
+                          },
                         ),
-                        BlocProvider(
-                          create: (context) =>
-                              GetCategoriesBloc(FirebaseExpenseRepo())
-                                ..add(GetCategories()),
-                        ),
-                        BlocProvider(
-                          create: (context) =>
-                              CreateExpenseBloc(FirebaseExpenseRepo()),
+                        const Divider(),
+                        ListTile(
+                          leading:
+                              const Icon(CupertinoIcons.chart_bar_alt_fill),
+                          title: const Text("Taxes"),
+                          onTap: () {
+                            Navigator.pop(context); // Close the bottom sheet
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TaxesPage()),
+                            );
+                          },
                         ),
                       ],
-                      child: const AddExpense(),
                     ),
-                  ));
-
-              if (newExpense != null) {
-                setState(() {
-                  state.expenses.insert(0, newExpense);
-                });
-              }
+                  );
+                },
+              );
             },
             shape: const CircleBorder(),
             child: Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(colors: [
-                      Theme.of(context).colorScheme.tertiary,
-                      Theme.of(context).colorScheme.secondary,
-                      Theme.of(context).colorScheme.primary
-                    ], transform: const GradientRotation(pi / 4))),
-                child: const Icon(CupertinoIcons.add)),
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(colors: [
+                  Theme.of(context).colorScheme.tertiary,
+                  Theme.of(context).colorScheme.secondary,
+                  Theme.of(context).colorScheme.primary,
+                ], transform: const GradientRotation(pi / 4)),
+              ),
+              child: const Icon(CupertinoIcons.add),
+            ),
           ),
+
+//           floatingActionButton: FloatingActionButton(
+//             onPressed: () async {
+//               var newExpense = await Navigator.push(
+//                   context,
+//                   MaterialPageRoute<Expense>(
+//                     builder: (BuildContext context) => MultiBlocProvider(
+//                       providers: [
+//                         BlocProvider(
+//                           create: (context) =>
+//                               CreateCategoryBloc(FirebaseExpenseRepo()),
+//                         ),
+//                         BlocProvider(
+//                           create: (context) =>
+//                               GetCategoriesBloc(FirebaseExpenseRepo())
+//                                 ..add(GetCategories()),
+//                         ),
+//                         BlocProvider(
+//                           create: (context) =>
+//                               CreateExpenseBloc(FirebaseExpenseRepo()),
+//                         ),
+//                       ],
+//                       child: const AddExpense(),
+//                     ),
+//                   ));
+
+//               if (newExpense != null) {
+//                 setState(() {
+//                   state.expenses.insert(0, newExpense);
+//                 });
+//               }
+//             },
+//             shape: const CircleBorder(),
+//             child: Container(
+//                 height: 60,
+//                 width: 60,
+//                 decoration: BoxDecoration(
+//                     shape: BoxShape.circle,
+//                     gradient: LinearGradient(colors: [
+//                       Theme.of(context).colorScheme.tertiary,
+//                       Theme.of(context).colorScheme.secondary,
+//                       Theme.of(context).colorScheme.primary
+//                     ], transform: const GradientRotation(pi / 4))),
+//                 child: const Icon(CupertinoIcons.add)),
+//           ),
           body: index == 0 ? MainScreen(state.expenses) : const StatScreen(),
         );
       } else {
