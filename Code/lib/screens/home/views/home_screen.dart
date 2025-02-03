@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:expense_repository/expense_repository.dart';
 import 'package:fintrackr/screens/taxes/taxes_page.dart';
+import 'package:fintrackr/screens/stocks/stocks_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../add_expense/blocs/create_category/create_category_bloc.dart';
@@ -118,6 +119,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => TaxesPage()),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          leading: 
+                              const Icon(CupertinoIcons.graph_square),
+                          title: const Text("Stocks"),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => StockPage()),
                             );
                           },
                         ),
