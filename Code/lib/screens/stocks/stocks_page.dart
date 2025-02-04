@@ -73,6 +73,26 @@ class _StockPageState extends State<StockPage> {
     }
   }
 
+  Future<Map<String, dynamic>?> fetchCompanyInfo(String ticker) async {
+    final response = await http.get(Uri.parse(
+        '$apiUrl?function=OVERVIEW&symbol=$ticker&apikey=$apiKey'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      return {
+        "Name": data["Name"] ?? "N/A",
+        "Description": data["Description"] ?? "No description available",
+        "Industry": data["Industry"] ?? "N/A",
+        "MarketCap": data["MarketCapitalization"] ?? "N/A",
+        "EBITDA": data["EBITDA"] ?? "N/A",
+        "Revenue": data["RevenueTTM"] ?? "N/A"
+      };
+    } else {
+      return null;
+    }
+  }
+
   void toggleFavorite(int index) {
     setState(() {
       stocks[index].isFavorite = !stocks[index].isFavorite;
@@ -86,14 +106,31 @@ class _StockPageState extends State<StockPage> {
     });
   }
 
-  void showStockDetails(Stock stock) {
+  void showStockDetails(Stock stock) async {
+    Map<String, dynamic>? companyInfo = await fetchCompanyInfo(stock.name);
+
+    companyInfo ??= {
+      "Name": stock.name,
+      "Description": "No description available",
+      "Industry": "N/A",
+      "MarketCap": "N/A",
+      "EBITDA": "N/A",
+      "Revenue": "N/A"
+    };
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(stock.name),
+            Expanded( 
+              child: Text(
+                (companyInfo ?? {})["Name"] ?? "N/A",
+                style: TextStyle(fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             IconButton(
               icon: Icon(Icons.close),
               onPressed: () => Navigator.pop(context),
@@ -103,21 +140,56 @@ class _StockPageState extends State<StockPage> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Stock Price Chart
             SizedBox(
-              height: 200, // Set height for chart
-              child: StockChart(ticker: stock.name), // Load real-time chart
+              height: 200,
+              child: StockChart(ticker: stock.name),
             ),
-            SizedBox(height: 10),
-            Text('Price: \$${stock.price.toStringAsFixed(2)}'),
-            Text('Change: ${stock.percentChange.toStringAsFixed(2)}% (Δ${stock.delta})'),
+            Divider(),
+
+            // Industry
+            Text(
+              '🏢 Industry: ${(companyInfo ?? {})["Industry"] ?? "N/A"}',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 5),
+
+            // Market Cap
+            Text(
+              '💰 Market Cap: \$${(companyInfo ?? {})["Market Cap"] ?? "N/A"}',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 5),
+
+            // EBITDA & Revenue
+            Text(
+              '📊 EBITDA: \$${(companyInfo ?? {})["EBIDTA"] ?? "N/A"}',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '📈 Revenue (TTM): \$${(companyInfo ?? {})["Revenue"] ?? "N/A"}',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+            Divider(),
+
+            // Description
+            Text(
+              '🌍 About the Company:',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              (companyInfo ?? {})["Description"] ?? "No Description Available",
+              textAlign: TextAlign.justify,
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 13),
+            ),
           ],
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('Close')),
-        ],
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
