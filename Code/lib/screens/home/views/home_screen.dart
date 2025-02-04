@@ -37,10 +37,18 @@ class _HomeScreenState extends State<HomeScreen> {
           bottomNavigationBar: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
             child: BottomNavigationBar(
+                currentIndex: index,
                 onTap: (value) {
-                  setState(() {
-                    index = value;
-                  });
+                  if (value == 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StockPage()),
+                    );
+                  } else {
+                    setState(() {
+                      index = value;
+                    });
+                  }
                 },
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
@@ -53,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   BottomNavigationBarItem(
                       icon: Icon(CupertinoIcons.graph_square,
                           color: index == 1 ? selectedItem : unselectedItem),
-                      label: 'Stats'),
+                      label: 'Stocks'),
                 ]),
           ),
           floatingActionButtonLocation:
@@ -122,19 +130,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
-                        ListTile(
-                          leading: 
-                              const Icon(CupertinoIcons.graph_square),
-                          title: const Text("Stocks"),
-                          onTap: () {
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => StockPage()),
-                            );
-                          },
-                        ),
+                        // ListTile(
+                        //   leading: 
+                        //       const Icon(CupertinoIcons.graph_square),
+                        //   title: const Text("Stocks"),
+                        //   onTap: () {
+                        //     Navigator.pop(context);
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) => StockPage()),
+                        //     );
+                        //   },
+                        // ),
                       ],
                     ),
                   );
