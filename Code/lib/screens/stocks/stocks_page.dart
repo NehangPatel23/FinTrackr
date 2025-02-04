@@ -224,7 +224,6 @@ class _StockPageState extends State<StockPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stocks'),
         actions: [
           IconButton(
             icon: Icon(Icons.info_outline),
@@ -236,11 +235,21 @@ class _StockPageState extends State<StockPage> {
         children: [
           SizedBox(height: 20),
           Center(
-            child: Image.asset(
-              'assets/stocks.png',
-              width: 200,
-              height: 200,
-              fit: BoxFit.contain,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/stocks.png',
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Stocks',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                ),
+              ],
             ),
           ),
           SizedBox(height: 20),
