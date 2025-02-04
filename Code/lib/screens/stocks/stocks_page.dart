@@ -143,7 +143,7 @@ class _StockPageState extends State<StockPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded( 
+            Expanded(
               child: Text(
                 (companyInfo ?? {})["Name"] ?? "N/A",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -156,64 +156,68 @@ class _StockPageState extends State<StockPage> {
             ),
           ],
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: rating.startsWith("🟢") ? Colors.green[100] :
-                       rating.startsWith("🟡") ? Colors.yellow[100] :
-                       rating.startsWith("🔴") ? Colors.red[100] : Colors.grey[300],
-                borderRadius: BorderRadius.circular(10),
+        content: SingleChildScrollView( // ✅ Prevents layout overflow in AlertDialog
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: rating.startsWith("🟢") ? Colors.green[100] :
+                         rating.startsWith("🟡") ? Colors.yellow[100] :
+                         rating.startsWith("🔴") ? Colors.red[100] : Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  "📊 Rating: $rating",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
-              child: Text(
-                "📊 Rating: $rating",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              SizedBox(height: 10),
+
+              // ✅ Fix for StockChart layout issue
+              SizedBox(
+                height: 200,
+                width: double.infinity,
+                child: StockChart(ticker: stock.name),
               ),
-            ),
-            SizedBox(height: 10),
-            SizedBox(
-              height: 200,
-              width: double.infinity,
-              child: StockChart(ticker: stock.name),
-            ),
-            Divider(),
+              Divider(),
 
-            Text(
-              '🏢 Industry: ${(companyInfo ?? {})["Industry"] ?? "N/A"}',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 5),
+              Text(
+                '🏢 Industry: ${(companyInfo ?? {})["Industry"] ?? "N/A"}',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 5),
 
-            Text(
-              '💰 Market Cap: \$${(companyInfo ?? {})["Market Cap"] ?? "N/A"}',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 5),
+              Text(
+                '💰 Market Cap: \$${(companyInfo ?? {})["MarketCap"] ?? "N/A"}', // ✅ Fixed key
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 5),
 
-            Text(
-              '📊 EBITDA: \$${(companyInfo ?? {})["EBIDTA"] ?? "N/A"}',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '📈 Revenue (TTM): \$${(companyInfo ?? {})["Revenue"] ?? "N/A"}',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            Divider(),
+              Text(
+                '📊 EBITDA: \$${(companyInfo ?? {})["EBITDA"] ?? "N/A"}', // ✅ Fixed typo
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '📈 Revenue (TTM): \$${(companyInfo ?? {})["Revenue"] ?? "N/A"}',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+              Divider(),
 
-            Text(
-              '🌍 About the Company:',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              (companyInfo ?? {})["Description"] ?? "No Description Available",
-              textAlign: TextAlign.justify,
-              maxLines: 4,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 13),
-            ),
-          ],
+              Text(
+                '🌍 About the Company:',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                (companyInfo ?? {})["Description"] ?? "No Description Available",
+                textAlign: TextAlign.justify,
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 13),
+              ),
+            ],
+          ),
         ),
       ),
     );
