@@ -75,21 +75,30 @@ class _StockPageState extends State<StockPage> {
   void toggleFavorite(int index) {
     setState(() {
       stocks[index].isFavorite = !stocks[index].isFavorite;
+
+      // Sort: Favorited stocks go to the top, others keep their original order
       stocks.sort((a, b) {
-        if (a.isFavorite == b.isFavorite) {
-          return 0;
-        }
-        return b.isFavorite ? -1 : 1;
+        if (a.isFavorite && !b.isFavorite) return -1; // a comes before b
+        if (!a.isFavorite && b.isFavorite) return 1; // b comes before a
+        return 0; // Keep original order
       });
     });
   }
-
 
   void showStockDetails(Stock stock) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(stock.name),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(stock.name),
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -123,9 +132,9 @@ class _StockPageState extends State<StockPage> {
           SizedBox(height: 20),
           Center(
             child: Image.asset(
-              'assets/stocks-graphic.png',
-              width: 150,
-              height: 150,
+              'assets/stocks.png',
+              width: 200,
+              height: 200,
               fit: BoxFit.contain,
             ),
           ),
