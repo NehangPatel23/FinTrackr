@@ -175,6 +175,7 @@ class _StockPageState extends State<StockPage> {
             SizedBox(height: 10),
             SizedBox(
               height: 200,
+              width: double.infinity,
               child: StockChart(ticker: stock.name),
             ),
             Divider(),
