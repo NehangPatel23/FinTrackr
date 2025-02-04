@@ -28,6 +28,7 @@ class StockPage extends StatefulWidget {
 
 class _StockPageState extends State<StockPage> {
   List<Stock> stocks = [];
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -36,16 +37,37 @@ class _StockPageState extends State<StockPage> {
   }
 
   Future<void> fetchStockData() async {
+    setState(() {
+      isLoading = true;
+    });
+
     final response = await http.get(Uri.parse('$apiUrl?function=TOP_GAINERS_LOSERS&apikey=$apiKey'));
+
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
+
+      // Mergeing multiple stock lists
+      List<dynamic> allStocks = [
+        ...data['top_gainers'],
+        ...data['top_losers'],
+        ...data['most_actively_traded']
+      ];
+
       setState(() {
-        stocks = List.generate(10, (index) => Stock(
-          name: 'Stock ${index + 1}',
-          price: (100 + index * 2).toDouble(),
-          percentChange: (index % 5 - 2).toDouble(),
-          delta: (index % 3 - 1).toDouble(),
-        ));
+        stocks = allStocks.map((stock) {
+          return Stock(
+            name: stock['ticker'],
+            price: double.tryParse(stock['price']) ?? 0.0,
+            percentChange: double.tryParse(stock['change_percentage'].replaceAll('%', '')) ?? 0.0,
+            delta: double.tryParse(stock['change_amount']) ?? 0.0,
+          );
+        }).toList();
+
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
       });
     }
   }
@@ -53,9 +75,15 @@ class _StockPageState extends State<StockPage> {
   void toggleFavorite(int index) {
     setState(() {
       stocks[index].isFavorite = !stocks[index].isFavorite;
-      stocks.sort((a, b) => b.isFavorite ? -1 : a.isFavorite ? 1 : 0);
+      stocks.sort((a, b) {
+        if (a.isFavorite == b.isFavorite) {
+          return 0;
+        }
+        return b.isFavorite ? -1 : 1;
+      });
     });
   }
+
 
   void showStockDetails(Stock stock) {
     showDialog(
@@ -90,20 +118,65 @@ class _StockPageState extends State<StockPage> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: stocks.length,
-        itemBuilder: (context, index) {
-          final stock = stocks[index];
-          return ListTile(
-            title: Text(stock.name),
-            subtitle: Text('Price: \$${stock.price.toStringAsFixed(2)} | Change: ${stock.percentChange.toStringAsFixed(2)}% (Δ${stock.delta})'),
-            trailing: IconButton(
-              icon: Icon(stock.isFavorite ? Icons.star : Icons.star_border),
-              onPressed: () => toggleFavorite(index),
+      body: Column(
+        children: [
+          SizedBox(height: 20),
+          Center(
+            child: Image.asset(
+              'assets/stocks-graphic.png',
+              width: 150,
+              height: 150,
+              fit: BoxFit.contain,
             ),
-            onTap: () => showStockDetails(stock),
-          );
-        },
+          ),
+          SizedBox(height: 20),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: fetchStockData,
+              child: isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: stocks.length,
+                      itemBuilder: (context, index) {
+                        final stock = stocks[index];
+                        return ListTile(
+                          title: Text('${stock.name} (${stock.name})', style: TextStyle(fontWeight: FontWeight.bold)),
+                          // subtitle: Text(
+                          //   'Price: \$${stock.price.toStringAsFixed(2)} | Change: '
+                          //   '${stock.percentChange.toStringAsFixed(2)}% (Δ${stock.delta})',
+                          // ),
+                          subtitle: Row(
+                            children: [
+                              Text(
+                                'Price: \$${stock.price.toStringAsFixed(2)} | Change: ',
+                              ),
+                              Text(
+                                '${stock.percentChange.toStringAsFixed(2)}%',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: stock.percentChange >= 0 ? Colors.green : Colors.red,
+                                ),
+                              ),
+                              Text(
+                                ' (Δ${stock.delta})',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: stock.delta > 0 ? Colors.green : stock.delta < 0 ? Colors.red : Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(stock.isFavorite ? Icons.star : Icons.star_border),
+                            onPressed: () => toggleFavorite(index),
+                          ),
+                          onTap: () => showStockDetails(stock),
+                        );
+                      },
+                    ),
+            ),
+          ),
+        ],
       ),
     );
   }
