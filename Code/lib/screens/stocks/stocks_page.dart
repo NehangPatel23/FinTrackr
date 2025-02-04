@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:fintrackr/screens/stocks/stock_chart.dart';
 import 'dart:convert';
 
 const String apiKey = 'OYNU1LA5APCCQ1I5';
@@ -102,7 +103,10 @@ class _StockPageState extends State<StockPage> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(height: 100, color: Colors.grey[300], child: Center(child: Text('Graph Placeholder'))),
+            SizedBox(
+              height: 200, // Set height for chart
+              child: StockChart(ticker: stock.name), // Load real-time chart
+            ),
             SizedBox(height: 10),
             Text('Price: \$${stock.price.toStringAsFixed(2)}'),
             Text('Change: ${stock.percentChange.toStringAsFixed(2)}% (Δ${stock.delta})'),
