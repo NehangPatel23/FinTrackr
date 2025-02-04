@@ -86,7 +86,8 @@ class _StockPageState extends State<StockPage> {
         "Industry": data["Industry"] ?? "N/A",
         "MarketCap": data["MarketCapitalization"] ?? "N/A",
         "EBITDA": data["EBITDA"] ?? "N/A",
-        "Revenue": data["RevenueTTM"] ?? "N/A"
+        "Revenue": data["RevenueTTM"] ?? "N/A",
+        "PERatio": data["PERatio"] ?? "N/A"
       };
     } else {
       return null;
@@ -97,13 +98,28 @@ class _StockPageState extends State<StockPage> {
     setState(() {
       stocks[index].isFavorite = !stocks[index].isFavorite;
 
-      // Sort: Favorited stocks go to the top, others keep their original order
       stocks.sort((a, b) {
-        if (a.isFavorite && !b.isFavorite) return -1; // a comes before b
-        if (!a.isFavorite && b.isFavorite) return 1; // b comes before a
-        return 0; // Keep original order
+        if (a.isFavorite && !b.isFavorite) return -1;
+        if (!a.isFavorite && b.isFavorite) return 1;
+        return 0;
       });
     });
+  }
+
+  String getStockRating(Map<String, dynamic> companyInfo) {
+    double peRatio = double.tryParse(companyInfo["PERatio"] ?? "0") ?? 0;
+    double marketCap = double.tryParse(companyInfo["MarketCap"]?.replaceAll(',', '') ?? "0") ?? 0;
+    double ebitda = double.tryParse(companyInfo["EBITDA"]?.replaceAll(',', '') ?? "0") ?? 0;
+
+    if (peRatio > 30) {
+      return "🔴 Sell (Overvalued)";
+    } else if (peRatio < 15 && marketCap > 5000000000 && ebitda > 1000000000) {
+      return "🟢 Strong Buy (Undervalued)";
+    } else if (peRatio < 20) {
+      return "🟡 Hold (Fairly Priced)";
+    } else {
+      return "⚪ Neutral";
+    }
   }
 
   void showStockDetails(Stock stock) async {
@@ -115,8 +131,11 @@ class _StockPageState extends State<StockPage> {
       "Industry": "N/A",
       "MarketCap": "N/A",
       "EBITDA": "N/A",
-      "Revenue": "N/A"
+      "Revenue": "N/A",
+      "PERatio": "N/A"
     };
+
+    String rating = getStockRating(companyInfo);
 
     showDialog(
       context: context,
@@ -140,28 +159,38 @@ class _StockPageState extends State<StockPage> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Stock Price Chart
+            Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: rating.startsWith("🟢") ? Colors.green[100] :
+                       rating.startsWith("🟡") ? Colors.yellow[100] :
+                       rating.startsWith("🔴") ? Colors.red[100] : Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                "📊 Rating: $rating",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(height: 10),
             SizedBox(
               height: 200,
               child: StockChart(ticker: stock.name),
             ),
             Divider(),
 
-            // Industry
             Text(
               '🏢 Industry: ${(companyInfo ?? {})["Industry"] ?? "N/A"}',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 5),
 
-            // Market Cap
             Text(
               '💰 Market Cap: \$${(companyInfo ?? {})["Market Cap"] ?? "N/A"}',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 5),
 
-            // EBITDA & Revenue
             Text(
               '📊 EBITDA: \$${(companyInfo ?? {})["EBIDTA"] ?? "N/A"}',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -172,7 +201,6 @@ class _StockPageState extends State<StockPage> {
             ),
             Divider(),
 
-            // Description
             Text(
               '🌍 About the Company:',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
