@@ -56,10 +56,15 @@ class _AddExpenseState extends State<AddExpense> {
             builder: (context, state) {
               if (state is GetCategoriesSuccess) {
                 return Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Image.asset(
+                        '/Users/nehangpatel/Downloads/FinTrackrApp/Code/assets/expenses-removebg-preview.png',
+                        height: 200,
+                        width: 200,
+                      ),
                       const Text('Add Expenses',
                           style: TextStyle(
                               fontSize: 22, fontWeight: FontWeight.w500)),
@@ -185,31 +190,46 @@ class _AddExpenseState extends State<AddExpense> {
                       ),
                       const SizedBox(height: 32),
                       SizedBox(
-                          width: double.infinity,
-                          height: kToolbarHeight,
-                          child: isLoading == true
-                              ? const CircularProgressIndicator()
-                              : TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      expense.amount =
-                                          int.parse(expenseController.text);
-                                    });
-                                    context
-                                        .read<CreateExpenseBloc>()
-                                        .add(CreateExpense(expense));
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.black,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12))),
-                                  child: const Text(
-                                    'Save',
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.white),
+                        width: 200,
+                        height: kToolbarHeight,
+                        child: isLoading
+                            ? const CircularProgressIndicator()
+                            : GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    expense.amount =
+                                        int.parse(expenseController.text);
+                                  });
+                                  context
+                                      .read<CreateExpenseBloc>()
+                                      .add(CreateExpense(expense));
+                                },
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Theme.of(context).colorScheme.tertiary,
+                                        Theme.of(context).colorScheme.secondary,
+                                        Theme.of(context).colorScheme.primary,
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
-                                ))
+                                  child: const Center(
+                                    child: Text(
+                                      'Save',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
                     ],
                   ),
                 );

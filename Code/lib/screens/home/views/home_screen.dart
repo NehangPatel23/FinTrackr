@@ -142,51 +142,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Icon(CupertinoIcons.add),
             ),
           ),
-
-//           floatingActionButton: FloatingActionButton(
-//             onPressed: () async {
-//               var newExpense = await Navigator.push(
-//                   context,
-//                   MaterialPageRoute<Expense>(
-//                     builder: (BuildContext context) => MultiBlocProvider(
-//                       providers: [
-//                         BlocProvider(
-//                           create: (context) =>
-//                               CreateCategoryBloc(FirebaseExpenseRepo()),
-//                         ),
-//                         BlocProvider(
-//                           create: (context) =>
-//                               GetCategoriesBloc(FirebaseExpenseRepo())
-//                                 ..add(GetCategories()),
-//                         ),
-//                         BlocProvider(
-//                           create: (context) =>
-//                               CreateExpenseBloc(FirebaseExpenseRepo()),
-//                         ),
-//                       ],
-//                       child: const AddExpense(),
-//                     ),
-//                   ));
-
-//               if (newExpense != null) {
-//                 setState(() {
-//                   state.expenses.insert(0, newExpense);
-//                 });
-//               }
-//             },
-//             shape: const CircleBorder(),
-//             child: Container(
-//                 height: 60,
-//                 width: 60,
-//                 decoration: BoxDecoration(
-//                     shape: BoxShape.circle,
-//                     gradient: LinearGradient(colors: [
-//                       Theme.of(context).colorScheme.tertiary,
-//                       Theme.of(context).colorScheme.secondary,
-//                       Theme.of(context).colorScheme.primary
-//                     ], transform: const GradientRotation(pi / 4))),
-//                 child: const Icon(CupertinoIcons.add)),
-//           ),
           body: index == 0 ? MainScreen(state.expenses) : const StatScreen(),
         );
       } else {
