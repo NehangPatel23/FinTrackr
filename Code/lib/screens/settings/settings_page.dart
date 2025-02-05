@@ -1,0 +1,170 @@
+import 'package:flutter/material.dart';
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/settings.png', // Ensure this asset is in pubspec.yaml
+                      height: 150,
+                      width: 150,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Settings',
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Profile Section
+              const Text('Profile', style: sectionTitleStyle),
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text('Edit Profile'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  // Navigate to profile editing page
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.language),
+                title: const Text('Language'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  // Open language selection
+                },
+              ),
+
+              // Tax Settings Section
+              const SizedBox(height: 16),
+              const Text('Tax Settings', style: sectionTitleStyle),
+              ListTile(
+                leading: const Icon(Icons.public),
+                title: const Text('Select Tax Region'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  // Navigate to tax region selection
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.percent),
+                title: const Text('Set Default Tax Rate'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  // Open tax rate input
+                },
+              ),
+              SwitchListTile(
+                secondary: const Icon(Icons.local_offer),
+                title: const Text('Enable Tax Treaty Benefits'),
+                value: true, // Should be linked to app settings state
+                onChanged: (bool value) {
+                  // Toggle tax treaty benefits
+                },
+              ),
+
+              // Notifications Section
+              const SizedBox(height: 16),
+              const Text('Notifications', style: sectionTitleStyle),
+              SwitchListTile(
+                secondary: const Icon(Icons.notifications),
+                title: const Text('Enable Notifications'),
+                value: true, // Replace with actual user setting
+                onChanged: (bool value) {
+                  // Toggle notifications
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.alarm),
+                title: const Text('Set Expense Alerts'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  // Open alerts setup
+                },
+              ),
+
+              // Security Section
+              const SizedBox(height: 16),
+              const Text('Security', style: sectionTitleStyle),
+              ListTile(
+                leading: const Icon(Icons.lock),
+                title: const Text('Change Password'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  // Navigate to change password page
+                },
+              ),
+              SwitchListTile(
+                secondary: const Icon(Icons.fingerprint),
+                title: const Text('Enable Biometric Login'),
+                value: false, // Example toggle
+                onChanged: (bool value) {
+                  // Toggle biometric authentication
+                },
+              ),
+
+              // Theme Section
+              const SizedBox(height: 16),
+              const Text('Theme Settings', style: sectionTitleStyle),
+              SwitchListTile(
+                secondary: const Icon(Icons.color_lens),
+                title: const Text('Dark Mode'),
+                value: false, // Use a variable to track theme
+                onChanged: (bool value) {
+                  // Toggle between light and dark themes
+                },
+              ),
+
+              // Support Section
+              const SizedBox(height: 16),
+              const Text('Support', style: sectionTitleStyle),
+              ListTile(
+                leading: const Icon(Icons.help),
+                title: const Text('FAQs'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  // Open FAQs
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.support),
+                title: const Text('Contact Support'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  // Open support contact page
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.info),
+                title: const Text('About App'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  // Show app version and details
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+const TextStyle sectionTitleStyle =
+    TextStyle(fontSize: 18, fontWeight: FontWeight.bold);

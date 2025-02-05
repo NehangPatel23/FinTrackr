@@ -61,7 +61,7 @@ class _AddExpenseState extends State<AddExpense> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        '/Users/nehangpatel/Downloads/FinTrackrApp/Code/assets/expenses-removebg-preview.png',
+                        'assets/expenses-removebg-preview.png',
                         height: 200,
                         width: 200,
                       ),
