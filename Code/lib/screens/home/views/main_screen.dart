@@ -270,7 +270,7 @@ class MainScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  '-\$${expenses[index].amount.toString()}.00',
+                                  '-\$${NumberFormat('#,###').format(expenses[index].amount).toString()}.00',
                                   style: TextStyle(
                                       fontSize: 14,
                                       color: Theme.of(context)

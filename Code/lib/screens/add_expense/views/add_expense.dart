@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
+import '../../ui_elements/text_field.dart';
 import '../blocs/create_expense/create_expense_bloc.dart';
 import '../blocs/get_categories/get_categories_bloc.dart';
 import 'category_creation.dart';
@@ -196,23 +197,9 @@ class _AddExpenseState extends State<AddExpense> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Expanded(
-                            child: TextFormField(
-                              controller: expenseController,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                prefixIcon: Icon(
-                                  FontAwesomeIcons.dollarSign,
-                                  size: 18,
-                                  color: Colors.grey.shade500,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                            ),
-                          ),
+                              child: InputTextField(
+                                  controller: expenseController,
+                                  icon: FontAwesomeIcons.dollarSign)),
                           const SizedBox(width: 10),
 
                           // ✅ OCR Button (Processes Asset Image)
@@ -232,21 +219,6 @@ class _AddExpenseState extends State<AddExpense> {
                           const SizedBox(width: 10),
                         ],
                       ),
-
-                      // SizedBox(
-                      //   width: MediaQuery.of(context).size.width * 0.7,
-                      //   child: TextFormField(
-                      //     controller: expenseController,
-                      //     decoration: InputDecoration(
-                      //         filled: true,
-                      //         fillColor: Colors.white,
-                      //         prefixIcon: Icon(FontAwesomeIcons.dollarSign,
-                      //             size: 18, color: Colors.grey.shade500),
-                      //         border: OutlineInputBorder(
-                      //             borderRadius: BorderRadius.circular(30),
-                      //             borderSide: BorderSide.none)),
-                      //   ),
-                      // ),
                       const SizedBox(height: 40),
                       TextFormField(
                         controller: categoryController,
@@ -289,7 +261,6 @@ class _AddExpenseState extends State<AddExpense> {
                       Container(
                         height: 200,
                         width: MediaQuery.of(context).size.width,
-                        // color: Colors.amber,
                         decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.vertical(
@@ -328,11 +299,11 @@ class _AddExpenseState extends State<AddExpense> {
                         readOnly: true,
                         onTap: () async {
                           DateTime? newDate = await showDatePicker(
-                              context: context,
-                              initialDate: expense.date,
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime.now()
-                                  .add(const Duration(days: 365)));
+                            context: context,
+                            initialDate: expense.date,
+                            firstDate: DateTime(0000, 01, 01),
+                            lastDate: DateTime.now(),
+                          );
 
                           if (newDate != null) {
                             setState(() {
@@ -361,8 +332,9 @@ class _AddExpenseState extends State<AddExpense> {
                             : GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    expense.amount =
-                                        int.parse(expenseController.text);
+                                    expense.amount = int.parse(expenseController
+                                        .text
+                                        .replaceAll(',', ''));
                                   });
                                   context
                                       .read<CreateExpenseBloc>()

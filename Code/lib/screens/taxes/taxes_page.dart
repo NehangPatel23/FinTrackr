@@ -1,6 +1,10 @@
+import 'package:fintrackr/screens/ui_elements/question_row.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+
+import '../ui_elements/dropdown.dart';
+import '../ui_elements/text_field.dart';
 
 class TaxesPage extends StatefulWidget {
   const TaxesPage({super.key});
@@ -195,74 +199,6 @@ class _TaxesPageState extends State<TaxesPage> {
     };
 
     return stateTaxRates[state] ?? 0.05; // Default to 5% if state not found
-  }
-
-  void _showInfoDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        elevation: 10.0,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                message,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 30),
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  width: 150,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).colorScheme.primary,
-                        Theme.of(context).colorScheme.secondary,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Got it!',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   void _showCalculateTaxesPopup() {
@@ -466,63 +402,82 @@ class _TaxesPageState extends State<TaxesPage> {
                 ),
                 const SizedBox(height: 32),
 
-                _buildQuestionRow('What is your income?', "Income Information",
-                    "Please input your total annual income before any deductions."),
-                _buildTextField(incomeController, FontAwesomeIcons.dollarSign),
+                QuestionRow(
+                    question: 'What is your income?',
+                    title: "Income Information",
+                    message:
+                        "Please input your total annual income before any deductions."),
+                InputTextField(
+                    controller: incomeController,
+                    icon: FontAwesomeIcons.dollarSign),
 
                 const SizedBox(height: 30),
 
-                _buildQuestionRow(
-                    'What is your marital status?',
-                    "Marital Status Information",
-                    "Please select your marital status."),
+                QuestionRow(
+                    question: 'What is your marital status?',
+                    title: "Marital Status Information",
+                    message: "Please select your marital status."),
                 _buildMaritalStatusRadio(),
 
                 // Display filing status only if the user selects 'Married'
                 if (maritalStatus == 'Married') ...[
                   const SizedBox(height: 30),
-                  _buildQuestionRow(
-                      'What is your filing status?',
-                      "Filing Status Information",
-                      "Please select your filing status."),
+                  QuestionRow(
+                      question: 'What is your filing status?',
+                      title: "Filing Status Information",
+                      message: "Please select your filing status."),
                   _buildFilingStatusSelection(),
                 ],
 
                 const SizedBox(height: 30),
 
-                _buildQuestionRow(
-                    'How many dependents do you have?',
-                    "Dependents Information",
-                    "Please enter the number of dependents you are financially responsible for. \"Dependents\" are your children and elderly parents you are financially responsible for."),
-                _buildTextField(
-                    dependentsController, FontAwesomeIcons.peopleGroup),
+                QuestionRow(
+                    question: 'How many dependents do you have?',
+                    title: "Dependents Information",
+                    message:
+                        "Please enter the number of dependents you are financially responsible for. \"Dependents\" are your children and elderly parents you are financially responsible for."),
+                InputTextField(
+                    controller: dependentsController,
+                    icon: FontAwesomeIcons.peopleGroup),
 
                 const SizedBox(height: 30),
 
-                _buildQuestionRow('What state are you from?', "State Selection",
-                    "Please select your state of residence."),
-                _buildDropdown(states, selectedState, (value) {
-                  setState(() => selectedState = value);
-                }),
+                QuestionRow(
+                    question: 'What state are you from?',
+                    title: "State Selection",
+                    message:
+                        "Please select your state of residence. This is used to calculate your state tax, if applicable for your state of residence."),
+                CustomDropdownMenu(
+                    items: states,
+                    selectedValue: selectedState,
+                    onChanged: (value) {
+                      setState(() => selectedState = value);
+                    }),
 
                 const SizedBox(height: 30),
 
-                _buildQuestionRow(
-                    'What country are you from?',
-                    "Country Selection",
-                    "Please select your country of residence."),
-                _buildDropdown(countries, selectedCountry, (value) {
-                  setState(() => selectedCountry = value);
-                }),
+                QuestionRow(
+                    question: 'What country are you from?',
+                    title: "Country Selection",
+                    message:
+                        "Please select your country of citizenship. This is used to check for any Tax Treaties between your home country and the United States that you could potentially use to reduce your taxes."),
+                CustomDropdownMenu(
+                    items: countries,
+                    selectedValue: selectedCountry,
+                    onChanged: (value) {
+                      setState(() => selectedCountry = value);
+                    }),
 
                 const SizedBox(height: 40),
 
-                _buildQuestionRow(
-                    'How much did you pay in taxes?',
-                    "Taxes Paid",
-                    "Please input the total taxes you've paid out of your paychecks. This information is available in your W-2 Form(s)."),
-                _buildTextField(
-                    taxesPaidController, FontAwesomeIcons.creditCard),
+                QuestionRow(
+                    question: 'How much did you pay in taxes?',
+                    title: "Taxes Paid",
+                    message:
+                        "Please input the total taxes you've paid out of your paychecks. This information is available in your W-2 Form(s)."),
+                InputTextField(
+                    controller: taxesPaidController,
+                    icon: FontAwesomeIcons.creditCard),
 
                 const SizedBox(height: 40),
 
@@ -618,81 +573,6 @@ class _TaxesPageState extends State<TaxesPage> {
           },
         ),
         const Text('Filing Separately', style: TextStyle(fontSize: 16)),
-      ],
-    );
-  }
-
-  /// Helper method to build text fields
-  Widget _buildTextField(TextEditingController controller, IconData icon) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.7,
-      child: TextFormField(
-        controller: controller,
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          prefixIcon: Icon(icon, size: 18, color: Colors.grey.shade500),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide.none,
-          ),
-        ),
-        onChanged: (value) {
-          final number = double.tryParse(value.replaceAll(',', ''));
-          if (number != null) {
-            controller.text = NumberFormat('#,###').format(number);
-            controller.selection =
-                TextSelection.collapsed(offset: controller.text.length);
-          }
-        },
-      ),
-    );
-  }
-
-  /// Helper method to build dropdowns
-  Widget _buildDropdown(List<String> items, String? selectedValue,
-      ValueChanged<String?> onChanged) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.7,
-      child: DropdownButtonHideUnderline(
-        child: DropdownButtonFormField<String>(
-          value: selectedValue,
-          hint: const Text("Select an option"),
-          isDense: true,
-          menuMaxHeight: 250,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-              borderSide: BorderSide.none,
-            ),
-          ),
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(item, textAlign: TextAlign.center),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        ),
-      ),
-    );
-  }
-
-  /// Helper method to build question rows with icons
-  Widget _buildQuestionRow(String question, String title, String message) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(question,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-        IconButton(
-          icon: Icon(FontAwesomeIcons.circleInfo,
-              size: 15, color: Colors.blue.shade700),
-          onPressed: () => _showInfoDialog(title, message),
-        ),
       ],
     );
   }

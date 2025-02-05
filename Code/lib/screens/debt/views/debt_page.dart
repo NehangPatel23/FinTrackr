@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
 
+import '../../ui_elements/question_row.dart';
+
 class DebtPage extends StatefulWidget {
   const DebtPage({super.key});
 
@@ -38,46 +40,46 @@ class _DebtPageState extends State<DebtPage> {
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Move the image right below the app bar title
-              Image.asset(
-                'assets/debt.png',
-                height: 250,
-                width: 250,
-              ),
-              const Text('\nDebt Calculator',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
-              const Text(
-                '\nDebt Amount',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-
-              SizedBox(height: 20), // Space between image and inputs
-              _buildInputField(
-                controller: amountController,
-                labelText: "Amount (\$)",
-                icon: Icons.monetization_on,
-              ),
-              const Text(
-                '\nInterest Rate',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-              _buildInputField(
-                controller: interestController,
-                labelText: "Interest Rate (%)",
-                icon: Icons.percent,
-              ),
-              SizedBox(height: 20),
-              _buildResults(),
-              SizedBox(height: 20),
-              _buildChart(),
-              SizedBox(height: 20),
-              _buildSubmitButton(),
-            ],
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/debt.png',
+                  height: 250,
+                  width: 250,
+                ),
+                const Text('Debt Calculator',
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
+                SizedBox(height: 20),
+                QuestionRow(
+                    question: 'Debt Amount',
+                    title: "How much debt do you currently owe?",
+                    message: "Please input your TOTAL debt amount."),
+                _buildInputField(
+                  controller: amountController,
+                  icon: Icons.monetization_on,
+                ),
+                SizedBox(height: 30),
+                QuestionRow(
+                    question: 'Interest Rate',
+                    title: "What interest do you pay on your debt?",
+                    message:
+                        "Please input the interest rate on your debt amount."),
+                _buildInputField(
+                  controller: interestController,
+                  icon: Icons.percent,
+                ),
+                SizedBox(height: 20),
+                _buildResults(),
+                SizedBox(height: 20),
+                _buildChart(),
+                SizedBox(height: 30),
+              ],
+            ),
           ),
         ),
       ),
@@ -86,7 +88,6 @@ class _DebtPageState extends State<DebtPage> {
 
   Widget _buildInputField({
     required TextEditingController controller,
-    required String labelText,
     required IconData icon,
   }) {
     return Padding(
@@ -176,35 +177,6 @@ class _DebtPageState extends State<DebtPage> {
         SizedBox(width: 8),
         Text(text, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       ],
-    );
-  }
-
-  Widget _buildSubmitButton() {
-    return GestureDetector(
-      onTap: () {
-        // Submit functionality
-      },
-      child: Container(
-        width: 200,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).colorScheme.tertiary,
-              Theme.of(context).colorScheme.secondary,
-              Theme.of(context).colorScheme.primary,
-            ],
-          ),
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: const Center(
-          child: Text(
-            'Submit',
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
-          ),
-        ),
-      ),
     );
   }
 
