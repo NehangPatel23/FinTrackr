@@ -14,7 +14,8 @@ Future getCategoryCreation(BuildContext context) {
     'pet',
     'shopping',
     'tech',
-    'travel'
+    'travel',
+    'activity',
   ];
 
   return showDialog(

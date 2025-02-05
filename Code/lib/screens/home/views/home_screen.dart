@@ -1,6 +1,6 @@
 import 'dart:math';
-
 import 'package:expense_repository/expense_repository.dart';
+import 'package:fintrackr/screens/taxes/taxes_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../add_expense/blocs/create_category/create_category_bloc.dart';
@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../stats/stat_screen.dart';
+import '../../debt/views/debt.dart'; // Make sure to import the Debt Page
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,83 +31,138 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<GetExpensesBloc, GetExpensesState>(
         builder: (context, state) {
-      if (state is GetExpensesSuccess) {
-        return Scaffold(
-          bottomNavigationBar: ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-            child: BottomNavigationBar(
-                onTap: (value) {
-                  setState(() {
-                    index = value;
-                  });
-                },
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                elevation: 3.0,
-                items: [
-                  BottomNavigationBarItem(
-                      icon: Icon(CupertinoIcons.home,
-                          color: index == 0 ? selectedItem : unselectedItem),
-                      label: 'Home'),
-                  BottomNavigationBarItem(
-                      icon: Icon(CupertinoIcons.graph_square,
-                          color: index == 1 ? selectedItem : unselectedItem),
-                      label: 'Stats'),
-                ]),
-          ),
-          floatingActionButtonLocation:
+          if (state is GetExpensesSuccess) {
+            return Scaffold(
+              bottomNavigationBar: ClipRRect(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+                child: BottomNavigationBar(
+                    onTap: (value) {
+                      setState(() {
+                        index = value;
+                      });
+                    },
+                    showSelectedLabels: false,
+                    showUnselectedLabels: false,
+                    elevation: 3.0,
+                    items: [
+                      BottomNavigationBarItem(
+                          icon: Icon(CupertinoIcons.home,
+                              color: index == 0 ? selectedItem : unselectedItem),
+                          label: 'Home'),
+                      BottomNavigationBarItem(
+                          icon: Icon(CupertinoIcons.graph_square,
+                              color: index == 1 ? selectedItem : unselectedItem),
+                          label: 'Stats'),
+                    ]),
+              ),
+              floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              var newExpense = await Navigator.push(
-                  context,
-                  MaterialPageRoute<Expense>(
-                    builder: (BuildContext context) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider(
-                          create: (context) =>
-                              CreateCategoryBloc(FirebaseExpenseRepo()),
-                        ),
-                        BlocProvider(
-                          create: (context) =>
-                              GetCategoriesBloc(FirebaseExpenseRepo())
-                                ..add(GetCategories()),
-                        ),
-                        BlocProvider(
-                          create: (context) =>
-                              CreateExpenseBloc(FirebaseExpenseRepo()),
-                        ),
-                      ],
-                      child: const AddExpense(),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                     ),
-                  ));
-
-              if (newExpense != null) {
-                setState(() {
-                  state.expenses.insert(0, newExpense);
-                });
-              }
-            },
-            shape: const CircleBorder(),
-            child: Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
+                    builder: (context) {
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTile(
+                              leading:
+                              const Icon(CupertinoIcons.money_dollar_circle),
+                              title: const Text("Add Expense"),
+                              onTap: () async {
+                                Navigator.pop(context); // Close the bottom sheet
+                                var newExpense = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute<Expense>(
+                                    builder: (BuildContext context) =>
+                                        MultiBlocProvider(
+                                          providers: [
+                                            BlocProvider(
+                                              create: (context) => CreateCategoryBloc(
+                                                  FirebaseExpenseRepo()),
+                                            ),
+                                            BlocProvider(
+                                              create: (context) => GetCategoriesBloc(
+                                                  FirebaseExpenseRepo())
+                                                ..add(GetCategories()),
+                                            ),
+                                            BlocProvider(
+                                              create: (context) => CreateExpenseBloc(
+                                                  FirebaseExpenseRepo()),
+                                            ),
+                                          ],
+                                          child: const AddExpense(),
+                                        ),
+                                  ),
+                                );
+                                if (newExpense != null) {
+                                  setState(() {
+                                    state.expenses.insert(0, newExpense);
+                                  });
+                                }
+                              },
+                            ),
+                            const Divider(),
+                            ListTile(
+                              leading:
+                              const Icon(CupertinoIcons.chart_bar_alt_fill),
+                              title: const Text("Taxes"),
+                              onTap: () {
+                                Navigator.pop(context); // Close the bottom sheet
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TaxesPage()),
+                                );
+                              },
+                            ),
+                            const Divider(),
+                            // New Debt section
+                            ListTile(
+                              leading: const Icon(CupertinoIcons.money_dollar_circle),
+                              title: const Text("Debt"),
+                              onTap: () {
+                                Navigator.pop(context); // Close the bottom sheet
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DebtPage()),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                shape: const CircleBorder(),
+                child: Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: LinearGradient(colors: [
                       Theme.of(context).colorScheme.tertiary,
                       Theme.of(context).colorScheme.secondary,
-                      Theme.of(context).colorScheme.primary
-                    ], transform: const GradientRotation(pi / 4))),
-                child: const Icon(CupertinoIcons.add)),
-          ),
-          body: index == 0 ? MainScreen(state.expenses) : const StatScreen(),
-        );
-      } else {
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
-      }
-    });
+                      Theme.of(context).colorScheme.primary,
+                    ], transform: const GradientRotation(pi / 4)),
+                  ),
+                  child: const Icon(CupertinoIcons.add),
+                ),
+              ),
+              body: index == 0 ? MainScreen(state.expenses) : const StatScreen(),
+            );
+          } else {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
+        });
   }
 }

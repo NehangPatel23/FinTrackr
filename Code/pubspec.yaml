@@ -39,7 +39,8 @@ dependencies:
   intl: ^0.20.0
   flutter_colorpicker: ^1.0.3
   uuid: ^4.3.3
-
+  http: ^0.13.6
+  file_picker: ^8.3.1
   firebase_core: ^2.16.0
 
   bloc: ^9.0.0
