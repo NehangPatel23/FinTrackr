@@ -163,16 +163,16 @@ The provided timeline outlines the start and end dates for each task related to 
 
 |**Task**                                                                                      | **Start** | **End**   |
 |------------------------------------------------------------------------------------------------|-----------|-----------|
-| ~~Refine the "Add Expenses" page and add a section to make notes about a transaction.~~     |   ~~20 October 2024~~        |  ~~23 October 2024~~         |
-| ~~Research the logic for OCR under "Add Expenses" section.~~  | ~~21 October 2024~~          |  ~~26 October 2024~~         |
-| ~~Research stock trends and educational content for the "Stocks" page.~~                   |  ~~20 October 2024~~         |    ~~23 October 2024~~       |
+| Refine the "Add Expenses" page and add a section to make notes about a transaction.    |   20 October 2024        |  23 October 2024         |
+| Research the logic for OCR under "Add Expenses" section.  | 21 October 2024          |  26 October 2024         |
+| Research stock trends and educational content for the "Stocks" page.                   |  20 October 2024         |    23 October 2024       |
 | Design and develop the "Debt" page UI.                                                |     23 October 2024      |     31 October 2024      |
 | Develop the mathematical formula and visualizations for the "Debt" page.               |   01 November 2024      |     10 November 2024      |
 | Design and implement pages for the different pending parts of the app.                 |     24 October 2024      |     01 November 2024      |
 | Design and develop the UI for the "Stocks" page.                                         |     01 November 2024      |      11 November 2024     |
 | Design the form for the "Tax Calculator" page.                                          |     02 November 2024      |      12 November 2024     |
 | Develop the database API to pull data about tax percentages based on user inputs on the "Taxes" page. |      13 November 2024     |     17 November 2024      |
-| ~~Research and develop list of debt-repayment educational content for the "Debt" page.~~    |     ~~15 January 2025~~      |     ~~19 January 2025~~      |
+| Research and develop list of debt-repayment educational content for the "Debt" page.    |     15 January 2025      |     19 January 2025      |
 | Design and develop the logic and code for OCR under "Add Expenses" section.  | 20 January 2025          |  31 January 2025         |
 | Research and implement in-app notifications.                                            |     15 January 2025      |      30 January 2025     |
 | Research chatbot integrations for the app.                                              |      01 February 2025     |      10 February 2025     |
