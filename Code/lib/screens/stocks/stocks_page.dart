@@ -156,7 +156,7 @@ class _StockPageState extends State<StockPage> {
             ),
           ],
         ),
-        content: SingleChildScrollView( // ✅ Prevents layout overflow in AlertDialog
+        content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -175,7 +175,6 @@ class _StockPageState extends State<StockPage> {
               ),
               SizedBox(height: 10),
 
-              // ✅ Fix for StockChart layout issue
               SizedBox(
                 height: 200,
                 width: double.infinity,
@@ -190,13 +189,13 @@ class _StockPageState extends State<StockPage> {
               SizedBox(height: 5),
 
               Text(
-                '💰 Market Cap: \$${(companyInfo ?? {})["MarketCap"] ?? "N/A"}', // ✅ Fixed key
+                '💰 Market Cap: \$${(companyInfo ?? {})["MarketCap"] ?? "N/A"}',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 5),
 
               Text(
-                '📊 EBITDA: \$${(companyInfo ?? {})["EBITDA"] ?? "N/A"}', // ✅ Fixed typo
+                '📊 EBITDA: \$${(companyInfo ?? {})["EBITDA"] ?? "N/A"}',
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
               Text(
@@ -268,10 +267,6 @@ class _StockPageState extends State<StockPage> {
                         final stock = stocks[index];
                         return ListTile(
                           title: Text('${stock.name} (${stock.name})', style: TextStyle(fontWeight: FontWeight.bold)),
-                          // subtitle: Text(
-                          //   'Price: \$${stock.price.toStringAsFixed(2)} | Change: '
-                          //   '${stock.percentChange.toStringAsFixed(2)}% (Δ${stock.delta})',
-                          // ),
                           subtitle: Row(
                             children: [
                               Text(
