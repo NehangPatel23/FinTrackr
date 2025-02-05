@@ -1,13 +1,19 @@
 import 'package:expense_repository/expense_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
-
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:file_picker/file_picker.dart';
 import '../blocs/create_expense/create_expense_bloc.dart';
 import '../blocs/get_categories/get_categories_bloc.dart';
 import 'category_creation.dart';
+
+const String OCRApiKey = 'K84027267088957';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -22,6 +28,7 @@ class _AddExpenseState extends State<AddExpense> {
   TextEditingController dateController = TextEditingController();
   late Expense expense;
   bool isLoading = false;
+  File? selectedImage;
 
   @override
   void initState() {
@@ -29,6 +36,120 @@ class _AddExpenseState extends State<AddExpense> {
     expense = Expense.empty;
     expense.expenseId = const Uuid().v1();
     super.initState();
+  }
+
+  Future<void> pickAndProcessImage() async {
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.image);
+    if (result != null) {
+      File imageFile = File(result.files.single.path!);
+      setState(() => selectedImage = imageFile);
+      await extractTextFromImage(imageFile);
+    } else {
+      showError('No image selected.');
+    }
+  }
+
+  Future<void> extractTextFromImage(File imageFile) async {
+    try {
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('https://api.ocr.space/parse/image'));
+      request.headers['apikey'] = OCRApiKey;
+      request.files
+          .add(await http.MultipartFile.fromPath('file', imageFile.path));
+      request.fields['language'] = 'eng';
+      request.fields['isOverlayRequired'] = 'false';
+
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        var responseData = await response.stream.bytesToString();
+        var jsonResponse = jsonDecode(responseData);
+
+        if (jsonResponse['ParsedResults'] != null &&
+            jsonResponse['ParsedResults'].isNotEmpty &&
+            jsonResponse['ParsedResults'][0]['ParsedText'] != null) {
+          String extractedText =
+              jsonResponse['ParsedResults'][0]['ParsedText'].trim();
+
+          if (extractedText.isEmpty) {
+            showError('No text detected in the image.');
+            return;
+          }
+
+          print(
+              'Extracted Text:\n$extractedText'); // Debugging: print the full text
+          print(
+              'Full Extracted Text:\n$extractedText'); // This will give the entire text.
+          extractAmountFromText(extractedText);
+        } else {
+          showError('No text detected in the image.');
+        }
+      } else {
+        showError('OCR API failed: ${response.statusCode}');
+      }
+    } catch (e) {
+      showError('Error during OCR processing: $e');
+    }
+  }
+
+  void extractAmountFromText(String text) {
+    // Normalize the text to avoid misinterpretations (e.g., spaces, incorrect characters)
+    text = text
+        .toLowerCase()
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim(); // Remove extra spaces
+
+    // Debugging: Print the processed text
+    print('Processed Text:\n$text');
+
+    // Check if the text contains "Total" or misinterpreted "T 01"
+    if (text.contains('total') || text.contains('Total')) {
+      // Look for "total" or "T 01" in the string
+      int totalIndex = text.contains('total')
+          ? text.indexOf('total') // Use "total" if found
+          : text.indexOf('Total'); // Fallback to "T 01"
+
+      // Extract the substring starting from the "Total" (or misinterpreted "T 01")
+      String remainingText = text.substring(totalIndex);
+
+      // Regex to find the first monetary value following "Total"
+      RegExp amountRegex = RegExp(r'[\$]?\s*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+          caseSensitive: false); // Match numbers like 46.79, 1,000.00
+      Match? match = amountRegex.firstMatch(remainingText);
+
+      if (match != null) {
+        String extractedAmount =
+            match.group(1)!; // Extracted amount as a string
+
+        // Convert to a double first
+        double amount = double.tryParse(
+                extractedAmount.replaceAll(',', '').replaceAll('\$', '')) ??
+            0.0;
+
+        // Round up to the nearest integer if it's a float
+        if (amount != 0.0 && amount != amount.toInt()) {
+          amount = (amount)
+              .ceil()
+              .toDouble(); // Round up and convert to double temporarily
+        }
+
+        // Convert to int
+        int roundedAmount = amount.toInt();
+
+        setState(() {
+          expenseController.text = roundedAmount
+              .toString(); // Set the extracted and rounded amount as int
+        });
+
+        return;
+      }
+    }
+  }
+
+  void showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override
@@ -61,7 +182,7 @@ class _AddExpenseState extends State<AddExpense> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        'assets/expenses-removebg-preview.png',
+                        '/Users/nehangpatel/Downloads/FinTrackrApp/Code/assets/expenses-removebg-preview.png',
                         height: 200,
                         width: 200,
                       ),
@@ -69,20 +190,63 @@ class _AddExpenseState extends State<AddExpense> {
                           style: TextStyle(
                               fontSize: 22, fontWeight: FontWeight.w500)),
                       const SizedBox(height: 16),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        child: TextFormField(
-                          controller: expenseController,
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              prefixIcon: Icon(FontAwesomeIcons.dollarSign,
-                                  size: 18, color: Colors.grey.shade500),
-                              border: OutlineInputBorder(
+
+                      // Expense Input with OCR Button
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: expenseController,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                prefixIcon: Icon(
+                                  FontAwesomeIcons.dollarSign,
+                                  size: 18,
+                                  color: Colors.grey.shade500,
+                                ),
+                                border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
-                                  borderSide: BorderSide.none)),
-                        ),
+                                  borderSide: BorderSide.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+
+                          // ✅ OCR Button (Processes Asset Image)
+                          IconButton(
+                            onPressed: () => pickAndProcessImage(),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                            ),
+                            icon: Icon(CupertinoIcons.camera),
+                            color: Colors.black,
+                          ),
+
+                          const SizedBox(width: 10),
+                        ],
                       ),
+
+                      // SizedBox(
+                      //   width: MediaQuery.of(context).size.width * 0.7,
+                      //   child: TextFormField(
+                      //     controller: expenseController,
+                      //     decoration: InputDecoration(
+                      //         filled: true,
+                      //         fillColor: Colors.white,
+                      //         prefixIcon: Icon(FontAwesomeIcons.dollarSign,
+                      //             size: 18, color: Colors.grey.shade500),
+                      //         border: OutlineInputBorder(
+                      //             borderRadius: BorderRadius.circular(30),
+                      //             borderSide: BorderSide.none)),
+                      //   ),
+                      // ),
                       const SizedBox(height: 40),
                       TextFormField(
                         controller: categoryController,

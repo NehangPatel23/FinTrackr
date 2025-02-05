@@ -121,13 +121,13 @@ class SettingsPage extends StatelessWidget {
 
               // Theme Section
               const SizedBox(height: 16),
-              const Text('Theme Settings', style: sectionTitleStyle),
+              const Text('Theme', style: sectionTitleStyle),
               SwitchListTile(
-                secondary: const Icon(Icons.color_lens),
-                title: const Text('Dark Mode'),
-                value: false, // Use a variable to track theme
+                secondary: const Icon(Icons.dark_mode),
+                title: const Text('Enable Dark Mode'),
+                value: false, // Example toggle
                 onChanged: (bool value) {
-                  // Toggle between light and dark themes
+                  // Toggle biometric authentication
                 },
               ),
 

@@ -45,5 +45,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>"Need to access files to pick images."</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>"Need to access photo library to pick images."</string>
 </dict>
 </plist>
