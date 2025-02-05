@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:expense_repository/expense_repository.dart';
+import 'package:fintrackr/screens/debt/views/debt_page.dart';
 import 'package:fintrackr/screens/taxes/taxes_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -118,6 +119,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => TaxesPage()),
+                            );
+                          },
+                        ),
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.attach_money),
+                          title: const Text("Debt"),
+                          onTap: () {
+                            Navigator.pop(context); // Close the bottom sheet
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DebtPage()),
                             );
                           },
                         ),
