@@ -58,25 +58,29 @@ class _StockChartState extends State<StockChart> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? Center(child: CircularProgressIndicator())
-        : LineChart(
-            LineChartData(
-              titlesData: FlTitlesData(show: false),
-              borderData: FlBorderData(show: false),
-              lineBarsData: [
-                LineChartBarData(
-                  spots: chartData,
-                  isCurved: true,
-                  gradient: LinearGradient(
-                    colors: [Colors.blue, Colors.blueAccent],
+    return SizedBox(
+      height: 200,
+      width: double.infinity,
+      child: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : LineChart(
+              LineChartData(
+                titlesData: FlTitlesData(show: false),
+                borderData: FlBorderData(show: false),
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: chartData,
+                    isCurved: true,
+                    gradient: LinearGradient(
+                      colors: [Colors.blue, Colors.blueAccent],
+                    ),
+                    barWidth: 2,
+                    isStrokeCapRound: true,
+                    belowBarData: BarAreaData(show: false),
                   ),
-                  barWidth: 2,
-                  isStrokeCapRound: true,
-                  belowBarData: BarAreaData(show: false),
-                ),
-              ],
+                ],
+              ),
             ),
-          );
+    );
   }
 }

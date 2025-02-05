@@ -29,7 +29,9 @@ class StockPage extends StatefulWidget {
 
 class _StockPageState extends State<StockPage> {
   List<Stock> stocks = [];
+  List<Stock> filteredStocks = [];
   bool isLoading = false;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -64,6 +66,7 @@ class _StockPageState extends State<StockPage> {
           );
         }).toList();
 
+        filteredStocks = stocks;
         isLoading = false;
       });
     } else {
@@ -71,6 +74,15 @@ class _StockPageState extends State<StockPage> {
         isLoading = false;
       });
     }
+  }
+
+  void filterStocks(String query) {
+    setState(() {
+      filteredStocks = query.isEmpty
+          ? stocks
+          : stocks.where((stock) =>
+              stock.name.toLowerCase().contains(query.toLowerCase())).toList();
+    });
   }
 
   Future<Map<String, dynamic>?> fetchCompanyInfo(String ticker) async {
@@ -256,15 +268,30 @@ class _StockPageState extends State<StockPage> {
             ),
           ),
           SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: 'Search stocks...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                prefixIcon: Icon(Icons.search),
+              ),
+              onChanged: filterStocks,
+            ),
+          ),
+          SizedBox(height: 20),
           Expanded(
             child: RefreshIndicator(
               onRefresh: fetchStockData,
               child: isLoading
                   ? Center(child: CircularProgressIndicator())
                   : ListView.builder(
-                      itemCount: stocks.length,
+                      itemCount: filteredStocks.length,
                       itemBuilder: (context, index) {
-                        final stock = stocks[index];
+                        final stock = filteredStocks[index];
                         return ListTile(
                           title: Text('${stock.name} (${stock.name})', style: TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Row(
