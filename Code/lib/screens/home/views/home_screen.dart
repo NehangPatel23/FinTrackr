@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:expense_repository/expense_repository.dart';
 import 'package:fintrackr/screens/debt/views/debt_page.dart';
 import 'package:fintrackr/screens/taxes/taxes_page.dart';
+import 'package:fintrackr/screens/stocks/stocks_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../add_expense/blocs/create_category/create_category_bloc.dart';
@@ -37,10 +38,18 @@ class _HomeScreenState extends State<HomeScreen> {
           bottomNavigationBar: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
             child: BottomNavigationBar(
+                currentIndex: index,
                 onTap: (value) {
-                  setState(() {
-                    index = value;
-                  });
+                  if (value == 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StockPage()),
+                    );
+                  } else {
+                    setState(() {
+                      index = value;
+                    });
+                  }
                 },
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
@@ -53,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   BottomNavigationBarItem(
                       icon: Icon(CupertinoIcons.graph_square,
                           color: index == 1 ? selectedItem : unselectedItem),
-                      label: 'Stats'),
+                      label: 'Stocks'),
                 ]),
           ),
           floatingActionButtonLocation:
