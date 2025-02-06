@@ -1,4 +1,5 @@
 import 'package:expense_repository/expense_repository.dart';
+import 'package:fintrackr/screens/ui_elements/header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -184,12 +185,10 @@ class _AddExpenseState extends State<AddExpense> {
                     children: [
                       Image.asset(
                         '/Users/nehangpatel/Downloads/FinTrackrApp/Code/assets/expenses-removebg-preview.png',
-                        height: 200,
+                        height: 150,
                         width: 200,
                       ),
-                      const Text('Add Expenses',
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w500)),
+                      Header(text: 'Add Expense'),
                       const SizedBox(height: 16),
 
                       // Expense Input with OCR Button
@@ -323,7 +322,7 @@ class _AddExpenseState extends State<AddExpense> {
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide.none)),
                       ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 40),
                       SizedBox(
                         width: 200,
                         height: kToolbarHeight,

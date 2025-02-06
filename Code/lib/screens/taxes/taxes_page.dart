@@ -1,10 +1,13 @@
+import 'package:fintrackr/screens/ui_elements/header.dart';
 import 'package:fintrackr/screens/ui_elements/question_row.dart';
+// import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 
 import '../ui_elements/dropdown.dart';
 import '../ui_elements/text_field.dart';
+import 'tax_results.dart';
 
 class TaxesPage extends StatefulWidget {
   const TaxesPage({super.key});
@@ -201,7 +204,7 @@ class _TaxesPageState extends State<TaxesPage> {
     return stateTaxRates[state] ?? 0.05; // Default to 5% if state not found
   }
 
-  void _showCalculateTaxesPopup() {
+  void _calculateTaxes() {
     final income =
         double.tryParse(incomeController.text.replaceAll(',', '')) ?? 0.0;
     final dependents = int.tryParse(dependentsController.text) ?? 0;
@@ -264,105 +267,17 @@ class _TaxesPageState extends State<TaxesPage> {
     // Calculate taxes owed or return
     double taxesOwedOrRefund = taxesPaid - totalTax;
 
-    // Formatting for better clarity
-    final formattedFederalTax = NumberFormat('#,###').format(federalTax);
-    final formattedStateTax = NumberFormat('#,###').format(stateTax);
-    final formattedTotalTax = NumberFormat('#,###').format(totalTax);
-    final formattedTaxesPaid = NumberFormat('#,###').format(taxesPaid);
-    final formattedTaxesOwedOrRefund =
-        NumberFormat('#,###').format(taxesOwedOrRefund.abs());
-
-    // Create the tax details message
-    String taxDetails = "Your estimated federal tax is \$$formattedFederalTax\n"
-        "Your estimated state tax is \$$formattedStateTax\n";
-
-    // Add tax relief details if applicable
-    if (dependentRelief > 0) {
-      taxDetails +=
-          "\nTax relief from dependents: \$${NumberFormat('#,###').format(dependentRelief)}";
-    }
-    if (taxTreatyBenefit > 0) {
-      taxDetails +=
-          "\nTax relief from tax treaty: \$${NumberFormat('#,###').format(taxTreatyBenefit)}";
-    }
-
-    taxDetails += "\n\nYour total estimated tax is \$$formattedTotalTax";
-
-    taxDetails += "\n\nYou have already paid \$$formattedTaxesPaid";
-
-    // Add information about taxes owed or refund
-    if (taxesOwedOrRefund < 0) {
-      taxDetails += "\n\nYou owe \$$formattedTaxesOwedOrRefund in taxes.";
-    } else if (taxesOwedOrRefund > 0) {
-      taxDetails +=
-          "\n\nYou are due a refund of \$$formattedTaxesOwedOrRefund.";
-    } else {
-      taxDetails += "\n\nYour taxes are perfectly balanced!";
-    }
-
-    // Show the dialog with the tax details and pie chart
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        elevation: 10.0,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Tax Calculation Breakdown",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                taxDetails,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 30),
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  width: 150,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).colorScheme.primary,
-                        Theme.of(context).colorScheme.secondary,
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Got it!',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TaxResultsPage(
+          federalTax: federalTax,
+          stateTax: stateTax,
+          taxTreatyBenefit: taxTreatyBenefit,
+          totalTax: totalTax,
+          taxesPaid: taxesPaid,
+          taxesOwedOrRefund: taxesOwedOrRefund,
+          dependentRelief: dependentRelief,
         ),
       ),
     );
@@ -396,11 +311,8 @@ class _TaxesPageState extends State<TaxesPage> {
                   height: 150,
                   width: 150,
                 ),
-                const Text(
-                  'Calculate Your Taxes',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 32),
+                Header(text: 'Calculate Your Taxes'),
+                const SizedBox(height: 20),
 
                 QuestionRow(
                     question: 'What is your income?',
@@ -443,7 +355,7 @@ class _TaxesPageState extends State<TaxesPage> {
                 const SizedBox(height: 30),
 
                 QuestionRow(
-                    question: 'What state are you from?',
+                    question: 'What state do you currently live in?',
                     title: "State Selection",
                     message:
                         "Please select your state of residence. This is used to calculate your state tax, if applicable for your state of residence."),
@@ -483,7 +395,7 @@ class _TaxesPageState extends State<TaxesPage> {
 
                 /// Submit Button with Gradient
                 GestureDetector(
-                  onTap: _showCalculateTaxesPopup,
+                  onTap: _calculateTaxes,
                   child: Container(
                     width: 200,
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -584,13 +496,13 @@ class InfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tax Information'),
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            Image.asset('assets/tax_info_page.png', height: 200, width: 200),
+            Header(text: 'Tax Information'),
             const Text(
               'Disclaimer: The tax values and calculations are based on dummy data and are not representative of actual tax calculations. The numbers provided are for demonstration purposes only.',
               textAlign: TextAlign.center,

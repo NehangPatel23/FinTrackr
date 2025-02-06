@@ -1,3 +1,4 @@
+import 'package:fintrackr/screens/ui_elements/header.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
@@ -48,12 +49,10 @@ class _DebtPageState extends State<DebtPage> {
               children: [
                 Image.asset(
                   'assets/debt.png',
-                  height: 250,
+                  height: 150,
                   width: 250,
                 ),
-                const Text('Debt Calculator',
-                    style:
-                        TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
+                Header(text: 'Debt Calculator'),
                 SizedBox(height: 20),
                 QuestionRow(
                     question: 'Debt Amount',
@@ -63,7 +62,7 @@ class _DebtPageState extends State<DebtPage> {
                   controller: amountController,
                   icon: Icons.monetization_on,
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 25),
                 QuestionRow(
                     question: 'Interest Rate',
                     title: "What interest do you pay on your debt?",
@@ -188,7 +187,7 @@ class _DebtPageState extends State<DebtPage> {
       PieChartSectionData(
         color: Colors.blue,
         value: principal,
-        title: principal.toStringAsFixed(2),
+        title: '\$${principal.toStringAsFixed(2)}',
         radius: 110, // Large radius for full pie effect
         titleStyle: TextStyle(
             fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
@@ -196,7 +195,7 @@ class _DebtPageState extends State<DebtPage> {
       PieChartSectionData(
         color: Colors.red,
         value: interest,
-        title: interest.toStringAsFixed(2),
+        title: '\$${interest.toStringAsFixed(2)}',
         radius: 110, // Ensure full coverage
         titleStyle: TextStyle(
             fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
