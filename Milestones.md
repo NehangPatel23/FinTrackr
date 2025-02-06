@@ -8,15 +8,15 @@ This milestone focuses on creating the "Add Expenses" page, where users can inpu
 
 - Designing the user interface for the page.
 - Researching and developing the logic and code required for the OCR functionality.
-- Ensuring that the OCR effectively recognizes and extracts relevant information from different receipt formats.
+- Ensuring the OCR effectively recognizes and extracts relevant information from different receipt formats.
 
-## 2. Development of "Tax" Page - Database APIs
+## 2. Development of "Tax" Page
 
 This milestone encompasses the creation of the "Tax" page, which will provide users with tax-related functionalities. Key components include:
 
-- Developing a database API that can pull relevant tax data based on user inputs, such as income level or region.
+- Developing a "Taxes" page that can request relevant tax data such as income level, dependents, state, country of origin, and marital status to calculate the Federal and State taxes for the user.
 - Creating a user-friendly interface that allows users to calculate their taxes effectively.
-- Integrating the tax calculation logic with the database API to ensure accurate results.
+- Developing a sound logic for the tax calculations to ensure accurate results.
 
 ## 3. Development of "Debt" Page - Visualizations
 
