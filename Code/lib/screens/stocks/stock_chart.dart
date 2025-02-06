@@ -59,7 +59,7 @@ class _StockChartState extends State<StockChart> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      height: 200, 
       width: double.infinity,
       child: isLoading
           ? Center(child: CircularProgressIndicator())

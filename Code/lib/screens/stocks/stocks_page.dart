@@ -151,86 +151,92 @@ class _StockPageState extends State<StockPage> {
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                (companyInfo ?? {})["Name"] ?? "N/A",
-                style: TextStyle(fontWeight: FontWeight.bold),
-                overflow: TextOverflow.ellipsis,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      stock.name,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
               ),
-            ),
-            IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: rating.startsWith("🟢") ? Colors.green[100] :
-                         rating.startsWith("🟡") ? Colors.yellow[100] :
-                         rating.startsWith("🔴") ? Colors.red[100] : Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: rating.startsWith("🟢") ? Colors.green[100] :
+                              rating.startsWith("🟡") ? Colors.yellow[100] :
+                                rating.startsWith("🔴") ? Colors.red[100] : Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        "📊 Rating: $rating",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    SizedBox(
+                      height: 200,
+                      width: 300,
+                      child: StockChart(ticker: stock.name),
+                    ),
+                    Divider(),
+
+                    Text(
+                      '🏢 Industry: ${(companyInfo ?? {})["Industry"] ?? "N/A"}',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+
+                    Text(
+                      '💰 Market Cap: \$${(companyInfo ?? {})["MarketCap"] ?? "N/A"}',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+
+                    Text(
+                      '📊 EBITDA: \$${(companyInfo ?? {})["EBITDA"] ?? "N/A"}',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '📈 Revenue (TTM): \$${(companyInfo ?? {})["Revenue"] ?? "N/A"}',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    Divider(),
+
+                    Text(
+                      '🌍 About the Company:',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      (companyInfo ?? {})["Description"] ?? "No Description Available",
+                      textAlign: TextAlign.justify,
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  "📊 Rating: $rating",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
               ),
-              SizedBox(height: 10),
-
-              SizedBox(
-                height: 200,
-                width: double.infinity,
-                child: StockChart(ticker: stock.name),
-              ),
-              Divider(),
-
-              Text(
-                '🏢 Industry: ${(companyInfo ?? {})["Industry"] ?? "N/A"}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 5),
-
-              Text(
-                '💰 Market Cap: \$${(companyInfo ?? {})["MarketCap"] ?? "N/A"}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 5),
-
-              Text(
-                '📊 EBITDA: \$${(companyInfo ?? {})["EBITDA"] ?? "N/A"}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '📈 Revenue (TTM): \$${(companyInfo ?? {})["Revenue"] ?? "N/A"}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              Divider(),
-
-              Text(
-                '🌍 About the Company:',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                (companyInfo ?? {})["Description"] ?? "No Description Available",
-                textAlign: TextAlign.justify,
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 13),
-              ),
-            ],
-          ),
-        ),
-      ),
+            );
+          },
+        );
+      },
     );
   }
 
