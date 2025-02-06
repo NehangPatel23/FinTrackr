@@ -38,8 +38,7 @@ dependencies:
   fl_chart: ^0.70.1
   intl: ^0.20.0
   flutter_colorpicker: ^1.0.3
-  uuid: ^4.3.3
-  http: ^0.13.6 
+  uuid: ^4.3.3 
 
   firebase_core: ^2.16.0
 
