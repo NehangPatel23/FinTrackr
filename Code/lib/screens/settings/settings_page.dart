@@ -1,3 +1,6 @@
+import 'about_page.dart';
+import 'contact_page.dart';
+import 'faq_page.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -139,7 +142,10 @@ class SettingsPage extends StatelessWidget {
                 title: const Text('FAQs'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
-                  // Open FAQs
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FAQPage()),
+                  );
                 },
               ),
               ListTile(
@@ -147,7 +153,10 @@ class SettingsPage extends StatelessWidget {
                 title: const Text('Contact Support'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
-                  // Open support contact page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ContactPage()),
+                  );
                 },
               ),
               ListTile(
@@ -155,7 +164,10 @@ class SettingsPage extends StatelessWidget {
                 title: const Text('About App'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
-                  // Show app version and details
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutPage()),
+                  );
                 },
               ),
             ],
