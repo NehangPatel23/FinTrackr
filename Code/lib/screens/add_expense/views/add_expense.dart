@@ -78,10 +78,7 @@ class _AddExpenseState extends State<AddExpense> {
             return;
           }
 
-          print(
-              'Extracted Text:\n$extractedText'); // Debugging: print the full text
-          print(
-              'Full Extracted Text:\n$extractedText'); // This will give the entire text.
+          print('Extracted Text:\n$extractedText');
           extractAmountFromText(extractedText);
         } else {
           showError('No text detected in the image.');
@@ -95,55 +92,28 @@ class _AddExpenseState extends State<AddExpense> {
   }
 
   void extractAmountFromText(String text) {
-    // Normalize the text to avoid misinterpretations (e.g., spaces, incorrect characters)
-    text = text
-        .toLowerCase()
-        .replaceAll(RegExp(r'\s+'), ' ')
-        .trim(); // Remove extra spaces
-
-    // Debugging: Print the processed text
+    text = text.toLowerCase().replaceAll(RegExp(r'\s+'), ' ').trim();
     print('Processed Text:\n$text');
 
-    // Check if the text contains "Total" or misinterpreted "T 01"
-    if (text.contains('total') || text.contains('Total')) {
-      // Look for "total" or "T 01" in the string
-      int totalIndex = text.contains('total')
-          ? text.indexOf('total') // Use "total" if found
-          : text.indexOf('Total'); // Fallback to "T 01"
-
-      // Extract the substring starting from the "Total" (or misinterpreted "T 01")
+    if (text.contains('total')) {
+      int totalIndex = text.indexOf('total');
       String remainingText = text.substring(totalIndex);
 
-      // Regex to find the first monetary value following "Total"
       RegExp amountRegex = RegExp(r'[\$]?\s*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-          caseSensitive: false); // Match numbers like 46.79, 1,000.00
+          caseSensitive: false);
       Match? match = amountRegex.firstMatch(remainingText);
 
       if (match != null) {
-        String extractedAmount =
-            match.group(1)!; // Extracted amount as a string
-
-        // Convert to a double first
+        String extractedAmount = match.group(1)!;
         double amount = double.tryParse(
                 extractedAmount.replaceAll(',', '').replaceAll('\$', '')) ??
             0.0;
 
-        // Round up to the nearest integer if it's a float
-        if (amount != 0.0 && amount != amount.toInt()) {
-          amount = (amount)
-              .ceil()
-              .toDouble(); // Round up and convert to double temporarily
-        }
-
-        // Convert to int
-        int roundedAmount = amount.toInt();
+        int roundedAmount = amount.ceil();
 
         setState(() {
-          expenseController.text = roundedAmount
-              .toString(); // Set the extracted and rounded amount as int
+          expenseController.text = roundedAmount.toString();
         });
-
-        return;
       }
     }
   }
@@ -184,7 +154,7 @@ class _AddExpenseState extends State<AddExpense> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
-                        '/Users/nehangpatel/Downloads/FinTrackrApp/Code/assets/expenses-removebg-preview.png',
+                        'assets/expenses-removebg-preview.png',
                         height: 150,
                         width: 200,
                       ),
