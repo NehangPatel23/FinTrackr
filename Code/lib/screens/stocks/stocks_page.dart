@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fintrackr/screens/stocks/stock_chart.dart';
 import 'dart:convert';
+import 'dart:math';
 
 const String apiKey = 'OYNU1LA5APCCQ1I5';
 const String apiUrl = 'https://www.alphavantage.co/query';
@@ -33,6 +34,7 @@ class _StockPageState extends State<StockPage> {
   List<Stock> stocks = [];
   List<Stock> filteredStocks = [];
   bool isLoading = false;
+  bool isSearching = false;
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -133,13 +135,22 @@ class _StockPageState extends State<StockPage> {
 
   void toggleFavorite(int index) {
     setState(() {
-      stocks[index].isFavorite = !stocks[index].isFavorite;
+      List<Stock> targetList = isSearching ? filteredStocks : stocks;
+      targetList[index].isFavorite = !targetList[index].isFavorite;
 
-      stocks.sort((a, b) {
-        if (a.isFavorite && !b.isFavorite) return -1;
-        if (!a.isFavorite && b.isFavorite) return 1;
-        return 0;
-      });
+      if (targetList[index].isFavorite) {
+        targetList.insert(0, targetList.removeAt(index));
+      } else {
+        int randomIndex = Random().nextInt(targetList.length);
+        targetList.insert(randomIndex, targetList.removeAt(index));
+      }
+
+      if (isSearching) {
+        int mainIndex = stocks.indexWhere((stock) => stock.ticker == targetList[index].ticker);
+        if (mainIndex != -1) stocks[mainIndex].isFavorite = targetList[index].isFavorite;
+      } else {
+        filteredStocks = List.from(stocks);
+      }
     });
   }
 
@@ -320,9 +331,9 @@ class _StockPageState extends State<StockPage> {
               child: isLoading
                   ? Center(child: CircularProgressIndicator())
                   : ListView.builder(
-                      itemCount: filteredStocks.length,
+                      itemCount: isSearching ? filteredStocks.length : stocks.length,
                       itemBuilder: (context, index) {
-                        final stock = filteredStocks[index];
+                        final stock = isSearching ? filteredStocks[index] : stocks[index];
                         return ListTile(
                           title: Text('${stock.name}', style: TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Row(
