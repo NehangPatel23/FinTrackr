@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:expense_repository/expense_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +6,53 @@ import 'package:intl/intl.dart';
 
 import '../../settings/settings_page.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   final List<Expense> expenses;
   const MainScreen(this.expenses, {super.key});
+
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  List<Expense> sortedExpenses = []; // Store sorted expenses
+  double totalExpenses = 0.0;
+  final double initialBalance = 1000000.00; // Set initial balance to $1M
+
+  @override
+  void didUpdateWidget(covariant MainScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _updateExpenses();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _updateExpenses(); // Sort and calculate expenses initially
+    _calculateTotalExpenses(); // Calculate initially
+  }
+
+  void _updateExpenses() {
+    setState(() {
+      sortedExpenses = List.from(widget.expenses)
+        ..sort((a, b) {
+          int dateComparison = b.date.compareTo(a.date); // Compare by date
+          if (dateComparison == 0) {
+            return b.date.compareTo(a.date); // Compare by exact timestamp
+          }
+          return dateComparison;
+        });
+
+      _calculateTotalExpenses();
+    });
+  }
+
+  void _calculateTotalExpenses() {
+    setState(() {
+      totalExpenses =
+          widget.expenses.fold(0.0, (sum, expense) => sum + expense.amount);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,125 +117,128 @@ class MainScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.width / 2,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                    Theme.of(context).colorScheme.primary,
-                    Theme.of(context).colorScheme.secondary,
-                    Theme.of(context).colorScheme.tertiary,
-                  ], transform: const GradientRotation(pi / 4)),
-                  borderRadius: BorderRadius.circular(25),
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 5,
-                        color: Colors.grey.shade400,
-                        offset: const Offset(5, 5))
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Total Balance',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    '\$4500.00',
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 25.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 25,
-                              width: 25,
-                              decoration: const BoxDecoration(
-                                  color: Colors.white30,
-                                  shape: BoxShape.circle),
-                              child: const Center(
-                                  child: Icon(
-                                CupertinoIcons.arrow_down,
-                                color: Colors.greenAccent,
-                                size: 12,
-                              )),
-                            ),
-                            const SizedBox(width: 8),
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Income',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  '\$2500.00',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              height: 25,
-                              width: 25,
-                              decoration: const BoxDecoration(
-                                  color: Colors.white30,
-                                  shape: BoxShape.circle),
-                              child: const Center(
-                                  child: Icon(
-                                CupertinoIcons.arrow_up,
-                                color: Colors.redAccent,
-                                size: 12,
-                              )),
-                            ),
-                            const SizedBox(width: 8),
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Expenses',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                Text(
-                                  '\$800.00',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            )
-                          ],
-                        )
-                      ],
+            Expanded(
+              flex: 0,
+              child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.width / 2,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.secondary,
+                      Theme.of(context).colorScheme.tertiary,
+                    ], transform: const GradientRotation(pi / 4)),
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 5,
+                          color: Colors.grey.shade400,
+                          offset: const Offset(5, 5))
+                    ]),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Total Balance',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600),
                     ),
-                  )
-                ],
+                    const SizedBox(height: 10),
+                    Text(
+                      '\$${NumberFormat('#,###.00').format(initialBalance - totalExpenses)}', // Updated balance calculation
+                      style: const TextStyle(
+                          fontSize: 40,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 25.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: 25,
+                                width: 25,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white30,
+                                    shape: BoxShape.circle),
+                                child: const Center(
+                                    child: Icon(
+                                  CupertinoIcons.arrow_down,
+                                  color: Colors.greenAccent,
+                                  size: 12,
+                                )),
+                              ),
+                              const SizedBox(width: 8),
+                              const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Income',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  Text(
+                                    '\$2500.00',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                height: 25,
+                                width: 25,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white30,
+                                    shape: BoxShape.circle),
+                                child: const Center(
+                                    child: Icon(
+                                  CupertinoIcons.arrow_up,
+                                  color: Colors.redAccent,
+                                  size: 12,
+                                )),
+                              ),
+                              const SizedBox(width: 8),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Expenses',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  Text(
+                                    '\$${NumberFormat('#,###.00').format(totalExpenses)}', // Updated expenses
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 40),
@@ -221,14 +267,15 @@ class MainScreen extends StatelessWidget {
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: expenses.length,
+                itemCount: sortedExpenses.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 16.0),
                     child: Container(
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
@@ -243,12 +290,14 @@ class MainScreen extends StatelessWidget {
                                       height: 50,
                                       width: 50,
                                       decoration: BoxDecoration(
-                                          color: Color(
-                                              expenses[index].category.color),
-                                          shape: BoxShape.circle),
+                                        color: Color(sortedExpenses[index]
+                                            .category
+                                            .color),
+                                        shape: BoxShape.circle,
+                                      ),
                                     ),
                                     Image.asset(
-                                      'assets/${expenses[index].category.icon}.png',
+                                      'assets/${sortedExpenses[index].category.icon}.png',
                                       scale: 2,
                                       color: Colors.black54,
                                     ),
@@ -256,13 +305,13 @@ class MainScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 12),
                                 Text(
-                                  expenses[index].category.name,
+                                  sortedExpenses[index].category.name,
                                   style: TextStyle(
-                                      fontSize: 14,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                      fontWeight: FontWeight.w500),
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ],
                             ),
@@ -270,23 +319,23 @@ class MainScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  '-\$${NumberFormat('#,###').format(expenses[index].amount).toString()}.00',
+                                  '-\$${NumberFormat('#,###').format(sortedExpenses[index].amount)}.00',
                                   style: TextStyle(
-                                      fontSize: 14,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                      fontWeight: FontWeight.w300),
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: FontWeight.w300,
+                                  ),
                                 ),
                                 Text(
-                                  DateFormat('MM/dd/yyyy')
-                                      .format(expenses[index].date),
+                                  DateFormat('MM/dd/yyyy').format(
+                                      (sortedExpenses[index].date).toDate()),
                                   style: TextStyle(
-                                      fontSize: 14,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onSurface,
-                                      fontWeight: FontWeight.w200),
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: FontWeight.w200,
+                                  ),
                                 ),
                               ],
                             )
@@ -297,7 +346,7 @@ class MainScreen extends StatelessWidget {
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
