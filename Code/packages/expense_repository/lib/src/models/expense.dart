@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../entities/entities.dart';
 import 'category.dart';
 
 class Expense {
   String expenseId;
   Category category;
-  DateTime date;
+  Timestamp date;
   int amount;
 
   Expense({
@@ -17,7 +19,7 @@ class Expense {
   static final empty = Expense(
     expenseId: '',
     category: Category.empty,
-    date: DateTime.now(),
+    date: Timestamp.now(),
     amount: 0,
   );
 
