@@ -316,12 +316,32 @@ class _StockPageState extends State<StockPage> {
               controller: searchController,
               decoration: InputDecoration(
                 hintText: 'Search stocks...',
+                prefixIcon: Icon(Icons.search),
+                suffixIcon: searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            searchController.clear();
+                            isSearching = false;
+                            filteredStocks = List.from(stocks);
+                          });
+                        },
+                      )
+                    : null,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                prefixIcon: Icon(Icons.search),
               ),
-              onChanged: filterStocks,
+              onChanged: (query) {
+                setState(() {
+                  isSearching = query.isNotEmpty;
+                  filteredStocks = stocks
+                      .where((stock) => stock.name.toLowerCase().contains(query.toLowerCase()) ||
+                                                  stock.ticker.toLowerCase().contains(query.toLowerCase()))
+                      .toList();
+                });
+              },
             ),
           ),
           SizedBox(height: 20),
