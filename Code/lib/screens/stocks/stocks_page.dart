@@ -88,6 +88,28 @@ class _StockPageState extends State<StockPage> {
     });
   }
 
+  String formatNumber(String? numberString) {
+    if (numberString == null || numberString.isEmpty || numberString == "N/A") {
+      return "N/A";
+    }
+
+    try {
+      double number = double.parse(numberString.replaceAll(',', ''));
+
+      if (number >= 1e12) {
+        return "\$${(number / 1e12).toStringAsFixed(2)}T";
+      } else if (number >= 1e9) {
+        return "\$${(number / 1e9).toStringAsFixed(2)}B";
+      } else if (number >= 1e6) {
+        return "\$${(number / 1e6).toStringAsFixed(2)}M";
+      } else {
+        return "\$${number.toStringAsFixed(2)}";
+      }
+    } catch (e) {
+      return "N/A";
+    }
+  }
+
   Future<Map<String, dynamic>?> fetchCompanyInfo(String ticker) async {
     final response = await http.get(Uri.parse(
         '$apiUrl?function=OVERVIEW&symbol=$ticker&apikey=$apiKey'));
@@ -207,17 +229,17 @@ class _StockPageState extends State<StockPage> {
                     SizedBox(height: 5),
 
                     Text(
-                      '💰 Market Cap: \$${(companyInfo ?? {})["MarketCap"] ?? "N/A"}',
+                      '💰 Market Cap: \$${formatNumber((companyInfo ?? {})["MarketCap"])}',
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 5),
 
                     Text(
-                      '📊 EBITDA: \$${(companyInfo ?? {})["EBITDA"] ?? "N/A"}',
+                      '📊 EBITDA: ${formatNumber((companyInfo ?? {})["EBITDA"])}',
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '📈 Revenue (TTM): \$${(companyInfo ?? {})["Revenue"] ?? "N/A"}',
+                      '📈 Revenue (TTM): ${formatNumber((companyInfo ?? {})["Revenue"])}',
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     Divider(),
