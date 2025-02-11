@@ -90,26 +90,27 @@ class _StockPageState extends State<StockPage> {
     });
   }
 
-  String formatNumber(String? numberString) {
-    if (numberString == null || numberString.isEmpty || numberString == "N/A") {
+  String formatNumber(dynamic value) {
+    if (value == null || value.isEmpty || value == "N/A") {
       return "N/A";
     }
 
-    try {
-      double number = double.parse(numberString.replaceAll(',', ''));
+    double number = double.tryParse(value.toString()) ?? 0.0;
+    bool isNegative = number < 0;
+    number = number.abs();
 
-      if (number >= 1e12) {
-        return "\$${(number / 1e12).toStringAsFixed(2)}T";
-      } else if (number >= 1e9) {
-        return "\$${(number / 1e9).toStringAsFixed(2)}B";
-      } else if (number >= 1e6) {
-        return "\$${(number / 1e6).toStringAsFixed(2)}M";
-      } else {
-        return "\$${number.toStringAsFixed(2)}";
-      }
-    } catch (e) {
-      return "N/A";
+    String formatted;
+    if (number >= 1e9) {
+      formatted = "${(number / 1e9).toStringAsFixed(2)}B";
+    } else if (number >= 1e6) {
+      formatted = "${(number / 1e6).toStringAsFixed(2)}M";
+    } else if (number >= 1e3) {
+      formatted = "${(number / 1e3).toStringAsFixed(2)}K";
+    } else {
+      formatted = number.toStringAsFixed(2);
     }
+
+    return isNegative ? "-\$$formatted" : "\$$formatted";
   }
 
   Future<Map<String, dynamic>?> fetchCompanyInfo(String ticker) async {
@@ -190,83 +191,94 @@ class _StockPageState extends State<StockPage> {
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      stock.ticker,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      overflow: TextOverflow.ellipsis,
+            return Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.8,
+                ),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                stock.ticker,
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.close),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ],
+                        ),
+                        Divider(),
+
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: rating.startsWith("🟢") ? Colors.green[100] :
+                                  rating.startsWith("🟡") ? Colors.yellow[100] :
+                                    rating.startsWith("🔴") ? Colors.red[100] : Colors.grey[300],
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            "📊 Rating: $rating",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+
+                        SizedBox(
+                          height: 200,
+                          width: double.infinity,
+                          //width: 300,
+                          child: StockChart(ticker: stock.name),
+                        ),
+                        Divider(),
+
+                        Text(
+                          '🏢 Industry: ${(companyInfo ?? {})["Industry"] ?? "N/A"}',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 5),
+
+                        Text(
+                          '💰 Market Cap: ${formatNumber((companyInfo ?? {})["MarketCap"])}',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 5),
+
+                        Text(
+                          '📊 EBITDA: ${formatNumber((companyInfo ?? {})["EBITDA"])}',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          '📈 Revenue (TTM): ${formatNumber((companyInfo ?? {})["Revenue"])}',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                        Divider(),
+
+                        Text(
+                          '🌍 About the Company:',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          (companyInfo ?? {})["Description"] ?? "No Description Available",
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ],
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              ),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: rating.startsWith("🟢") ? Colors.green[100] :
-                              rating.startsWith("🟡") ? Colors.yellow[100] :
-                                rating.startsWith("🔴") ? Colors.red[100] : Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        "📊 Rating: $rating",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-
-                    SizedBox(
-                      height: 200,
-                      width: 300,
-                      child: StockChart(ticker: stock.name),
-                    ),
-                    Divider(),
-
-                    Text(
-                      '🏢 Industry: ${(companyInfo ?? {})["Industry"] ?? "N/A"}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 5),
-
-                    Text(
-                      '💰 Market Cap: \$${formatNumber((companyInfo ?? {})["MarketCap"])}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 5),
-
-                    Text(
-                      '📊 EBITDA: ${formatNumber((companyInfo ?? {})["EBITDA"])}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      '📈 Revenue (TTM): ${formatNumber((companyInfo ?? {})["Revenue"])}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    Divider(),
-
-                    Text(
-                      '🌍 About the Company:',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      (companyInfo ?? {})["Description"] ?? "No Description Available",
-                      textAlign: TextAlign.justify,
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ],
                 ),
               ),
             );
