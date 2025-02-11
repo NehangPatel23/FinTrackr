@@ -8,6 +8,7 @@ const String apiUrl = 'https://www.alphavantage.co/query';
 
 class Stock {
   final String name;
+  final String ticker;
   final double price;
   final double percentChange;
   final double delta;
@@ -15,6 +16,7 @@ class Stock {
 
   Stock({
     required this.name,
+    required this.ticker,
     required this.price,
     required this.percentChange,
     required this.delta,
@@ -59,7 +61,8 @@ class _StockPageState extends State<StockPage> {
       setState(() {
         stocks = allStocks.map((stock) {
           return Stock(
-            name: stock['ticker'],
+            name: stock['name'] ?? stock['ticker'],
+            ticker: stock['ticker'],
             price: double.tryParse(stock['price']) ?? 0.0,
             percentChange: double.tryParse(stock['change_percentage'].replaceAll('%', '')) ?? 0.0,
             delta: double.tryParse(stock['change_amount']) ?? 0.0,
@@ -160,7 +163,7 @@ class _StockPageState extends State<StockPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      stock.name,
+                      stock.ticker,
                       style: TextStyle(fontWeight: FontWeight.bold),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -299,7 +302,7 @@ class _StockPageState extends State<StockPage> {
                       itemBuilder: (context, index) {
                         final stock = filteredStocks[index];
                         return ListTile(
-                          title: Text('${stock.name} (${stock.name})', style: TextStyle(fontWeight: FontWeight.bold)),
+                          title: Text('${stock.name}', style: TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Row(
                             children: [
                               Text(
