@@ -9,10 +9,10 @@ class DebtPage extends StatefulWidget {
   const DebtPage({super.key});
 
   @override
-  _DebtPageState createState() => _DebtPageState();
+  DebtPageState createState() => DebtPageState();
 }
 
-class _DebtPageState extends State<DebtPage> {
+class DebtPageState extends State<DebtPage> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController interestController = TextEditingController();
   double monthlyPayment = 0.0;

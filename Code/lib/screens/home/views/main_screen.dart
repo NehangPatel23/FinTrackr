@@ -11,10 +11,10 @@ class MainScreen extends StatefulWidget {
   const MainScreen(this.expenses, {super.key});
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  MainScreenState createState() => MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreen> {
   List<Expense> sortedExpenses = []; // Store sorted expenses
   double totalExpenses = 0.0;
   final double initialBalance = 1000000.00; // Set initial balance to $1M

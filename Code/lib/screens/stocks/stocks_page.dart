@@ -23,11 +23,13 @@ class Stock {
 }
 
 class StockPage extends StatefulWidget {
+  const StockPage({super.key});
+
   @override
-  _StockPageState createState() => _StockPageState();
+  StockPageState createState() => StockPageState();
 }
 
-class _StockPageState extends State<StockPage> {
+class StockPageState extends State<StockPage> {
   List<Stock> stocks = [];
   List<Stock> filteredStocks = [];
   bool isLoading = false;
@@ -44,7 +46,8 @@ class _StockPageState extends State<StockPage> {
       isLoading = true;
     });
 
-    final response = await http.get(Uri.parse('$apiUrl?function=TOP_GAINERS_LOSERS&apikey=$apiKey'));
+    final response = await http
+        .get(Uri.parse('$apiUrl?function=TOP_GAINERS_LOSERS&apikey=$apiKey'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -61,7 +64,9 @@ class _StockPageState extends State<StockPage> {
           return Stock(
             name: stock['ticker'],
             price: double.tryParse(stock['price']) ?? 0.0,
-            percentChange: double.tryParse(stock['change_percentage'].replaceAll('%', '')) ?? 0.0,
+            percentChange: double.tryParse(
+                    stock['change_percentage'].replaceAll('%', '')) ??
+                0.0,
             delta: double.tryParse(stock['change_amount']) ?? 0.0,
           );
         }).toList();
@@ -80,14 +85,16 @@ class _StockPageState extends State<StockPage> {
     setState(() {
       filteredStocks = query.isEmpty
           ? stocks
-          : stocks.where((stock) =>
-              stock.name.toLowerCase().contains(query.toLowerCase())).toList();
+          : stocks
+              .where((stock) =>
+                  stock.name.toLowerCase().contains(query.toLowerCase()))
+              .toList();
     });
   }
 
   Future<Map<String, dynamic>?> fetchCompanyInfo(String ticker) async {
-    final response = await http.get(Uri.parse(
-        '$apiUrl?function=OVERVIEW&symbol=$ticker&apikey=$apiKey'));
+    final response = await http.get(
+        Uri.parse('$apiUrl?function=OVERVIEW&symbol=$ticker&apikey=$apiKey'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -120,8 +127,11 @@ class _StockPageState extends State<StockPage> {
 
   String getStockRating(Map<String, dynamic> companyInfo) {
     double peRatio = double.tryParse(companyInfo["PERatio"] ?? "0") ?? 0;
-    double marketCap = double.tryParse(companyInfo["MarketCap"]?.replaceAll(',', '') ?? "0") ?? 0;
-    double ebitda = double.tryParse(companyInfo["EBITDA"]?.replaceAll(',', '') ?? "0") ?? 0;
+    double marketCap =
+        double.tryParse(companyInfo["MarketCap"]?.replaceAll(',', '') ?? "0") ??
+            0;
+    double ebitda =
+        double.tryParse(companyInfo["EBITDA"]?.replaceAll(',', '') ?? "0") ?? 0;
 
     if (peRatio > 30) {
       return "🔴 Sell (Overvalued)";
@@ -178,53 +188,59 @@ class _StockPageState extends State<StockPage> {
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: rating.startsWith("🟢") ? Colors.green[100] :
-                              rating.startsWith("🟡") ? Colors.yellow[100] :
-                                rating.startsWith("🔴") ? Colors.red[100] : Colors.grey[300],
+                        color: rating.startsWith("🟢")
+                            ? Colors.green[100]
+                            : rating.startsWith("🟡")
+                                ? Colors.yellow[100]
+                                : rating.startsWith("🔴")
+                                    ? Colors.red[100]
+                                    : Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         "📊 Rating: $rating",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
                     SizedBox(height: 10),
-
                     SizedBox(
                       height: 200,
                       width: 300,
                       child: StockChart(ticker: stock.name),
                     ),
                     Divider(),
-
                     Text(
                       '🏢 Industry: ${(companyInfo ?? {})["Industry"] ?? "N/A"}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 5),
-
                     Text(
                       '💰 Market Cap: \$${(companyInfo ?? {})["MarketCap"] ?? "N/A"}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 5),
-
                     Text(
                       '📊 EBITDA: \$${(companyInfo ?? {})["EBITDA"] ?? "N/A"}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       '📈 Revenue (TTM): \$${(companyInfo ?? {})["Revenue"] ?? "N/A"}',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     Divider(),
-
                     Text(
                       '🌍 About the Company:',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      (companyInfo ?? {})["Description"] ?? "No Description Available",
+                      (companyInfo ?? {})["Description"] ??
+                          "No Description Available",
                       textAlign: TextAlign.justify,
                       maxLines: 4,
                       overflow: TextOverflow.ellipsis,
@@ -239,7 +255,6 @@ class _StockPageState extends State<StockPage> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -299,7 +314,8 @@ class _StockPageState extends State<StockPage> {
                       itemBuilder: (context, index) {
                         final stock = filteredStocks[index];
                         return ListTile(
-                          title: Text('${stock.name} (${stock.name})', style: TextStyle(fontWeight: FontWeight.bold)),
+                          title: Text('${stock.name} (${stock.name})',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Row(
                             children: [
                               Text(
@@ -309,20 +325,28 @@ class _StockPageState extends State<StockPage> {
                                 '${stock.percentChange.toStringAsFixed(2)}%',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: stock.percentChange >= 0 ? Colors.green : Colors.red,
+                                  color: stock.percentChange >= 0
+                                      ? Colors.green
+                                      : Colors.red,
                                 ),
                               ),
                               Text(
                                 ' (Δ${stock.delta})',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: stock.delta > 0 ? Colors.green : stock.delta < 0 ? Colors.red : Colors.black,
+                                  color: stock.delta > 0
+                                      ? Colors.green
+                                      : stock.delta < 0
+                                          ? Colors.red
+                                          : Colors.black,
                                 ),
                               ),
                             ],
                           ),
                           trailing: IconButton(
-                            icon: Icon(stock.isFavorite ? Icons.star : Icons.star_border),
+                            icon: Icon(stock.isFavorite
+                                ? Icons.star
+                                : Icons.star_border),
                             onPressed: () => toggleFavorite(index),
                           ),
                           onTap: () => showStockDetails(stock),
