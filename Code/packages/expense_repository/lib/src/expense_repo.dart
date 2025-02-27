@@ -1,11 +1,11 @@
 import 'models/models.dart';
 
 abstract class ExpenseRepository {
-  Future<void> createCategory(Category category);
+  Future<bool> createCategory(Category category);
 
-  Future<List<Category>> getCategory();
+  Stream<List<Category>> getCategories();
 
-  Future<void> createExpense(Expense expense);
+  Future<bool> createExpense(Expense expense);
 
-  Future<List<Expense>> getExpenses();
+  Stream<List<Expense>> getExpenses();
 }
