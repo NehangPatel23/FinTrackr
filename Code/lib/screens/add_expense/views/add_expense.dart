@@ -14,6 +14,7 @@ import '../../ui_elements/text_field.dart';
 import '../blocs/create_expense/create_expense_bloc.dart';
 import '../blocs/get_categories/get_categories_bloc.dart';
 import 'category_creation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 const String OCRApiKey = 'K84027267088957';
 
@@ -171,7 +172,7 @@ class _AddExpenseState extends State<AddExpense> {
                                   icon: FontAwesomeIcons.dollarSign)),
                           const SizedBox(width: 10),
 
-                          // ✅ OCR Button (Processes Asset Image)
+                          // OCR Button (Processes Asset Image)
                           IconButton(
                             onPressed: () => pickAndProcessImage(),
                             style: ElevatedButton.styleFrom(
@@ -269,7 +270,7 @@ class _AddExpenseState extends State<AddExpense> {
                         onTap: () async {
                           DateTime? newDate = await showDatePicker(
                             context: context,
-                            initialDate: expense.date,
+                            initialDate: DateTime.now(),
                             firstDate: DateTime(0000, 01, 01),
                             lastDate: DateTime.now(),
                           );
@@ -278,20 +279,24 @@ class _AddExpenseState extends State<AddExpense> {
                             setState(() {
                               dateController.text =
                                   DateFormat('MM/dd/yyyy').format(newDate);
-                              expense.date = newDate;
+                              expense.date = Timestamp.fromDate(
+                                  newDate); // Convert to Firestore Timestamp
                             });
                           }
                         },
                         decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: 'Date',
-                            prefixIcon: Icon(FontAwesomeIcons.clock,
-                                size: 18, color: Colors.grey.shade500),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide.none)),
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Date',
+                          prefixIcon: Icon(FontAwesomeIcons.clock,
+                              size: 18, color: Colors.grey.shade500),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
                       ),
+
                       const SizedBox(height: 40),
                       SizedBox(
                         width: 200,
@@ -305,6 +310,10 @@ class _AddExpenseState extends State<AddExpense> {
                                         .text
                                         .replaceAll(',', ''));
                                   });
+                                  expense.category.totalExpenses =
+                                      (expense.category.totalExpenses) +
+                                          expense.amount;
+
                                   context
                                       .read<CreateExpenseBloc>()
                                       .add(CreateExpense(expense));

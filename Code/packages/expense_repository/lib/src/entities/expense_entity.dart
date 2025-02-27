@@ -6,7 +6,7 @@ import '../models/models.dart';
 class ExpenseEntity {
   String expenseId;
   Category category;
-  DateTime date;
+  Timestamp date;
   int amount;
 
   ExpenseEntity({
@@ -30,7 +30,7 @@ class ExpenseEntity {
       expenseId: doc['expenseId'],
       category:
           Category.fromEntity(CategoryEntity.fromDocument(doc['category'])),
-      date: (doc['date'] as Timestamp).toDate(),
+      date: (doc['date'] as Timestamp),
       amount: doc['amount'],
     );
   }

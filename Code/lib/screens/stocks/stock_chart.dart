@@ -9,13 +9,13 @@ const String apiUrl = 'https://www.alphavantage.co/query';
 class StockChart extends StatefulWidget {
   final String ticker;
 
-  StockChart({required this.ticker});
+  const StockChart({super.key, required this.ticker});
 
   @override
-  _StockChartState createState() => _StockChartState();
+  StockChartState createState() => StockChartState();
 }
 
-class _StockChartState extends State<StockChart> {
+class StockChartState extends State<StockChart> {
   List<FlSpot> chartData = [];
   bool isLoading = true;
 
@@ -26,9 +26,8 @@ class _StockChartState extends State<StockChart> {
   }
 
   Future<void> fetchChartData() async {
-    final response = await http.get(
-      Uri.parse('$apiUrl?function=TIME_SERIES_INTRADAY&symbol=${widget.ticker}&interval=5min&apikey=$apiKey')
-    );
+    final response = await http.get(Uri.parse(
+        '$apiUrl?function=TIME_SERIES_INTRADAY&symbol=${widget.ticker}&interval=5min&apikey=$apiKey'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -59,7 +58,7 @@ class _StockChartState extends State<StockChart> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200, 
+      height: 200,
       width: double.infinity,
       child: isLoading
           ? Center(child: CircularProgressIndicator())
