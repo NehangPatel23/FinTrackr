@@ -5,4 +5,4 @@
 4. Debt repayment
 5. Stocks filtering
 6. UI updates
-7. Disable the save button until all fields are filled in to add expense.
+7. Disable the save button until all fields are filled in to add the expense.
