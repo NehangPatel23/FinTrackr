@@ -36,6 +36,7 @@ class _StockPageState extends State<StockPage> {
   bool isLoading = false;
   bool isSearching = false;
   TextEditingController searchController = TextEditingController();
+  String selectedFilter = 'All';
 
   @override
   void initState() {
@@ -171,6 +172,57 @@ class _StockPageState extends State<StockPage> {
     }
   }
 
+  void applyFilter() {
+    if (selectedFilter == 'All') {
+      setState(() {
+        filteredStocks = List.from(stocks); // Reset to all stocks
+      });
+      return;
+    }
+
+    setState(() {
+      switch (selectedFilter) {
+        case 'Gainers':
+          filteredStocks = stocks.where((stock) => stock.percentChange > 0).toList();
+          break;
+        case 'Losers':
+          filteredStocks = stocks.where((stock) => stock.percentChange < 0).toList();
+          break;
+        case 'Positive Change':
+          filteredStocks = stocks.where((stock) => stock.delta > 0).toList();
+          break;
+        case 'Negative Change':
+          filteredStocks = stocks.where((stock) => stock.delta < 0).toList();
+          break;
+      }
+    });
+  }
+  void showFilterMenu(BuildContext context, Offset position) async {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+
+    final result = await showMenu<String>(
+      context: context,
+      position: RelativeRect.fromRect(
+        Rect.fromPoints(position, position), // Position relative to tap
+        Offset.zero & overlay.size,
+      ),
+      items: [
+        PopupMenuItem(value: 'All', child: Text('Show All')),
+        PopupMenuItem(value: 'Gainers', child: Text('Gainers')),
+        PopupMenuItem(value: 'Losers', child: Text('Losers')),
+        PopupMenuItem(value: 'Positive Change', child: Text('Positive Change')),
+        PopupMenuItem(value: 'Negative Change', child: Text('Negative Change')),
+      ],
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedFilter = result;
+        applyFilter(); // Apply filter ONLY when the user selects an option
+      });
+    }
+  }
+
   void showStockDetails(Stock stock) async {
     Map<String, dynamic>? companyInfo = await fetchCompanyInfo(stock.name);
 
@@ -288,6 +340,31 @@ class _StockPageState extends State<StockPage> {
     );
   }
 
+  Widget buildFilterDropdown() {
+    return DropdownButton<String>(
+      value: selectedFilter,
+      onChanged: (String? newValue) {
+        if (newValue != null) {
+          setState(() {
+            selectedFilter = newValue;
+            applyFilter();
+          });
+        }
+      },
+      items: [
+        'All',
+        'Gainers',
+        'Losers',
+        'Positive Change',
+        'Negative Change'
+      ].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -324,36 +401,56 @@ class _StockPageState extends State<StockPage> {
           SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TextField(
-              controller: searchController,
-              decoration: InputDecoration(
-                hintText: 'Search stocks...',
-                prefixIcon: Icon(Icons.search),
-                suffixIcon: searchController.text.isNotEmpty
-                    ? IconButton(
-                        icon: Icon(Icons.clear),
-                        onPressed: () {
-                          setState(() {
-                            searchController.clear();
-                            isSearching = false;
-                            filteredStocks = List.from(stocks);
-                          });
-                        },
-                      )
-                    : null,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search stocks...',
+                      prefixIcon: Icon(Icons.search),
+                      suffixIcon: searchController.text.isNotEmpty
+                          ? IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  searchController.clear();
+                                  isSearching = false;
+                                  filteredStocks = List.from(stocks);
+                                });
+                              },
+                            )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onChanged: (query) {
+                      setState(() {
+                        isSearching = query.isNotEmpty;
+                        filteredStocks = stocks
+                            .where((stock) => stock.name.toLowerCase().contains(query.toLowerCase()) ||
+                                              stock.ticker.toLowerCase().contains(query.toLowerCase()))
+                            .toList();
+                      });
+                    },
+                  ),
                 ),
-              ),
-              onChanged: (query) {
-                setState(() {
-                  isSearching = query.isNotEmpty;
-                  filteredStocks = stocks
-                      .where((stock) => stock.name.toLowerCase().contains(query.toLowerCase()) ||
-                                                  stock.ticker.toLowerCase().contains(query.toLowerCase()))
-                      .toList();
-                });
-              },
+                SizedBox(width: 10),
+                GestureDetector(
+                  onTapDown: (TapDownDetails details) {
+                    showFilterMenu(context, details.globalPosition);
+                  },
+                  child: ElevatedButton.icon(
+                    onPressed: null,
+                    icon: Icon(Icons.filter_list),
+                    label: Text("Filter"),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(height: 20),
