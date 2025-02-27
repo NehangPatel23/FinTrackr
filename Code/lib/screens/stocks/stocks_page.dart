@@ -37,6 +37,7 @@ class StockPageState extends State<StockPage> {
   List<Stock> filteredStocks = [];
   bool isLoading = false;
   bool isSearching = false;
+  bool isFiltering = false;
   TextEditingController searchController = TextEditingController();
   String selectedFilter = 'All';
 
@@ -96,29 +97,6 @@ class StockPageState extends State<StockPage> {
                   stock.name.toLowerCase().contains(query.toLowerCase()))
               .toList();
     });
-  }
-
-  String formatNumber(dynamic value) {
-    if (value == null || value.isEmpty || value == "N/A") {
-      return "N/A";
-    }
-
-    double number = double.tryParse(value.toString()) ?? 0.0;
-    bool isNegative = number < 0;
-    number = number.abs();
-
-    String formatted;
-    if (number >= 1e9) {
-      formatted = "${(number / 1e9).toStringAsFixed(2)}B";
-    } else if (number >= 1e6) {
-      formatted = "${(number / 1e6).toStringAsFixed(2)}M";
-    } else if (number >= 1e3) {
-      formatted = "${(number / 1e3).toStringAsFixed(2)}K";
-    } else {
-      formatted = number.toStringAsFixed(2);
-    }
-
-    return isNegative ? "-\$$formatted" : "\$$formatted";
   }
 
   String formatNumber(dynamic value) {
@@ -208,12 +186,14 @@ class StockPageState extends State<StockPage> {
   void applyFilter() {
     if (selectedFilter == 'All') {
       setState(() {
-        filteredStocks = List.from(stocks); // Reset to all stocks
+        isFiltering = false;
+        filteredStocks = List.from(stocks);
       });
       return;
     }
 
     setState(() {
+      isFiltering = true;
       switch (selectedFilter) {
         case 'Gainers':
           filteredStocks = stocks.where((stock) => stock.percentChange > 0).toList();
@@ -236,7 +216,7 @@ class StockPageState extends State<StockPage> {
     final result = await showMenu<String>(
       context: context,
       position: RelativeRect.fromRect(
-        Rect.fromPoints(position, position), // Position relative to tap
+        Rect.fromPoints(position, position),
         Offset.zero & overlay.size,
       ),
       items: [
@@ -251,7 +231,8 @@ class StockPageState extends State<StockPage> {
     if (result != null) {
       setState(() {
         selectedFilter = result;
-        applyFilter(); // Apply filter ONLY when the user selects an option
+        isFiltering = result != 'All';
+        applyFilter();
       });
     }
   }
@@ -467,10 +448,17 @@ class StockPageState extends State<StockPage> {
                     onChanged: (query) {
                       setState(() {
                         isSearching = query.isNotEmpty;
-                        filteredStocks = stocks
+                        if (isFiltering) {
+                          filteredStocks = stocks
                             .where((stock) => stock.name.toLowerCase().contains(query.toLowerCase()) ||
                                               stock.ticker.toLowerCase().contains(query.toLowerCase()))
                             .toList();
+                        } else {
+                          filteredStocks = stocks
+                            .where((stock) => stock.name.toLowerCase().contains(query.toLowerCase()) ||
+                                              stock.ticker.toLowerCase().contains(query.toLowerCase()))
+                            .toList();
+                        }
                       });
                     },
                   ),
@@ -499,9 +487,17 @@ class StockPageState extends State<StockPage> {
               child: isLoading
                   ? Center(child: CircularProgressIndicator())
                   : ListView.builder(
-                      itemCount: isSearching ? filteredStocks.length : stocks.length,
+                      itemCount: isFiltering
+                          ? filteredStocks.length
+                          : isSearching
+                              ? filteredStocks.length
+                              : stocks.length,
                       itemBuilder: (context, index) {
-                        final stock = isSearching ? filteredStocks[index] : stocks[index];
+                        final stock = isFiltering
+                            ? filteredStocks[index]
+                            : isSearching 
+                                ? filteredStocks[index]
+                                : stocks[index];
                         return ListTile(
                           title: Text('${stock.name}', style: TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Row(
