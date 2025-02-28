@@ -6,3 +6,5 @@
 5. Stocks filtering
 6. UI updates
 7. Disable the save button until all fields are filled in to add the expense.
+8. Financial planning for home investments
+9. type of debt dropdown in debt management.
