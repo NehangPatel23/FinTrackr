@@ -6,14 +6,14 @@ part 'get_categories_event.dart';
 part 'get_categories_state.dart';
 
 class GetCategoriesBloc extends Bloc<GetCategoriesEvent, GetCategoriesState> {
-  final ExpenseRepository expenseRepository;
+  final TransactionRepository transactionRepository;
 
-  GetCategoriesBloc(this.expenseRepository) : super(GetCategoriesInitial()) {
+  GetCategoriesBloc(this.transactionRepository) : super(GetCategoriesInitial()) {
     on<GetCategories>((event, emit) async {
       emit(GetCategoriesLoading());
       try {
         await emit.forEach<List<Category>>(
-          expenseRepository.getCategories(), // Now listening to the stream
+          transactionRepository.getCategories(), // Now listening to the stream
           onData: (categories) => GetCategoriesSuccess(categories),
           onError: (_, __) => GetCategoriesFailure(),
         );

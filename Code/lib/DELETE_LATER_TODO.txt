@@ -1,0 +1,5 @@
+TODO
+
+1. Implement income page.
+2. Link income calculation to balance card.
+3. Make sure income shows up under transactions in Green font with a +.

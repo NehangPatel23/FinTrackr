@@ -14,7 +14,7 @@ final class GetExpensesFailure extends GetExpensesState {}
 final class GetExpensesLoading extends GetExpensesState {}
 
 final class GetExpensesSuccess extends GetExpensesState {
-  final List<Expense> expenses;
+  final List<FinancialTransaction> expenses;
 
   const GetExpensesSuccess(this.expenses);
 

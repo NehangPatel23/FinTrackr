@@ -7,18 +7,18 @@ import 'package:intl/intl.dart';
 import '../../settings/settings_page.dart';
 
 class MainScreen extends StatefulWidget {
-  final List<Expense> expenses;
-  const MainScreen(this.expenses, {super.key});
+  final List<FinancialTransaction> transactions;
+  const MainScreen(this.transactions, {super.key});
 
   @override
   MainScreenState createState() => MainScreenState();
 }
 
 class MainScreenState extends State<MainScreen> {
-  List<Expense> sortedExpenses = [];
+  List<FinancialTransaction> sortedTransactions = [];
   double totalExpenses = 0.0;
   final double initialBalance = 1000000.00; // Set initial balance to $1M
-  double income = 2500.00;
+  double totalIncome = 0.0;
 
   @override
   void didUpdateWidget(covariant MainScreen oldWidget) {
@@ -29,14 +29,14 @@ class MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _updateExpenses(); // Sort and calculate expenses initially
+    _updateExpenses(); // Sort and calculate transactions initially
     _calculateTotalExpenses(); // Calculate initially
   }
 
   void _updateExpenses() {
     setState(() {
-      sortedExpenses = [...widget.expenses]; // Copy existing list
-      sortedExpenses
+      sortedTransactions = [...widget.transactions]; // Copy existing list
+      sortedTransactions
           .sort((a, b) => b.date.compareTo(a.date)); // Sort newest first
       _calculateTotalExpenses();
     });
@@ -45,7 +45,7 @@ class MainScreenState extends State<MainScreen> {
   void _calculateTotalExpenses() {
     setState(() {
       totalExpenses =
-          widget.expenses.fold(0.0, (sum, expense) => sum + expense.amount);
+          widget.transactions.fold(0.0, (sum, expense) => sum + expense.amount);
     });
   }
 
@@ -143,7 +143,7 @@ class MainScreenState extends State<MainScreen> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      '\$${NumberFormat('#,###.00').format(initialBalance + income - totalExpenses)}', // Updated balance calculation
+                      '\$${NumberFormat('#,###.00').format(initialBalance + totalIncome - totalExpenses)}', // Updated balance calculation
                       style: const TextStyle(
                           fontSize: 40,
                           color: Colors.white,
@@ -171,7 +171,7 @@ class MainScreenState extends State<MainScreen> {
                                 )),
                               ),
                               const SizedBox(width: 8),
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -182,7 +182,7 @@ class MainScreenState extends State<MainScreen> {
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    '\$2500.00',
+                                    '\$${NumberFormat('#,###.00').format(totalIncome)}',
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.white,
@@ -219,7 +219,7 @@ class MainScreenState extends State<MainScreen> {
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    '\$${NumberFormat('#,###.00').format(totalExpenses)}', // Updated expenses
+                                    '\$${NumberFormat('#,###.00').format(totalExpenses)}', // Updated transactions
                                     style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.white,
@@ -264,7 +264,7 @@ class MainScreenState extends State<MainScreen> {
               child: RefreshIndicator(
                 onRefresh: () async => _updateExpenses(),
                 child: ListView.builder(
-                  itemCount: sortedExpenses.length,
+                  itemCount: sortedTransactions.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
@@ -287,14 +287,14 @@ class MainScreenState extends State<MainScreen> {
                                         height: 50,
                                         width: 50,
                                         decoration: BoxDecoration(
-                                          color: Color(sortedExpenses[index]
+                                          color: Color(sortedTransactions[index]
                                               .category
                                               .color),
                                           shape: BoxShape.circle,
                                         ),
                                       ),
                                       Image.asset(
-                                        'assets/${sortedExpenses[index].category.icon}.png',
+                                        'assets/${sortedTransactions[index].category.icon}.png',
                                         scale: 2,
                                         color: Colors.black54,
                                         errorBuilder:
@@ -307,7 +307,7 @@ class MainScreenState extends State<MainScreen> {
                                   ),
                                   const SizedBox(width: 12),
                                   Text(
-                                    sortedExpenses[index].category.name,
+                                    sortedTransactions[index].category.name,
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Theme.of(context)
@@ -322,16 +322,23 @@ class MainScreenState extends State<MainScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    '-\$${NumberFormat('#,###').format(sortedExpenses[index].amount)}.00',
+                                    '${sortedTransactions[index].type.toString() == "income" ? "+" : "-"}\$${NumberFormat('#,###').format(sortedTransactions[index].amount)}.00',
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: Colors.red,
+                                      color: sortedTransactions[index]
+                                                  .type
+                                                  .toString() ==
+                                              "income"
+                                          ? Colors.green
+                                          : Colors
+                                              .red, // Green for income, red for expense
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                   Text(
                                     DateFormat('MM/dd/yyyy').format(
-                                        (sortedExpenses[index].date).toDate()),
+                                        (sortedTransactions[index].date)
+                                            .toDate()),
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Theme.of(context)
