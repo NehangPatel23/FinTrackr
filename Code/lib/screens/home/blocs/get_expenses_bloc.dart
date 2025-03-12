@@ -6,15 +6,16 @@ part 'get_expenses_event.dart';
 part 'get_expenses_state.dart';
 
 class GetExpensesBloc extends Bloc<GetExpensesEvent, GetExpensesState> {
-  final ExpenseRepository expenseRepository;
+  final TransactionRepository transactionRepository;
 
-  GetExpensesBloc(this.expenseRepository) : super(GetExpensesInitial()) {
+  GetExpensesBloc(this.transactionRepository) : super(GetExpensesInitial()) {
     on<GetExpenses>((event, emit) async {
       emit(GetExpensesLoading());
       try {
-        await emit.forEach<List<Expense>>(
-          expenseRepository.getExpenses(), // Now listening to the stream
-          onData: (expenses) => GetExpensesSuccess(expenses),
+        await emit.forEach<List<FinancialTransaction>>(
+          transactionRepository
+              .getTransactions(),
+          onData: (transactions) => GetExpensesSuccess(transactions),
           onError: (_, __) => GetExpensesFailure(),
         );
       } catch (e) {

@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../add_expense/blocs/create_category/create_category_bloc.dart';
 import '../../add_expense/blocs/create_expense/create_expense_bloc.dart';
 import '../../add_expense/blocs/get_categories/get_categories_bloc.dart';
-import '../../add_expense/views/add_expense.dart';
+import '../../add_expense/views/add_transaction.dart';
 import '../blocs/get_expenses_bloc.dart';
 import 'main_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -83,30 +83,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         ListTile(
                           leading:
                               const Icon(CupertinoIcons.money_dollar_circle),
-                          title: const Text("Add Expense"),
+                          title: const Text("Add Transaction"),
                           onTap: () async {
                             Navigator.pop(context); // Close the bottom sheet
                             var newExpense = await Navigator.push(
                               context,
-                              MaterialPageRoute<Expense>(
+                              MaterialPageRoute<FinancialTransaction>(
                                 builder: (BuildContext context) =>
                                     MultiBlocProvider(
                                   providers: [
                                     BlocProvider(
                                       create: (context) => CreateCategoryBloc(
-                                          FirebaseExpenseRepo()),
+                                          FirebaseTransactionRepo()),
                                     ),
                                     BlocProvider(
                                       create: (context) => GetCategoriesBloc(
-                                          FirebaseExpenseRepo())
+                                          FirebaseTransactionRepo())
                                         ..add(GetCategories()),
                                     ),
                                     BlocProvider(
                                       create: (context) => CreateExpenseBloc(
-                                          FirebaseExpenseRepo()),
+                                          FirebaseTransactionRepo()),
                                     ),
                                   ],
-                                  child: const AddExpense(),
+                                  child: const AddTransaction(),
                                 ),
                               ),
                             );

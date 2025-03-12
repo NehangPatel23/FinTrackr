@@ -23,7 +23,7 @@ class MyAppView extends StatelessWidget {
               outline: Colors.grey.shade600)),
       home: BlocProvider(
         create: (context) =>
-            GetExpensesBloc(FirebaseExpenseRepo())..add(GetExpenses()),
+            GetExpensesBloc(FirebaseTransactionRepo())..add(GetExpenses()),
         child: const HomeScreen(),
       ),
     );

@@ -18,26 +18,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 const String OCRApiKey = 'K84027267088957';
 
-class AddExpense extends StatefulWidget {
-  const AddExpense({super.key});
+class AddTransaction extends StatefulWidget {
+  const AddTransaction({super.key});
 
   @override
-  State<AddExpense> createState() => _AddExpenseState();
+  State<AddTransaction> createState() => _AddTransactionState();
 }
 
-class _AddExpenseState extends State<AddExpense> {
+class _AddTransactionState extends State<AddTransaction> {
   TextEditingController expenseController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
   TextEditingController dateController = TextEditingController();
-  late Expense expense;
+  TransactionType _transactionType = TransactionType.expense;
+  late FinancialTransaction transaction;
   bool isLoading = false;
   File? selectedImage;
 
   @override
   void initState() {
     dateController.text = DateFormat('MM/dd/yyyy').format(DateTime.now());
-    expense = Expense.empty;
-    expense.expenseId = const Uuid().v1();
+    transaction = FinancialTransaction.empty;
+    transaction.transactionId = const Uuid().v1();
     super.initState();
   }
 
@@ -130,7 +131,7 @@ class _AddExpenseState extends State<AddExpense> {
     return BlocListener<CreateExpenseBloc, CreateExpenseState>(
       listener: (context, state) {
         if (state is CreateExpenseSuccess) {
-          Navigator.pop(context, expense);
+          Navigator.pop(context, transaction);
         } else if (state is CreateExpenseLoading) {
           isLoading = true;
         } else {
@@ -159,10 +160,10 @@ class _AddExpenseState extends State<AddExpense> {
                         height: 150,
                         width: 200,
                       ),
-                      Header(text: 'Add Expense'),
+                      Header(text: 'Add Transaction'),
                       const SizedBox(height: 16),
 
-                      // Expense Input with OCR Button
+                      // Transaction Input with OCR Button
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -197,18 +198,18 @@ class _AddExpenseState extends State<AddExpense> {
                         textAlignVertical: TextAlignVertical.center,
                         decoration: InputDecoration(
                             filled: true,
-                            fillColor: expense.category == Category.empty
+                            fillColor: transaction.category == Category.empty
                                 ? Colors.white
-                                : Color(expense.category.color),
+                                : Color(transaction.category.color),
                             hintText: 'Category',
-                            prefixIcon: expense.category == Category.empty
+                            prefixIcon: transaction.category == Category.empty
                                 ? const Icon(
                                     FontAwesomeIcons.list,
                                     size: 16,
                                     color: Colors.grey,
                                   )
                                 : Image.asset(
-                                    'assets/${expense.category.icon}.png',
+                                    'assets/${transaction.category.icon}.png',
                                     scale: 2,
                                   ),
                             suffixIcon: IconButton(
@@ -245,9 +246,9 @@ class _AddExpenseState extends State<AddExpense> {
                                   child: ListTile(
                                 onTap: () {
                                   setState(() {
-                                    expense.category = state.categories[i];
+                                    transaction.category = state.categories[i];
                                     categoryController.text =
-                                        expense.category.name;
+                                        transaction.category.name;
                                   });
                                 },
                                 leading: Image.asset(
@@ -261,6 +262,30 @@ class _AddExpenseState extends State<AddExpense> {
                             },
                           ),
                         ),
+                      ),
+                      Row(
+                        children: [
+                          const Text('Transaction Type: ',
+                              style: TextStyle(fontSize: 16)),
+                          const SizedBox(width: 10),
+                          DropdownButton<TransactionType>(
+                            value: _transactionType,
+                            onChanged: (TransactionType? newValue) {
+                              setState(() {
+                                _transactionType = newValue!;
+                              });
+                            },
+                            items: TransactionType.values
+                                .map((TransactionType type) {
+                              return DropdownMenuItem<TransactionType>(
+                                value: type,
+                                child: Text(type == TransactionType.expense
+                                    ? "Expense"
+                                    : "Income"),
+                              );
+                            }).toList(),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -279,7 +304,7 @@ class _AddExpenseState extends State<AddExpense> {
                             setState(() {
                               dateController.text =
                                   DateFormat('MM/dd/yyyy').format(newDate);
-                              expense.date = Timestamp.fromDate(
+                              transaction.date = Timestamp.fromDate(
                                   newDate); // Convert to Firestore Timestamp
                             });
                           }
@@ -306,17 +331,17 @@ class _AddExpenseState extends State<AddExpense> {
                             : GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    expense.amount = int.parse(expenseController
-                                        .text
-                                        .replaceAll(',', ''));
+                                    transaction.amount = int.parse(
+                                        expenseController.text
+                                            .replaceAll(',', ''));
                                   });
-                                  expense.category.totalExpenses =
-                                      (expense.category.totalExpenses) +
-                                          expense.amount;
+                                  transaction.category.totalExpenses =
+                                      (transaction.category.totalExpenses) +
+                                          transaction.amount;
 
                                   context
                                       .read<CreateExpenseBloc>()
-                                      .add(CreateExpense(expense));
+                                      .add(CreateExpense(transaction));
                                 },
                                 child: Container(
                                   padding:
