@@ -8,16 +8,22 @@ import '../../settings/settings_page.dart';
 
 class MainScreen extends StatefulWidget {
   final List<Expense> expenses;
-  const MainScreen(this.expenses, {super.key});
+  final String name;
+  const MainScreen(
+    this.name,
+    this.expenses, {
+    super.key,
+  });
 
   @override
   MainScreenState createState() => MainScreenState();
 }
 
 class MainScreenState extends State<MainScreen> {
-  List<Expense> sortedExpenses = []; // Store sorted expenses
+  List<Expense> sortedExpenses = [];
   double totalExpenses = 0.0;
   final double initialBalance = 1000000.00; // Set initial balance to $1M
+  double income = 2500.00;
 
   @override
   void didUpdateWidget(covariant MainScreen oldWidget) {
@@ -34,15 +40,9 @@ class MainScreenState extends State<MainScreen> {
 
   void _updateExpenses() {
     setState(() {
-      sortedExpenses = List.from(widget.expenses)
-        ..sort((a, b) {
-          int dateComparison = b.date.compareTo(a.date); // Compare by date
-          if (dateComparison == 0) {
-            return b.date.compareTo(a.date); // Compare by exact timestamp
-          }
-          return dateComparison;
-        });
-
+      sortedExpenses = [...widget.expenses]; // Copy existing list
+      sortedExpenses
+          .sort((a, b) => b.date.compareTo(a.date)); // Sort newest first
       _calculateTotalExpenses();
     });
   }
@@ -94,7 +94,7 @@ class MainScreenState extends State<MainScreen> {
                               color: Theme.of(context).colorScheme.outline),
                         ),
                         Text(
-                          'John Doe',
+                          '${widget.name}',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
@@ -148,7 +148,7 @@ class MainScreenState extends State<MainScreen> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      '\$${NumberFormat('#,###.00').format(initialBalance - totalExpenses)}', // Updated balance calculation
+                      '\$${NumberFormat('#,###.00').format(initialBalance + income - totalExpenses)}', // Updated balance calculation
                       style: const TextStyle(
                           fontSize: 40,
                           color: Colors.white,
@@ -176,7 +176,7 @@ class MainScreenState extends State<MainScreen> {
                                 )),
                               ),
                               const SizedBox(width: 8),
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -187,7 +187,7 @@ class MainScreenState extends State<MainScreen> {
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    '\$2500.00',
+                                    '\$${NumberFormat('#,###.00').format(income)}',
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.white,
@@ -266,85 +266,94 @@ class MainScreenState extends State<MainScreen> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: ListView.builder(
-                itemCount: sortedExpenses.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Container(
-                                      height: 50,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                        color: Color(sortedExpenses[index]
-                                            .category
-                                            .color),
-                                        shape: BoxShape.circle,
+              child: RefreshIndicator(
+                onRefresh: () async => _updateExpenses(),
+                child: ListView.builder(
+                  itemCount: sortedExpenses.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        height: 50,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                          color: Color(sortedExpenses[index]
+                                              .category
+                                              .color),
+                                          shape: BoxShape.circle,
+                                        ),
                                       ),
+                                      Image.asset(
+                                        'assets/${sortedExpenses[index].category.icon}.png',
+                                        scale: 2,
+                                        color: Colors.black54,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Icon(Icons.error,
+                                              color: Colors.red);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    sortedExpenses[index].category.name,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    Image.asset(
-                                      'assets/${sortedExpenses[index].category.icon}.png',
-                                      scale: 2,
-                                      color: Colors.black54,
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '-\$${NumberFormat('#,###').format(sortedExpenses[index].amount)}.00',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.w400,
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(width: 12),
-                                Text(
-                                  sortedExpenses[index].category.name,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                    fontWeight: FontWeight.w500,
                                   ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  '-\$${NumberFormat('#,###').format(sortedExpenses[index].amount)}.00',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                    fontWeight: FontWeight.w300,
+                                  Text(
+                                    DateFormat('MM/dd/yyyy').format(
+                                        (sortedExpenses[index].date).toDate()),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                      fontWeight: FontWeight.w200,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  DateFormat('MM/dd/yyyy').format(
-                                      (sortedExpenses[index].date).toDate()),
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                    fontWeight: FontWeight.w200,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           ],

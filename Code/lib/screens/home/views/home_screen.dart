@@ -18,7 +18,8 @@ import 'package:flutter/material.dart';
 import '../../stats/stat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String name;
+  const HomeScreen({super.key, avatar, required this.name});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -83,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ListTile(
                           leading:
                               const Icon(CupertinoIcons.money_dollar_circle),
-                          title: const Text("Add Expense"),
+                          title: const Text("Add Transaction"),
                           onTap: () async {
                             Navigator.pop(context); // Close the bottom sheet
                             var newExpense = await Navigator.push(
@@ -165,7 +166,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Icon(CupertinoIcons.add),
             ),
           ),
-          body: index == 0 ? MainScreen(state.expenses) : const StatScreen(),
+          body: index == 0
+              ? MainScreen(widget.name, state.expenses)
+              : const StatScreen(),
         );
       } else {
         return const Scaffold(
