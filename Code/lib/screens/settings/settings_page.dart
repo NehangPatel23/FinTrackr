@@ -1,3 +1,5 @@
+
+import '../auth/login_screen.dart';
 import 'about_page.dart';
 import 'contact_page.dart';
 import 'faq_page.dart';
@@ -38,7 +40,7 @@ class SettingsPage extends StatelessWidget {
               // Profile Section
               const Text('Profile', style: sectionTitleStyle),
               ListTile(
-                leading: const Icon(Icons.person),
+                leading: const Icon(Icons.person_2_outlined),
                 title: const Text('Edit Profile'),
                 trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                 onTap: () {
@@ -167,6 +169,31 @@ class SettingsPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => AboutPage()),
+                  );
+                },
+              ),
+
+              // Support Section
+              const SizedBox(height: 16),
+              const Text('Log Out', style: sectionTitleStyle),
+              ListTile(
+                leading: const Icon(Icons.person_3),
+                title: const Text('Log Out'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      duration: Duration(seconds: 3),
+                      content: Text(
+                        'Logged Out Successfully!',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      backgroundColor: Colors.greenAccent,
+                    ),
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
                   );
                 },
               ),

@@ -159,7 +159,7 @@ class _AddExpenseState extends State<AddExpense> {
                         height: 150,
                         width: 200,
                       ),
-                      Header(text: 'Add Expense'),
+                      Header(text: 'Add Transaction'),
                       const SizedBox(height: 16),
 
                       // Expense Input with OCR Button
