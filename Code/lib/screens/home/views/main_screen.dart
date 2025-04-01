@@ -8,7 +8,12 @@ import '../../settings/settings_page.dart';
 
 class MainScreen extends StatefulWidget {
   final List<Expense> expenses;
-  const MainScreen(this.expenses, {super.key});
+  final String name;
+  const MainScreen(
+    this.name,
+    this.expenses, {
+    super.key,
+  });
 
   @override
   MainScreenState createState() => MainScreenState();
@@ -89,7 +94,7 @@ class MainScreenState extends State<MainScreen> {
                               color: Theme.of(context).colorScheme.outline),
                         ),
                         Text(
-                          'John Doe',
+                          '${widget.name}',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
@@ -171,7 +176,7 @@ class MainScreenState extends State<MainScreen> {
                                 )),
                               ),
                               const SizedBox(width: 8),
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -182,7 +187,7 @@ class MainScreenState extends State<MainScreen> {
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    '\$2500.00',
+                                    '\$${NumberFormat('#,###.00').format(income)}',
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.white,
