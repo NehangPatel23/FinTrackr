@@ -163,8 +163,9 @@ class StockPageState extends State<StockPage> {
       if (isSearching) {
         int mainIndex = stocks
             .indexWhere((stock) => stock.ticker == targetList[index].ticker);
-        if (mainIndex != -1)
+        if (mainIndex != -1) {
           stocks[mainIndex].isFavorite = targetList[index].isFavorite;
+        }
       } else {
         filteredStocks = List.from(stocks);
       }
@@ -528,7 +529,7 @@ class StockPageState extends State<StockPage> {
                                 ? filteredStocks[index]
                                 : stocks[index];
                         return ListTile(
-                          title: Text('${stock.name}',
+                          title: Text(stock.name,
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Row(
                             children: [
