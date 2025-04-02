@@ -809,7 +809,31 @@ class InfoPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 75),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Real-time Stock Market Information can be found ',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    TextSpan(
+                      text: 'here',
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () =>
+                            launchURL('https://www.google.com/finance/?hl=en'),
+                    ),
+                    const TextSpan(
+                      text: ' at the Google Finance page.\n\n',
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
+              ),
               RichText(
                 text: TextSpan(
                   children: [
