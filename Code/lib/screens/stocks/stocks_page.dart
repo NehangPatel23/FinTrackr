@@ -1,8 +1,13 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:fintrackr/screens/stocks/stock_chart.dart';
 import 'dart:convert';
 import 'dart:math';
+
+import '../ui_elements/header.dart';
+import '../ui_elements/launch_url.dart';
 
 const String apiKey = 'OYNU1LA5APCCQ1I5';
 const String apiUrl = 'https://www.alphavantage.co/query';
@@ -156,8 +161,11 @@ class StockPageState extends State<StockPage> {
       }
 
       if (isSearching) {
-        int mainIndex = stocks.indexWhere((stock) => stock.ticker == targetList[index].ticker);
-        if (mainIndex != -1) stocks[mainIndex].isFavorite = targetList[index].isFavorite;
+        int mainIndex = stocks
+            .indexWhere((stock) => stock.ticker == targetList[index].ticker);
+        if (mainIndex != -1) {
+          stocks[mainIndex].isFavorite = targetList[index].isFavorite;
+        }
       } else {
         filteredStocks = List.from(stocks);
       }
@@ -196,10 +204,12 @@ class StockPageState extends State<StockPage> {
       isFiltering = true;
       switch (selectedFilter) {
         case 'Gainers':
-          filteredStocks = stocks.where((stock) => stock.percentChange > 0).toList();
+          filteredStocks =
+              stocks.where((stock) => stock.percentChange > 0).toList();
           break;
         case 'Losers':
-          filteredStocks = stocks.where((stock) => stock.percentChange < 0).toList();
+          filteredStocks =
+              stocks.where((stock) => stock.percentChange < 0).toList();
           break;
         case 'Positive Change':
           filteredStocks = stocks.where((stock) => stock.delta > 0).toList();
@@ -210,8 +220,10 @@ class StockPageState extends State<StockPage> {
       }
     });
   }
+
   void showFilterMenu(BuildContext context, Offset position) async {
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
 
     final result = await showMenu<String>(
       context: context,
@@ -258,7 +270,8 @@ class StockPageState extends State<StockPage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return Dialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.8,
@@ -276,7 +289,8 @@ class StockPageState extends State<StockPage> {
                             Expanded(
                               child: Text(
                                 stock.ticker,
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 18),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -287,23 +301,22 @@ class StockPageState extends State<StockPage> {
                           ],
                         ),
                         Divider(),
-
                         Container(
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: rating.startsWith("🟢")
-                            ? Colors.green[100]
+                                ? Colors.green[100]
                                 : rating.startsWith("🟡")
-                                ? Colors.yellow[100]
+                                    ? Colors.yellow[100]
                                     : rating.startsWith("🔴")
-                                    ? Colors.red[100]
-                                    : Colors.grey[300],
+                                        ? Colors.red[100]
+                                        : Colors.grey[300],
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
                             "📊 Rating: $rating",
                             style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
                         SizedBox(height: 10),
@@ -316,35 +329,35 @@ class StockPageState extends State<StockPage> {
                         Divider(),
                         Text(
                           '🏢 Industry: ${(companyInfo ?? {})["Industry"] ?? "N/A"}',
-                          style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 5),
                         Text(
                           '💰 Market Cap: ${formatNumber((companyInfo ?? {})["MarketCap"])}',
-                          style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 5),
                         Text(
                           '📊 EBITDA: ${formatNumber((companyInfo ?? {})["EBITDA"])}',
-                          style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           '📈 Revenue (TTM): ${formatNumber((companyInfo ?? {})["Revenue"])}',
-                          style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         Divider(),
                         Text(
                           '🌍 About the Company:',
-                          style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           (companyInfo ?? {})["Description"] ??
-                          "No Description Available",
+                              "No Description Available",
                           textAlign: TextAlign.justify,
                           style: TextStyle(fontSize: 13),
                         ),
@@ -371,18 +384,22 @@ class StockPageState extends State<StockPage> {
           });
         }
       },
-      items: [
-        'All',
-        'Gainers',
-        'Losers',
-        'Positive Change',
-        'Negative Change'
-      ].map<DropdownMenuItem<String>>((String value) {
+      items: ['All', 'Gainers', 'Losers', 'Positive Change', 'Negative Change']
+          .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),
         );
       }).toList(),
+    );
+  }
+
+  void _showMoreInfoPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => InfoPage(),
+      ),
     );
   }
 
@@ -392,8 +409,10 @@ class StockPageState extends State<StockPage> {
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () {},
+            icon: Icon(FontAwesomeIcons.circleInfo),
+            onPressed: () {
+              _showMoreInfoPage();
+            },
           ),
         ],
       ),
@@ -450,14 +469,24 @@ class StockPageState extends State<StockPage> {
                         isSearching = query.isNotEmpty;
                         if (isFiltering) {
                           filteredStocks = stocks
-                            .where((stock) => stock.name.toLowerCase().contains(query.toLowerCase()) ||
-                                              stock.ticker.toLowerCase().contains(query.toLowerCase()))
-                            .toList();
+                              .where((stock) =>
+                                  stock.name
+                                      .toLowerCase()
+                                      .contains(query.toLowerCase()) ||
+                                  stock.ticker
+                                      .toLowerCase()
+                                      .contains(query.toLowerCase()))
+                              .toList();
                         } else {
                           filteredStocks = stocks
-                            .where((stock) => stock.name.toLowerCase().contains(query.toLowerCase()) ||
-                                              stock.ticker.toLowerCase().contains(query.toLowerCase()))
-                            .toList();
+                              .where((stock) =>
+                                  stock.name
+                                      .toLowerCase()
+                                      .contains(query.toLowerCase()) ||
+                                  stock.ticker
+                                      .toLowerCase()
+                                      .contains(query.toLowerCase()))
+                              .toList();
                         }
                       });
                     },
@@ -473,7 +502,8 @@ class StockPageState extends State<StockPage> {
                     icon: Icon(Icons.filter_list),
                     label: Text("Filter"),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                     ),
                   ),
                 ),
@@ -495,11 +525,13 @@ class StockPageState extends State<StockPage> {
                       itemBuilder: (context, index) {
                         final stock = isFiltering
                             ? filteredStocks[index]
-                            : isSearching 
+                            : isSearching
                                 ? filteredStocks[index]
                                 : stocks[index];
                         return ListTile(
-                          title: Text('${stock.name}', style: TextStyle(fontWeight: FontWeight.bold)),
+                          title: Text(stock.name,
+                              style: TextStyle(fontWeight: 
+                              FontWeight.bold)),
                           subtitle: Wrap(
                             spacing: 4.0,
                             runSpacing: 2.0,
@@ -551,4 +583,289 @@ void main() {
   runApp(MaterialApp(
     home: StockPage(),
   ));
+}
+
+class InfoPage extends StatelessWidget {
+  const InfoPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Image.asset('assets/debt-info-page.png', height: 200, width: 200),
+              Header(text: 'Helpful Links & Information'),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Disclaimer: ',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                    const TextSpan(
+                      text:
+                          'We are not providing any recommendations on buying/selling stocks. All the information displayed here is representational and for demonstration purposes only.\n\n',
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                    const TextSpan(
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.redAccent,
+                            fontSize: 18),
+                        text:
+                            'Investing in stocks carries risks, as the value of a stock can decrease, and investors could lose money!')
+                  ],
+                ),
+              ),
+              SizedBox(height: 50),
+              Text('What Are Stocks?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              SizedBox(height: 15),
+              Text(
+                  'Stocks, also known as shares or equities, represent ownership in a company, and when you buy stock, you become a shareholder with a stake in the company\'s assets and potential profits.\n\nWhen a company issues stock, it\'s essentially selling a piece of itself to investors. Investors who purchase these shares become shareholders, meaning they have a claim on the company\'s assets and profits.'),
+              SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.schwab.com/stocks/understand-stocks'),
+                child: const Text(
+                  'What are Stocks?',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.investor.gov/introduction-investing/investing-basics/investment-products/stocks'),
+                child: const Text(
+                  'INVESTOR.GOV - What Are Stocks?',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.td.com/ca/en/investing/direct-investing/articles/what-is-stock-market'),
+                child: const Text(
+                  'Stock Market 101',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.rbcgam.com/en/ca/learn-plan/investment-basics/what-are-stocks-and-how-do-they-work/detail'),
+                child: const Text(
+                  'What Are Stocks & How Do They Work?',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 50),
+              Text('Want to Learn More About Stocks?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://dfi.wa.gov/financial-education/information/basics-investing-stocks'),
+                child: const Text(
+                  'Basics of Investing in Stocks',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () =>
+                    launchURL('https://n26.com/en-eu/blog/what-are-stocks'),
+                child: const Text(
+                  'What Are Stocks - A Walkthrough For Beginner Investors',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.getsmarteraboutmoney.ca/learning-path/getting-started/how-the-stock-market-works/'),
+                child: const Text(
+                  'How The Stock Market Works',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://finred.usalearning.gov/Saving/StocksBondsMutualFunds'),
+                child: const Text(
+                  'Investing Basics',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.usbank.com/investing/financial-perspectives/investing-insights/how-do-i-invest-in-stocks.html'),
+                child: const Text(
+                  'How Do I Invest In Stocks?',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.nerdwallet.com/article/investing/how-to-invest-in-stocks'),
+                child: const Text(
+                  'How To Invest In Stocks - Beginner\'s Guide',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.schwab.com/learn/story/stock-investment-tips-beginners'),
+                child: const Text(
+                  'Stock Market Tips For Beginners',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.sec.gov/investor/pubs/tenthingstoconsider.htm'),
+                child: const Text(
+                  '10 Things To Consider Before Making Investing Decisions',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.lloydsbank.com/investing/understanding-investing/investing-for-beginners.html'),
+                child: const Text(
+                  'Investing For Beginners',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.investopedia.com/articles/basics/06/invest1000.asp'),
+                child: const Text(
+                  'How To Start Investing in Stocks in 2025 and Beyond',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 75),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Real-time Stock Market Information can be found ',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    TextSpan(
+                      text: 'here',
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () =>
+                            launchURL('https://www.google.com/finance/?hl=en'),
+                    ),
+                    const TextSpan(
+                      text: ' at the Google Finance page.\n\n',
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'More information is just a simple ',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    TextSpan(
+                      text: 'Google Search',
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => launchURL(
+                            'https://www.google.com/search?q=stock+market+investment&sca_esv=cd731438e95bc999&biw=1728&bih=992&sxsrf=AHTn8zo2lbr6IkgFxTa6kvaSgFg2w7pgtQ%3A1743541666414&ei=olXsZ7-AGYz8ptQPn6bXyQU&ved=0ahUKEwi_2bXt3reMAxUMvokEHR_TNVk4HhDh1QMIEA&oq=stock+market+investment&gs_lp=Egxnd3Mtd2l6LXNlcnAiF3N0b2NrIG1hcmtldCBpbnZlc3RtZW50SABQAFgAcAB4AJABAJgBAKABAKoBALgBDMgBAJgCAKACAJgDAJIHAKAHAA&sclient=gws-wiz-serp'),
+                    ),
+                    const TextSpan(
+                      text: ' a simple Google Search away!\n\n',
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 50),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

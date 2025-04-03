@@ -1,11 +1,11 @@
 import 'package:fintrackr/screens/ui_elements/header.dart';
 import 'package:fintrackr/screens/ui_elements/question_row.dart';
-// import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:intl/intl.dart';
 
 import '../ui_elements/dropdown.dart';
+import '../ui_elements/launch_url.dart';
 import '../ui_elements/text_field.dart';
 import 'tax_results.dart';
 
@@ -497,18 +497,134 @@ class InfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Image.asset('assets/tax_info_page.png', height: 200, width: 200),
-            Header(text: 'Tax Information'),
-            const Text(
-              'Disclaimer: The tax values and calculations are based on dummy data and are not representative of actual tax calculations. The numbers provided are for demonstration purposes only.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Image.asset('assets/tax_info_page.png', height: 200, width: 200),
+              Header(text: 'Helpful Links & Information'),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Disclaimer: ',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                    const TextSpan(
+                      text:
+                          'The tax values and calculations displayed are based on dummy data and are not representative of actual tax calculations. The numbers provided are for demonstration purposes only.',
+                      style: TextStyle(color: Colors.black, fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 50),
+              Text('What Are Taxes and Why Do I Need To Pay Taxes?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              SizedBox(height: 20),
+              Text(
+                  'A Tax is a mandatory financial charge or levy imposed on an individual or legal entity by a governmental organization to support government spending and public expenditures collectively or to regulate and reduce negative externalities.\n\nTax Compliance refers to policy actions and individual behavior aimed at ensuring that taxpayers are paying the right amount of tax at the right time and securing the correct tax allowances and tax relief.'),
+              SizedBox(
+                height: 20,
+              ),
+              InkWell(
+                onTap: () =>
+                    launchURL('https://www.irs.gov/pub/irs-pdf/p2105.pdf'),
+                child: const Text(
+                  'Why Do I Have To File Taxes?',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 50),
+              Text(
+                  'Want to Learn More About Taxes? Have Questions About Your Taxes?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () =>
+                    launchURL('https://www.youtube.com/watch?v=8YeU1gbuR9g'),
+                child: const Text(
+                  'Basics of Tax Preparation',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.irs.gov/how-to-file-your-taxes-step-by-step'),
+                child: const Text(
+                  'How to file your taxes - Step by Step Instructions',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.consumerfinance.gov/consumer-tools/guide-to-filing-your-taxes/'),
+                child: const Text(
+                  'Guide to Filing Your Taxes',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              InkWell(
+                onTap: () => launchURL(
+                    'https://www.irs.gov/individuals/tax-withholding-estimator'),
+                child: const Text(
+                  'Tax Withholding Estimation',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(height: 50),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text:
+                          'For more detailed information, refer to the official ',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    TextSpan(
+                      text: 'IRS website',
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => launchURL('https://www.irs.gov/'),
+                    ),
+                    const TextSpan(
+                      text: '.',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 50),
+            ],
+          ),
         ),
       ),
     );
