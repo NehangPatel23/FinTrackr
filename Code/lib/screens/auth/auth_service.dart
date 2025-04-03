@@ -1,5 +1,6 @@
 import 'package:bcrypt/bcrypt.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -16,7 +17,9 @@ class AuthService {
           .get();
 
       if (userSnapshot.docs.isNotEmpty) {
-        print('User already exists.');
+        if (kDebugMode) {
+          print('User already exists.');
+        }
         return false;
       }
 
@@ -34,7 +37,9 @@ class AuthService {
 
       return true; // Registration successful
     } catch (e) {
-      print('Error during registration: $e');
+      if (kDebugMode) {
+        print('Error during registration: $e');
+      }
       return false; // Registration failed
     }
   }
@@ -56,7 +61,9 @@ class AuthService {
         if (userData.containsKey('passwordHash')) {
           String storedPasswordHash = userData['passwordHash'];
 
-          print("Stored hash: $storedPasswordHash");
+          if (kDebugMode) {
+            print("Stored hash: $storedPasswordHash");
+          }
 
           // Ensure stored password hash is not null or empty
           if (storedPasswordHash.isNotEmpty) {
@@ -72,7 +79,9 @@ class AuthService {
 
       return null; // User not found or password field missing
     } catch (e) {
-      print('Error during login: $e');
+      if (kDebugMode) {
+        print('Error during login: $e');
+      }
       return null; // Login failed
     }
   }

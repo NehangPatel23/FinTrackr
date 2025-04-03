@@ -94,7 +94,7 @@ class MainScreenState extends State<MainScreen> {
                               color: Theme.of(context).colorScheme.outline),
                         ),
                         Text(
-                          '${widget.name}',
+                          widget.name,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18.0,
