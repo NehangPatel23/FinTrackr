@@ -530,8 +530,11 @@ class StockPageState extends State<StockPage> {
                                 : stocks[index];
                         return ListTile(
                           title: Text(stock.name,
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                          subtitle: Row(
+                              style: TextStyle(fontWeight: 
+                              FontWeight.bold)),
+                          subtitle: Wrap(
+                            spacing: 4.0,
+                            runSpacing: 2.0,
                             children: [
                               Text(
                                 'Price: \$${stock.price.toStringAsFixed(2)} | Change: ',
