@@ -20,6 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _obscurePassword = true;
+  final RegExp emailRegex = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
   final AuthService authService = AuthService();
 
   @override
@@ -59,14 +61,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           TextFormField(
                             controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
-                              labelText: 'Email',
+                              labelText: 'Email Address',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your email';
+                                return 'Please enter your email address!';
+                              } else if (!emailRegex.hasMatch(value)) {
+                                return 'Please enter a valid email address!';
                               }
                               return null;
                             },
@@ -77,20 +82,25 @@ class _LoginScreenState extends State<LoginScreen> {
                             obscureText: _obscurePassword,
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)),
                               suffixIcon: GestureDetector(
                                 onLongPress: () {
                                   setState(() {
-                                    _obscurePassword = false; // Show password when held
+                                    _obscurePassword =
+                                        false; // Show password when held
                                   });
                                 },
                                 onLongPressUp: () {
                                   setState(() {
-                                    _obscurePassword = true; // Hide password when released
+                                    _obscurePassword =
+                                        true; // Hide password when released
                                   });
                                 },
                                 child: Icon(
-                                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                  _obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
                                 ),
                               ),
                             ),

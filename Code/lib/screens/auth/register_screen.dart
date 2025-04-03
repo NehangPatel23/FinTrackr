@@ -22,8 +22,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  bool _passwordVisible = false;
-  bool _confirmPasswordVisible = false;
+  bool _obscurePassword = true;
+  final bool _confirmPasswordVisible = false;
+  final RegExp emailRegex = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
   final AuthService authService = AuthService();
 
   @override
@@ -78,14 +80,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 15),
                           TextFormField(
                             controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
-                              labelText: 'Email/Username',
+                              labelText: 'Email Address',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your email/username';
+                                return 'Please enter your email address!';
+                              } else if (!emailRegex.hasMatch(value)) {
+                                return 'Please enter a valid email address!';
                               }
                               return null;
                             },
@@ -93,22 +98,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 15),
                           TextFormField(
                             controller: passwordController,
-                            obscureText: !_passwordVisible,
+                            obscureText: _obscurePassword,
                             decoration: InputDecoration(
                               labelText: 'Password',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _passwordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                onPressed: () {
+                              suffixIcon: GestureDetector(
+                                onLongPress: () {
                                   setState(() {
-                                    _passwordVisible = !_passwordVisible;
+                                    _obscurePassword =
+                                        false; // Show password when held
                                   });
                                 },
+                                onLongPressUp: () {
+                                  setState(() {
+                                    _obscurePassword =
+                                        true; // Hide password when released
+                                  });
+                                },
+                                child: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
                               ),
                             ),
                             validator: (value) {
@@ -126,18 +138,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               labelText: 'Confirm Password',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _confirmPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                                onPressed: () {
+                              suffixIcon: GestureDetector(
+                                onLongPress: () {
                                   setState(() {
-                                    _confirmPasswordVisible =
-                                        !_confirmPasswordVisible;
+                                    _obscurePassword =
+                                        false; // Show password when held
                                   });
                                 },
+                                onLongPressUp: () {
+                                  setState(() {
+                                    _obscurePassword =
+                                        true; // Hide password when released
+                                  });
+                                },
+                                child: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
                               ),
                             ),
                             validator: (value) {

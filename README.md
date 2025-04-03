@@ -315,7 +315,7 @@ These instructions will help you set up and run the Flutter application locally 
     flutter pub get
     ```
 
-2. **Open the project in your IDE.**
+3. **Open the project in your IDE.**
 
     Open your chosen IDE and open the project directory. You can install the Flutter and Dart extensions
     for a smoother development experience.
@@ -326,13 +326,13 @@ These instructions will help you set up and run the Flutter application locally 
     code .
     ```
 
-3. **Connect a physical device or start an emulator.**
+4. **Connect a physical device or start an emulator.**
 
     Ensure that you have either a physical device connected via USB debugging or an emulator running. You can use any device - iOS or Android.
 
     Note: For iOS devices, the minimum required version to properly run the application is iOS 12.
 
-4. **Run the app:**
+5. **Run the app:**
 
     Run the following command to build and launch the app on your connected device or emulator.
 

@@ -7,6 +7,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MyAppView();
+    return GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus(); // Hides the keyboard
+        },
+        child: const MyAppView());
   }
 }
