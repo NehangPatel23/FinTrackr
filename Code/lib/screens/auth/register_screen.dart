@@ -1,4 +1,5 @@
 import 'package:expense_repository/expense_repository.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../home/blocs/get_expenses_bloc.dart';
 import 'login_screen.dart';
@@ -12,6 +13,23 @@ class RegisterScreen extends StatefulWidget {
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class CapitalizeTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Capitalize the first letter of each word
+    String text = newValue.text;
+    text = text
+        .split(' ')
+        .map((word) => word.isNotEmpty
+            ? word[0].toUpperCase() + word.substring(1).toLowerCase()
+            : '')
+        .join(' ');
+
+    return newValue.copyWith(text: text, selection: newValue.selection);
+  }
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -65,6 +83,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         children: [
                           TextFormField(
                             controller: nameController,
+                            keyboardType: TextInputType.name,
+                            textCapitalization: TextCapitalization.words,
+                            inputFormatters: [
+                              CapitalizeTextInputFormatter(),
+                            ],
                             decoration: InputDecoration(
                               labelText: 'Full Name',
                               border: OutlineInputBorder(
