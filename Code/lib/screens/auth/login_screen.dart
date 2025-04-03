@@ -77,17 +77,21 @@ class _LoginScreenState extends State<LoginScreen> {
                             obscureText: _obscurePassword,
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              suffixIcon: IconButton(
-                                icon: Icon(_obscurePassword
-                                    ? Icons.visibility_off
-                                    : Icons.visibility),
-                                onPressed: () {
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                              suffixIcon: GestureDetector(
+                                onLongPress: () {
                                   setState(() {
-                                    _obscurePassword = !_obscurePassword;
+                                    _obscurePassword = false; // Show password when held
                                   });
                                 },
+                                onLongPressUp: () {
+                                  setState(() {
+                                    _obscurePassword = true; // Hide password when released
+                                  });
+                                },
+                                child: Icon(
+                                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                ),
                               ),
                             ),
                             validator: (value) {
