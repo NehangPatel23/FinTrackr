@@ -1,5 +1,4 @@
-
-import '../auth/login_screen.dart';
+import '../splash_screen.dart';
 import 'about_page.dart';
 import 'contact_page.dart';
 import 'faq_page.dart';
@@ -193,7 +192,7 @@ class SettingsPage extends StatelessWidget {
                   );
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    MaterialPageRoute(builder: (context) => SplashScreen()),
                   );
                 },
               ),
