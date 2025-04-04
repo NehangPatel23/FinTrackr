@@ -224,7 +224,7 @@ class MainScreenState extends State<MainScreen> {
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
-                                    '\$${NumberFormat('#,###.00').format(totalExpenses)}', // Updated expenses
+                                    '\$${NumberFormat('#,###.00').format(totalExpenses)}',
                                     style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.white,
@@ -252,16 +252,15 @@ class MainScreenState extends State<MainScreen> {
                       color: Theme.of(context).colorScheme.onSurface,
                       fontWeight: FontWeight.bold),
                 ),
-                GestureDetector(
-                  onTap: () {},
-                  child: Text(
-                    'View All',
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.outline,
-                        fontWeight: FontWeight.w400),
-                  ),
-                )
+
+                // ADD FILTER FUNCTIONALITY HERE.
+                // GestureDetector(
+                //   onTap: () {},
+                //   child: IconButton(
+                //     onPressed: () {},
+                //     icon: Icon(FontAwesomeIcons.filter, size:15, color: Colors.grey.shade700,),
+                //   ),
+                // )
               ],
             ),
             const SizedBox(height: 20),

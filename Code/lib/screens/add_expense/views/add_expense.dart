@@ -105,12 +105,18 @@ class _AddExpenseState extends State<AddExpense> {
       int totalIndex = text.indexOf('total');
       String remainingText = text.substring(totalIndex);
 
-      RegExp amountRegex = RegExp(r'[\$]?\s*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
-          caseSensitive: false);
-      Match? match = amountRegex.firstMatch(remainingText);
+      RegExp amountRegex = RegExp(
+        r'[\$]?\s*(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)',
+        caseSensitive: false,
+      );
 
-      if (match != null) {
-        String extractedAmount = match.group(1)!;
+      // Get all matches
+      Iterable<Match> matches = amountRegex.allMatches(remainingText);
+
+      if (matches.isNotEmpty) {
+        Match lastMatch = matches.last;
+        String extractedAmount = lastMatch.group(1)!;
+
         double amount = double.tryParse(
                 extractedAmount.replaceAll(',', '').replaceAll('\$', '')) ??
             0.0;
