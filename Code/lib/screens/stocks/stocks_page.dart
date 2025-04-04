@@ -467,27 +467,25 @@ class StockPageState extends State<StockPage> {
                     onChanged: (query) {
                       setState(() {
                         isSearching = query.isNotEmpty;
-                        if (isFiltering) {
-                          filteredStocks = stocks
-                              .where((stock) =>
-                                  stock.name
-                                      .toLowerCase()
-                                      .contains(query.toLowerCase()) ||
-                                  stock.ticker
-                                      .toLowerCase()
-                                      .contains(query.toLowerCase()))
-                              .toList();
-                        } else {
-                          filteredStocks = stocks
-                              .where((stock) =>
-                                  stock.name
-                                      .toLowerCase()
-                                      .contains(query.toLowerCase()) ||
-                                  stock.ticker
-                                      .toLowerCase()
-                                      .contains(query.toLowerCase()))
-                              .toList();
-                        }
+
+                        List<Stock> baseList = isFiltering ? stocks.where((stock) {
+                          switch(selectedFilter) {
+                            case 'Gainers':
+                              return stock.percentChange > 0;
+                            case 'Losers':
+                              return stock.percentChange < 0;
+                            case 'Positive Change':
+                              return stock.delta > 0;
+                            case 'Negative Change':
+                              return stock.delta < 0;
+                            default:
+                              return true;
+                          }
+                        }).toList() : stocks;
+
+                        filteredStocks = baseList.where((stock) => 
+                            stock.name.toLowerCase().contains(query.toLowerCase()) ||
+                            stock.ticker.toLowerCase().contains(query.toLowerCase())).toList();
                       });
                     },
                   ),
