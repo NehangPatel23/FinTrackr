@@ -225,12 +225,6 @@ class _TaxesPageState extends State<TaxesPage> {
       return;
     }
 
-    // final income =
-    //     double.tryParse(incomeController.text.replaceAll(',', '')) ?? 0.0;
-    // final dependents = int.tryParse(dependentsController.text) ?? 0;
-    // final taxesPaid =
-    //     double.tryParse(taxesPaidController.text.replaceAll(',', '')) ?? 0.0;
-
     final incomeText = incomeController.text.replaceAll(',', '').trim();
     final income = double.tryParse(incomeText);
     final dependentsText = dependentsController.text.trim();
