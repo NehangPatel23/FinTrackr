@@ -22,7 +22,7 @@ class MainScreen extends StatefulWidget {
 class MainScreenState extends State<MainScreen> {
   List<Expense> sortedExpenses = [];
   double totalExpenses = 0.0;
-  final double initialBalance = 1000000.00; // Set initial balance to $1M
+  final double initialBalance = 1000000.00;
   double income = 2500.00;
 
   @override
@@ -34,15 +34,14 @@ class MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _updateExpenses(); // Sort and calculate expenses initially
-    _calculateTotalExpenses(); // Calculate initially
+    _updateExpenses();
+    _calculateTotalExpenses();
   }
 
   void _updateExpenses() {
     setState(() {
-      sortedExpenses = [...widget.expenses]; // Copy existing list
-      sortedExpenses
-          .sort((a, b) => b.date.compareTo(a.date)); // Sort newest first
+      sortedExpenses = [...widget.expenses];
+      sortedExpenses.sort((a, b) => b.date.compareTo(a.date));
       _calculateTotalExpenses();
     });
   }
@@ -56,9 +55,13 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        padding: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.05, vertical: screenHeight * 0.01),
         child: Column(
           children: [
             Row(
@@ -70,8 +73,8 @@ class MainScreenState extends State<MainScreen> {
                       alignment: Alignment.center,
                       children: [
                         Container(
-                          width: 50,
-                          height: 50,
+                          width: screenWidth * 0.13,
+                          height: screenWidth * 0.13,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.yellow.shade700),
@@ -82,7 +85,7 @@ class MainScreenState extends State<MainScreen> {
                         )
                       ],
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: screenWidth * 0.02),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -90,14 +93,14 @@ class MainScreenState extends State<MainScreen> {
                           'Welcome!',
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 12.0,
+                              fontSize: screenWidth * 0.03,
                               color: Theme.of(context).colorScheme.outline),
                         ),
                         Text(
-                          widget.name,
+                          '${widget.name}',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
+                              fontSize: screenWidth * 0.045,
                               color: Theme.of(context).colorScheme.onSurface),
                         )
                       ],
@@ -116,12 +119,12 @@ class MainScreenState extends State<MainScreen> {
                 )
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.02),
             Expanded(
               flex: 0,
               child: Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.width / 2,
+                height: screenHeight * 0.25,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(colors: [
                       Theme.of(context).colorScheme.primary,
@@ -139,32 +142,33 @@ class MainScreenState extends State<MainScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 10),
-                    const Text(
+                    Text(
                       'Total Balance',
                       style: TextStyle(
-                          fontSize: 16,
+                          fontSize: screenWidth * 0.042,
                           color: Colors.white,
                           fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      '\$${NumberFormat('#,###.00').format(initialBalance + income - totalExpenses)}', // Updated balance calculation
-                      style: const TextStyle(
-                          fontSize: 40,
+                      '\$${NumberFormat('#,###.00').format(initialBalance + income - totalExpenses)}',
+                      style: TextStyle(
+                          fontSize: screenWidth * 0.08,
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 25.0),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.05,
+                          vertical: screenHeight * 0.02),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
                               Container(
-                                height: 25,
-                                width: 25,
+                                height: screenWidth * 0.07,
+                                width: screenWidth * 0.07,
                                 decoration: const BoxDecoration(
                                     color: Colors.white30,
                                     shape: BoxShape.circle),
@@ -175,21 +179,21 @@ class MainScreenState extends State<MainScreen> {
                                   size: 12,
                                 )),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: screenWidth * 0.02),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'Income',
                                     style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: screenWidth * 0.035,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
                                     '\$${NumberFormat('#,###.00').format(income)}',
                                     style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: screenWidth * 0.04,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600),
                                   ),
@@ -200,8 +204,8 @@ class MainScreenState extends State<MainScreen> {
                           Row(
                             children: [
                               Container(
-                                height: 25,
-                                width: 25,
+                                height: screenWidth * 0.07,
+                                width: screenWidth * 0.07,
                                 decoration: const BoxDecoration(
                                     color: Colors.white30,
                                     shape: BoxShape.circle),
@@ -212,21 +216,21 @@ class MainScreenState extends State<MainScreen> {
                                   size: 12,
                                 )),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: screenWidth * 0.02),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'Expenses',
                                     style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: screenWidth * 0.035,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400),
                                   ),
                                   Text(
                                     '\$${NumberFormat('#,###.00').format(totalExpenses)}',
-                                    style: const TextStyle(
-                                        fontSize: 16,
+                                    style: TextStyle(
+                                        fontSize: screenWidth * 0.04,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600),
                                   ),
@@ -241,29 +245,20 @@ class MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 40),
+            SizedBox(height: screenHeight * 0.04),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Transactions',
                   style: TextStyle(
-                      fontSize: 16,
+                      fontSize: screenWidth * 0.045,
                       color: Theme.of(context).colorScheme.onSurface,
                       fontWeight: FontWeight.bold),
                 ),
-
-                // ADD FILTER FUNCTIONALITY HERE.
-                // GestureDetector(
-                //   onTap: () {},
-                //   child: IconButton(
-                //     onPressed: () {},
-                //     icon: Icon(FontAwesomeIcons.filter, size:15, color: Colors.grey.shade700,),
-                //   ),
-                // )
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.02),
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async => _updateExpenses(),
@@ -271,14 +266,14 @@ class MainScreenState extends State<MainScreen> {
                   itemCount: sortedExpenses.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
+                      padding: EdgeInsets.only(bottom: screenHeight * 0.02),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: EdgeInsets.all(screenWidth * 0.04),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -288,8 +283,8 @@ class MainScreenState extends State<MainScreen> {
                                     alignment: Alignment.center,
                                     children: [
                                       Container(
-                                        height: 50,
-                                        width: 50,
+                                        height: screenWidth * 0.13,
+                                        width: screenWidth * 0.13,
                                         decoration: BoxDecoration(
                                           color: Color(sortedExpenses[index]
                                               .category
@@ -303,17 +298,17 @@ class MainScreenState extends State<MainScreen> {
                                         color: Colors.black54,
                                         errorBuilder:
                                             (context, error, stackTrace) {
-                                          return Icon(Icons.error,
+                                          return const Icon(Icons.error,
                                               color: Colors.red);
                                         },
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: screenWidth * 0.03),
                                   Text(
                                     sortedExpenses[index].category.name,
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: screenWidth * 0.035,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurface,
@@ -328,7 +323,7 @@ class MainScreenState extends State<MainScreen> {
                                   Text(
                                     '-\$${NumberFormat('#,###').format(sortedExpenses[index].amount)}.00',
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: screenWidth * 0.035,
                                       color: Colors.red,
                                       fontWeight: FontWeight.w400,
                                     ),
@@ -337,7 +332,7 @@ class MainScreenState extends State<MainScreen> {
                                     DateFormat('MM/dd/yyyy').format(
                                         (sortedExpenses[index].date).toDate()),
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: screenWidth * 0.03,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurface,

@@ -250,8 +250,8 @@ class _TaxesPageState extends State<TaxesPage> {
       }
     }
 
-    // Deduct dependents (assuming $2000 per dependent)
-    double dependentRelief = dependents * 2000;
+    // Deduct dependents (assuming $500 per dependent)
+    double dependentRelief = dependents * 500;
     federalTax -= dependentRelief;
     federalTax = federalTax < 0 ? 0 : federalTax;
 
@@ -344,7 +344,7 @@ class _TaxesPageState extends State<TaxesPage> {
                 const SizedBox(height: 30),
 
                 QuestionRow(
-                    question: 'How many dependents do you have?',
+                    question: 'Number of Dependents',
                     title: "Dependents Information",
                     message:
                         "Please enter the number of dependents you are financially responsible for. \"Dependents\" are your children and elderly parents you are financially responsible for."),
@@ -355,7 +355,7 @@ class _TaxesPageState extends State<TaxesPage> {
                 const SizedBox(height: 30),
 
                 QuestionRow(
-                    question: 'What state do you currently live in?',
+                    question: 'What state do you live in?',
                     title: "State Selection",
                     message:
                         "Please select your state of residence. This is used to calculate your state tax, if applicable for your state of residence."),
