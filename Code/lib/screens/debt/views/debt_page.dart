@@ -21,9 +21,33 @@ class DebtPageState extends State<DebtPage> {
   double monthlyPayment = 0.0;
   double totalPayments = 0.0;
 
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   void calculatePayments() {
-    double amount = double.tryParse(amountController.text) ?? 0.0;
-    double interestRate = double.tryParse(interestController.text) ?? 0.0;
+    // double amount = double.tryParse(amountController.text) ?? 0.0;
+    // double interestRate = double.tryParse(interestController.text) ?? 0.0;
+    final amountText = amountController.text.replaceAll(',', '').trim();
+    final interestText = interestController.text.replaceAll(',', '').trim();
+    final amount = double.tryParse(amountText);
+    final interestRate = double.tryParse(interestText);
+
+    if (amount == null) {
+      _showError('Please enter a valid number for the debt amount.');
+      return;
+    }
+
+    if (interestRate == null) {
+      _showError('Please enter a valid number for the interest rate.');
+      return;
+    }
+
     double monthlyInterest = (interestRate / 100) / 12;
     int loanTermMonths = 60; // Assume a 5-year loan term
 

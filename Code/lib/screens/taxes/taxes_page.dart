@@ -114,6 +114,15 @@ class _TaxesPageState extends State<TaxesPage> {
     );
   }
 
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   // Helper method to apply random tax treaty benefits for countries
   double _getTaxTreatyBenefit(String country) {
     Map<String, double> taxTreatyBenefits = {
@@ -205,11 +214,44 @@ class _TaxesPageState extends State<TaxesPage> {
   }
 
   void _calculateTaxes() {
-    final income =
-        double.tryParse(incomeController.text.replaceAll(',', '')) ?? 0.0;
-    final dependents = int.tryParse(dependentsController.text) ?? 0;
-    final taxesPaid =
-        double.tryParse(taxesPaidController.text.replaceAll(',', '')) ?? 0.0;
+    if (incomeController.text.isEmpty ||
+      dependentsController.text.isEmpty ||
+      taxesPaidController.text.isEmpty ||
+      selectedState == null ||
+      selectedCountry == null ||
+      maritalStatus == null ||
+      (maritalStatus == 'Married' && filingStatus == null)) {
+      _showError('Please complete all required fields.');
+      return;
+    }
+
+    // final income =
+    //     double.tryParse(incomeController.text.replaceAll(',', '')) ?? 0.0;
+    // final dependents = int.tryParse(dependentsController.text) ?? 0;
+    // final taxesPaid =
+    //     double.tryParse(taxesPaidController.text.replaceAll(',', '')) ?? 0.0;
+
+    final incomeText = incomeController.text.replaceAll(',', '').trim();
+    final income = double.tryParse(incomeText);
+    final dependentsText = dependentsController.text.trim();
+    final dependents = int.tryParse(dependentsText);
+    final taxesPaidText = taxesPaidController.text.replaceAll(',', '').trim();
+    final taxesPaid = double.tryParse(taxesPaidText);
+
+    if (income == null) {
+      _showError('Please enter a valid number for income.');
+      return;
+    }
+
+    if (dependents == null) {
+      _showError('Please enter a valid number for dependents.');
+      return;
+    }
+
+    if (taxesPaid == null) {
+      _showError('Please enter a valid number for taxes paid.');
+      return;
+    }
 
     double federalTax = 0;
     double stateTax = 0;

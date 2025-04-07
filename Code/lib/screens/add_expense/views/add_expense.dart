@@ -132,7 +132,7 @@ class _AddExpenseState extends State<AddExpense> {
 
   void showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 
@@ -317,10 +317,22 @@ class _AddExpenseState extends State<AddExpense> {
                               ? const CircularProgressIndicator()
                               : GestureDetector(
                                   onTap: () {
+                                    final amountText = expenseController.text.replaceAll(',', '').trim();
+                                    final amount = int.tryParse(amountText);
+                                    if (amount == null || amount <= 0) {
+                                      showError('Please enter a valid expense amount.');
+                                      return;
+                                    }
+                                    if (expense.category == Category.empty) {
+                                      showError('Please select a category.');
+                                      return;
+                                    }
+                                    if (expense.date == Timestamp(0, 0)) {
+                                      showError('Please pick a valid date.');
+                                      return;
+                                    }
                                     setState(() {
-                                      expense.amount = int.parse(
-                                          expenseController.text
-                                              .replaceAll(',', ''));
+                                      expense.amount = amount;
                                     });
                                     expense.category.totalExpenses =
                                         (expense.category.totalExpenses) +
