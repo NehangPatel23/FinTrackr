@@ -214,13 +214,13 @@ class _TaxesPageState extends State<TaxesPage> {
   }
 
   void _calculateTaxes() {
-    if (incomeController.text.isEmpty ||
-      dependentsController.text.isEmpty ||
-      taxesPaidController.text.isEmpty ||
-      selectedState == null ||
-      selectedCountry == null ||
-      maritalStatus == null ||
-      (maritalStatus == 'Married' && filingStatus == null)) {
+    if (incomeController.text.isEmpty &&
+        dependentsController.text.isEmpty &&
+        taxesPaidController.text.isEmpty &&
+        selectedState == null &&
+        selectedCountry == null &&
+        (maritalStatus == null ||
+            (maritalStatus == 'Married' && filingStatus == null))) {
       _showError('Please complete all required fields.');
       return;
     }
@@ -233,17 +233,47 @@ class _TaxesPageState extends State<TaxesPage> {
     final taxesPaid = double.tryParse(taxesPaidText);
 
     if (income == null) {
-      _showError('Please enter a valid number for income.');
+      _showError('Please enter a valid value for income.');
+      return;
+    }
+
+    if (maritalStatus == null) {
+      _showError('Please select a value for marital status.');
+      return;
+    }
+
+    if (maritalStatus == 'Married' && filingStatus == null) {
+      _showError('Please select your filing status.');
       return;
     }
 
     if (dependents == null) {
-      _showError('Please enter a valid number for dependents.');
+      _showError('Please enter valid number of dependents.');
+      return;
+    }
+
+    if (selectedState == null) {
+      _showError('Please select your state of residence.');
+      return;
+    }
+
+    if (selectedCountry == null) {
+      _showError('Please select your country of origin.');
       return;
     }
 
     if (taxesPaid == null) {
-      _showError('Please enter a valid number for taxes paid.');
+      _showError('Please enter a valid value for taxes paid.');
+      return;
+    }
+
+    if (taxesPaid > income) {
+      _showError('Taxes paid cannot exceed income.');
+      return;
+    }
+
+    if (taxesPaid == income) {
+      _showError('Taxes paid cannot be equal to income.');
       return;
     }
 

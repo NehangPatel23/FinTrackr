@@ -31,27 +31,15 @@ class DebtPageState extends State<DebtPage> {
   }
 
   void calculatePayments() {
-    // double amount = double.tryParse(amountController.text) ?? 0.0;
-    // double interestRate = double.tryParse(interestController.text) ?? 0.0;
     final amountText = amountController.text.replaceAll(',', '').trim();
     final interestText = interestController.text.replaceAll(',', '').trim();
     final amount = double.tryParse(amountText);
     final interestRate = double.tryParse(interestText);
 
-    if (amount == null) {
-      _showError('Please enter a valid number for the debt amount.');
-      return;
-    }
-
-    if (interestRate == null) {
-      _showError('Please enter a valid number for the interest rate.');
-      return;
-    }
-
-    double monthlyInterest = (interestRate / 100) / 12;
+    double monthlyInterest = (interestRate! / 100) / 12;
     int loanTermMonths = 60; // Assume a 5-year loan term
 
-    if (amount > 0 && interestRate > 0) {
+    if (amount! > 0 && interestRate > 0) {
       monthlyPayment = (amount * monthlyInterest) /
           (1 - pow(1 + monthlyInterest, -loanTermMonths));
       totalPayments = monthlyPayment * loanTermMonths;
