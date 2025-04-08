@@ -177,13 +177,18 @@ class TaxResultsPage extends StatelessWidget {
   Widget _buildLegend() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _legendItem(Colors.blue, "Federal Tax"),
-          _legendItem(Colors.red, "State Tax"),
-          _legendItem(Colors.green, "Tax Treaty"),
-        ],
+      child: Center(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 16,
+          runSpacing: 8,
+          children: [
+            _legendItem(Colors.blue, "Federal Tax"),
+            _legendItem(Colors.red, "State Tax"),
+            _legendItem(Colors.green, "Tax Treaty"),
+          ],
+        ),
       ),
     );
   }

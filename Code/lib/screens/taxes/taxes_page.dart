@@ -221,13 +221,13 @@ class _TaxesPageState extends State<TaxesPage> {
         selectedCountry == null &&
         (maritalStatus == null ||
             (maritalStatus == 'Married' && filingStatus == null))) {
-      _showError('Please complete all required fields.');
+      _showError('Please complete all fields.');
       return;
     }
 
     final incomeText = incomeController.text.replaceAll(',', '').trim();
     final income = double.tryParse(incomeText);
-    final dependentsText = dependentsController.text.trim();
+    final dependentsText = dependentsController.text.replaceAll(',', '').trim();
     final dependents = int.tryParse(dependentsText);
     final taxesPaidText = taxesPaidController.text.replaceAll(',', '').trim();
     final taxesPaid = double.tryParse(taxesPaidText);

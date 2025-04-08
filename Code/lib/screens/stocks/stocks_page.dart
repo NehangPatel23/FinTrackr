@@ -9,7 +9,7 @@ import 'dart:math';
 import '../ui_elements/header.dart';
 import '../ui_elements/launch_url.dart';
 
-const String apiKey = 'OYNU1LA5APCCQ1I5';
+const String apiKey = 'QEBRGKTKH96YGWOV';
 const String apiUrl = 'https://www.alphavantage.co/query';
 
 class Stock {
@@ -530,8 +530,7 @@ class StockPageState extends State<StockPage> {
                                 : stocks[index];
                         return ListTile(
                           title: Text(stock.name,
-                              style: TextStyle(fontWeight: 
-                              FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Wrap(
                             spacing: 4.0,
                             runSpacing: 2.0,

@@ -41,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _obscurePassword = true;
-  final bool _confirmPasswordVisible = false;
+  bool _confirmPasswordVisible = false;
   final RegExp emailRegex = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
   final AuthService authService = AuthService();
@@ -164,18 +164,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               suffixIcon: GestureDetector(
                                 onLongPress: () {
                                   setState(() {
-                                    _obscurePassword =
-                                        false; // Show password when held
+                                    _confirmPasswordVisible =
+                                        true; // Show password when held
                                   });
                                 },
                                 onLongPressUp: () {
                                   setState(() {
-                                    _obscurePassword =
-                                        true; // Hide password when released
+                                    _confirmPasswordVisible =
+                                        false; // Hide password when released
                                   });
                                 },
                                 child: Icon(
-                                  _obscurePassword
+                                  _confirmPasswordVisible
                                       ? Icons.visibility_off
                                       : Icons.visibility,
                                 ),
