@@ -190,9 +190,10 @@ class SettingsPage extends StatelessWidget {
                       backgroundColor: Colors.greenAccent,
                     ),
                   );
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => SplashScreen()),
+                    (Route<dynamic> route) => false,
                   );
                 },
               ),

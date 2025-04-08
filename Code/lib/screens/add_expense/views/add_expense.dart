@@ -205,7 +205,6 @@ class _AddExpenseState extends State<AddExpense> {
                         TextFormField(
                           controller: categoryController,
                           readOnly: true,
-                          onTap: () {},
                           textAlignVertical: TextAlignVertical.center,
                           decoration: InputDecoration(
                               filled: true,
@@ -317,10 +316,13 @@ class _AddExpenseState extends State<AddExpense> {
                               ? const CircularProgressIndicator()
                               : GestureDetector(
                                   onTap: () {
-                                    final amountText = expenseController.text.replaceAll(',', '').trim();
+                                    final amountText = expenseController.text
+                                        .replaceAll(',', '')
+                                        .trim();
                                     final amount = int.tryParse(amountText);
                                     if (amount == null || amount <= 0) {
-                                      showError('Please enter a valid expense amount.');
+                                      showError(
+                                          'Please enter a valid expense amount.');
                                       return;
                                     }
                                     if (expense.category == Category.empty) {
