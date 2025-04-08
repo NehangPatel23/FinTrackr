@@ -17,7 +17,7 @@ import '../blocs/get_categories/get_categories_bloc.dart';
 import 'category_creation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-const String OCRApiKey = 'K84027267088957';
+const String OCRApiKey = 'GP88NUZB6CY4X';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -57,7 +57,7 @@ class _AddExpenseState extends State<AddExpense> {
   Future<void> extractTextFromImage(File imageFile) async {
     try {
       var request = http.MultipartRequest(
-          'POST', Uri.parse('https://api.ocr.space/parse/image'));
+          'POST', Uri.parse('https://apipro1.ocr.space/parse/image'));
       request.headers['apikey'] = OCRApiKey;
       request.files
           .add(await http.MultipartFile.fromPath('file', imageFile.path));
@@ -205,6 +205,7 @@ class _AddExpenseState extends State<AddExpense> {
                         TextFormField(
                           controller: categoryController,
                           readOnly: true,
+                          // onTap: () {},
                           textAlignVertical: TextAlignVertical.center,
                           decoration: InputDecoration(
                               filled: true,
