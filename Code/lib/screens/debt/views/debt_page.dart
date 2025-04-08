@@ -272,19 +272,19 @@ class DebtPageState extends State<DebtPage> {
         double.tryParse(amountController.text.replaceAll(',', '')) ?? 0.0;
     double calculatedInterest = totalPayments - principal;
 
-    // Ensure non-negative values for the pie chart
     double interest = calculatedInterest > 0 ? calculatedInterest : 0;
 
-    // Avoid zero total to prevent NaN sections
     if (principal <= 0 && interest <= 0) {
       return [];
     }
+
+    final formatter = NumberFormat('#,##0.00');
 
     return [
       PieChartSectionData(
         color: Colors.blue,
         value: principal,
-        title: principal > 0 ? '\$${principal.toStringAsFixed(2)}' : '',
+        title: principal > 0 ? '\$${formatter.format(principal)}' : '',
         radius: 110,
         titleStyle: const TextStyle(
             fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
@@ -292,7 +292,7 @@ class DebtPageState extends State<DebtPage> {
       PieChartSectionData(
         color: Colors.red,
         value: interest,
-        title: interest > 0 ? '\$${interest.toStringAsFixed(2)}' : '',
+        title: interest > 0 ? '\$${formatter.format(interest)}' : '',
         radius: 110,
         titleStyle: const TextStyle(
             fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
