@@ -89,7 +89,7 @@ class SettingsPage extends StatelessWidget {
               SwitchListTile(
                 secondary: const Icon(Icons.notifications),
                 title: const Text('Enable Notifications'),
-                value: true, // Replace with actual user setting
+                value: false, // Replace with actual user setting
                 onChanged: (bool value) {
                   // Toggle notifications
                 },
