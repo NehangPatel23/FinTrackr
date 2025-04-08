@@ -15,8 +15,6 @@ import 'main_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../stats/stat_screen.dart';
-
 class HomeScreen extends StatefulWidget {
   final String name;
   const HomeScreen({super.key, avatar, required this.name});
@@ -168,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           body: index == 0
               ? MainScreen(widget.name, state.expenses)
-              : const StatScreen(),
+              : const StockPage(),
         );
       } else {
         return const Scaffold(

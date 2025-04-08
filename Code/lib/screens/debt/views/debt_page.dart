@@ -2,7 +2,9 @@ import 'package:fintrackr/screens/ui_elements/header.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'dart:math';
 
 import '../../ui_elements/launch_url.dart';
@@ -15,33 +17,57 @@ class DebtPage extends StatefulWidget {
   DebtPageState createState() => DebtPageState();
 }
 
+class ThousandsSeparatorInputFormatter extends TextInputFormatter {
+  final NumberFormat _formatter = NumberFormat.decimalPattern();
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Handle deleting or backspacing properly by stripping commas
+    String cleaned = newValue.text.replaceAll(',', '');
+
+    // Allow deletion of first digit (if the text is empty)
+    if (cleaned.isEmpty) {
+      return newValue.copyWith(
+          text: '', selection: TextSelection.collapsed(offset: 0));
+    }
+
+    // Parse to number
+    final num? value = num.tryParse(cleaned);
+    if (value == null) {
+      return oldValue;
+    }
+
+    final newText = _formatter.format(value);
+
+    // Ensure the cursor is at the end of the new text after formatting
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
+  }
+}
+
 class DebtPageState extends State<DebtPage> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController interestController = TextEditingController();
+  final TextEditingController loanTermMonthsController =
+      TextEditingController(text: '60');
   double monthlyPayment = 0.0;
   double totalPayments = 0.0;
 
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
-
-  void calculatePayments() {
+  void calculatePayments({loanTermMonths = 60}) {
     final amountText = amountController.text.replaceAll(',', '').trim();
     final interestText = interestController.text.replaceAll(',', '').trim();
+    final loanTermMonths = num.tryParse(loanTermMonthsController.text.trim());
     final amount = double.tryParse(amountText);
     final interestRate = double.tryParse(interestText);
 
     double monthlyInterest = (interestRate! / 100) / 12;
-    int loanTermMonths = 60; // Assume a 5-year loan term
 
     if (amount! > 0 && interestRate > 0) {
       monthlyPayment = (amount * monthlyInterest) /
-          (1 - pow(1 + monthlyInterest, -loanTermMonths));
+          (1 - pow(1 + monthlyInterest, -loanTermMonths!));
       totalPayments = monthlyPayment * loanTermMonths;
     } else {
       monthlyPayment = 0.0;
@@ -104,6 +130,16 @@ class DebtPageState extends State<DebtPage> {
                   controller: interestController,
                   icon: Icons.percent,
                 ),
+                SizedBox(height: 25),
+                QuestionRow(
+                    question: 'Loan Term Duration',
+                    title: "What is your loan term duration (months)?",
+                    message:
+                        "Please input the loan term duration.\nThe default is 60 months/5 years."),
+                _buildInputField(
+                  controller: loanTermMonthsController,
+                  icon: Icons.calendar_month,
+                ),
                 SizedBox(height: 20),
                 _buildResults(),
                 SizedBox(height: 20),
@@ -128,6 +164,7 @@ class DebtPageState extends State<DebtPage> {
         child: TextFormField(
           controller: controller,
           keyboardType: TextInputType.number,
+          inputFormatters: [ThousandsSeparatorInputFormatter()],
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
@@ -144,15 +181,23 @@ class DebtPageState extends State<DebtPage> {
   }
 
   Widget _buildResults() {
+    String loanMonths = loanTermMonthsController.text.toString();
+    final formatter = NumberFormat("#,##0.00");
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Monthly Payment: \$${monthlyPayment.toStringAsFixed(2)}",
+          "Monthly Payments for ${(double.tryParse(loanMonths)! / 12).toStringAsFixed(2)} years:",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 5),
+        Text(
+          "Monthly Payment: \$${formatter.format(monthlyPayment)}",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         Text(
-          "Estimated Total Payments: \$${totalPayments.toStringAsFixed(2)}",
+          "Estimated Total Payments: \$${formatter.format(totalPayments)}",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ],
@@ -160,6 +205,8 @@ class DebtPageState extends State<DebtPage> {
   }
 
   Widget _buildChart() {
+    final chartSections = _generateChartSections();
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Card(
@@ -168,14 +215,23 @@ class DebtPageState extends State<DebtPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              AspectRatio(
-                aspectRatio: 1.5, // Adjust aspect ratio for a better fit
-                child: PieChart(
-                  PieChartData(sections: _generateChartSections()),
+              if (chartSections.isNotEmpty)
+                AspectRatio(
+                  aspectRatio: 1.5,
+                  child: PieChart(
+                    PieChartData(sections: chartSections),
+                  ),
+                )
+              else
+                const Padding(
+                  padding: EdgeInsets.all(32.0),
+                  child: Text(
+                    'Enter debt and interest to see breakdown',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
-              ),
-              SizedBox(height: 10),
-              _buildLegend(), // Add legend below the chart
+              const SizedBox(height: 10),
+              _buildLegend(),
             ],
           ),
         ),
@@ -212,24 +268,33 @@ class DebtPageState extends State<DebtPage> {
   }
 
   List<PieChartSectionData> _generateChartSections() {
-    double principal = double.tryParse(amountController.text) ?? 0.0;
-    double interest = totalPayments - principal;
+    double principal =
+        double.tryParse(amountController.text.replaceAll(',', '')) ?? 0.0;
+    double calculatedInterest = totalPayments - principal;
+
+    // Ensure non-negative values for the pie chart
+    double interest = calculatedInterest > 0 ? calculatedInterest : 0;
+
+    // Avoid zero total to prevent NaN sections
+    if (principal <= 0 && interest <= 0) {
+      return [];
+    }
 
     return [
       PieChartSectionData(
         color: Colors.blue,
         value: principal,
-        title: '\$${principal.toStringAsFixed(2)}',
-        radius: 110, // Large radius for full pie effect
-        titleStyle: TextStyle(
+        title: principal > 0 ? '\$${principal.toStringAsFixed(2)}' : '',
+        radius: 110,
+        titleStyle: const TextStyle(
             fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
       ),
       PieChartSectionData(
         color: Colors.red,
         value: interest,
-        title: '\$${interest.toStringAsFixed(2)}',
-        radius: 110, // Ensure full coverage
-        titleStyle: TextStyle(
+        title: interest > 0 ? '\$${interest.toStringAsFixed(2)}' : '',
+        radius: 110,
+        titleStyle: const TextStyle(
             fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
       ),
     ];
