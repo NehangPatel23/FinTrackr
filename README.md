@@ -175,7 +175,7 @@ The test plan and results can be found on [this page.](./Spring%20Assignments/te
 
 ## User Manual
 
-The user manual can be found by navigating to [this link.](opposite-hamster-e8c.notion.site/FinTrackr-User-Documentation-1c80e5dbb68e80a4a80ae95bc3993177)
+The user manual can be found by navigating to [this link.](https://opposite-hamster-e8c.notion.site/FinTrackr-User-Documentation-1c80e5dbb68e80a4a80ae95bc3993177)
 
 ## Spring Final Presentation
 
