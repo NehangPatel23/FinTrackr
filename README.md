@@ -1,6 +1,6 @@
 # FinTrackr
 
-FinTrackr is a comprehensive personal finance management app designed to help users track their expenses, monitor subscriptions, set budgeting goals, and receive personalized stock market investment recommendations.
+FinTrackr is a comprehensive personal finance management app designed to help users track their expenses, calculate their taxes, calculate interest owed on debts, and receive up-to-date stock market information.
 
 ## Table of Contents
 
@@ -16,6 +16,17 @@ FinTrackr is a comprehensive personal finance management app designed to help us
     - [D0](#d0)
     - [D1](#d1)
     - [D2](#d2)
+  - [User Interface Specifications](#user-interface-specifications)
+    - [System Overview](#system-overview)
+    - [Landing Page](#landing-page)
+    - [Add Expense](#add-expense)
+    - [Stocks Page](#stocks-page)
+    - [Debt Page](#debt-page)
+    - [Taxes Page](#taxes-page)
+  - [Test Plan \& Results](#test-plan--results)
+  - [User Manual](#user-manual)
+  - [Spring Final Presentation](#spring-final-presentation)
+  - [Expo Poster](#expo-poster)
   - [Project Tasks \& Timeline](#project-tasks--timeline)
     - [Nehang's Tasks](#nehangs-tasks)
     - [Tharun's Tasks](#tharuns-tasks)
@@ -55,26 +66,27 @@ FinTrackr is a comprehensive personal finance management app designed to help us
 
 ## Project Abstract
 
-This project develops a personal finance app to help users manage expenses, track debt, and improve budgeting. It also offers stock market investment tips tailored to user preferences and financial habits. By integrating expense tracking, financial planning, and investment strategies, the app provides a holistic tool for effective personal finance management.
+This project develops a personal finance management app to help users manage expenses, calculate taxes, track debt, and improve budgeting. It also offers real-time stock market information. By integrating expense tracking, financial planning, and investment strategies, the app provides a holistic tool for effective personal finance management.
 
 ## Project Description
 
 This project centers on creating a comprehensive personal finance application designed to empower users in managing their financial well-being. The application offers a user-friendly **Expense Tracker Landing Page** as the main interface, allowing users to efficiently manage and review their expenses. Key features include:
 
 1. **Expense Management:**
-   - Users can easily **add new expenses** via a form or through **OCR technology** for scanning receipts.
-   - A dedicated **View Expenses** feature helps users track spending and identify patterns to improve financial habits.
+   - Users can easily **add new transactions** via a form or through **OCR technology** for scanning receipts.
+   - A dedicated **View Transactions** feature helps users track spending and identify patterns to improve financial habits.
 
 2. **Stock Management:**
-   - The app includes a **Stocks module** offering:
+   - The app includes a **Stocks Module** offering:
      - **Educational content** to help users understand investment strategies.
-     - Options to **save favorite stocks** for quick access.
+     - Options to **save, filter, and favorite stocks** for quick access.
      - Tools to **view stock trends**, enabling informed decision-making.
 
 3. **Debt Tracking:**
-   - A **Debt module** provides insights into:
+   - A **Debt Module** provides insights into:
      - **Outstanding debt and interest calculations**.
      - A **visual representation of monthly payments** using pie charts, simplifying debt management for users.
+     - Ability for users to modify the debt duration to calculate accurate values of debt owed.
 
 4. **Tax Calculation:**
    - The app integrates a **Tax Calculator** to guide users through tax planning, featuring:
@@ -97,19 +109,19 @@ We have identified the following User Stories for our app, FinTrackr:
 
 ### D0
 
-![alt text](./Design%20Diagrams/Design_Diagram_D0.png)
+![alt text](./Fall%20Assignments/Design%20Diagrams/Design_Diagram_D0.png)
 
 The flowchart illustrates a simple user interaction process. It starts with the user deciding whether to utilize the application (decision point). If they do, the application generates an output that is displayed on the UI, concluding with the end of the user flow. The process follows a straightforward, linear path.
 
 ### D1
 
-![alt text](./Design%20Diagrams/Design_Diagram_D1.png)
+![alt text](./Fall%20Assignments/Design%20Diagrams/Design_Diagram_D1.png)
 
 The diagram represents the user flow and system architecture for a personal finance management application, detailing the purpose of its components and conventions used. Rounded rectangles indicate the start and end of the user interaction flow, representing the entry and exit points of the system. Ellipses or ovals represent the primary modules that users interact with, such as "Stocks," "Add Expense," "Tax Calculator," and "Debt." Rectangles signify specific actions or functionalities within these modules, such as stock visualization, keeping track of expenses, inputting tax information, and accessing debt-related data. Arrows illustrate the flow of user interactions, connecting the components and guiding users through the application. The flow begins with the "Expense Tracker Landing Page," which serves as the central navigation hub, leading to different modules based on user needs. Each module outputs its data to the "Display on UI" component, which consolidates and presents information in a user-friendly format. The process concludes with the "User Flow End," marking the completion of the interaction. This diagram ensures a streamlined and intuitive navigation experience, with each component designed to enhance user accessibility and functionality while supporting effective financial management.
 
 ### D2
 
-![alt text](./Design%20Diagrams/Design_Diagram_D2.png)
+![alt text](./Fall%20Assignments/Design%20Diagrams/Design_Diagram_D2.png)
 
 The diagram illustrates the flow and structure of our comprehensive personal finance management application, highlighting its components and conventions.
 
@@ -130,6 +142,48 @@ Key features illustrated in the diagram include:
 - **Tax Calculator:** Estimates federal and state taxes based on user inputs.
 
 The diagram integrates these components seamlessly, conveying a clear and user-friendly structure for the application. Each component is designed to enhance financial literacy, support informed decision-making, and improve the overall user experience.
+
+## User Interface Specifications
+
+### System Overview
+
+![alt text](./assets/design-specs-1.png)
+
+### Landing Page
+
+![alt text](./assets/design-specs-2.png)
+
+### Add Expense
+
+![alt text](./assets/design-specs-3.png)
+
+### Stocks Page
+
+![alt text](./assets/design-specs-4.png)
+
+### Debt Page
+
+![alt text](./assets/design-specs-5.png)
+
+### Taxes Page
+
+![alt text](./assets/design-specs-6.png)
+
+## Test Plan & Results
+
+The test plan and results can be found on [this page.](./Spring%20Assignments/test_plan.md)
+
+## User Manual
+
+The user manual can be found by navigating to [this link.](opposite-hamster-e8c.notion.site/FinTrackr-User-Documentation-1c80e5dbb68e80a4a80ae95bc3993177)
+
+## Spring Final Presentation
+
+Our final Spring Presentation can be found [here.](./Senior%20Design%20Expo/Senior%20Design%20Spring%20Presentation.pdf)
+
+## Expo Poster
+
+Our expo poster can be found [here.](./Senior%20Design%20Expo/Expo%20Poster.pdf)
 
 ## Project Tasks & Timeline
 
@@ -245,11 +299,29 @@ In designing FinTrackr, our comprehensive personal finance management app, we mu
 
 ## Self Assessments
 
-[Nehang Patel Self Assessment](./Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Nehang%20Patel%20Individual%20Capstone%20Assessment.md)
+<details>
+<summary>Initial Self-Assessments</summary>
 
-[Shruti Asolkar Self Assessment](./Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Shruti%20Asolkar%20Individual%20Capstone%20Assessment.md)
+- [Nehang Patel Self Assessment](./Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Nehang%20Patel%20Individual%20Capstone%20Assessment.md)
 
-[Tharun Swaminathan Ravi Kumar Self Assessment](./Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Tharun%20Swaminathan%20Individual%20Capstone%20Assessment.md)
+- [Shruti Asolkar Self Assessment](./Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Shruti%20Asolkar%20Individual%20Capstone%20Assessment.md)
+
+- [Tharun Swaminathan Ravi Kumar Self Assessment](./Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Tharun%20Swaminathan%20Individual%20Capstone%20Assessment.md)
+
+</details>
+
+<br>
+
+<details>
+<summary>Final Self-Assessments</summary>
+
+- [Nehang Patel Self Assessment]()
+
+- [Shruti Asolkar Self Assessment]()
+
+- [Tharun Swaminathan Ravi Kumar Self Assessment]()
+
+</details>
 
 ## Professional Biographies
 
