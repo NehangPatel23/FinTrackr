@@ -336,13 +336,12 @@ OCRSpace OCR API - $30
 ## Appendix
 
 - **Project UI Inspiration -** <https://dribbble.com/shots/15560984-Daily-Expense-Tracker>
-- **Help with BLoC architecture -** <https://www.youtube.com/watch?v=pyivtUs4ANo>
+- **Help with BLoC architecture -** <https://www.youtube.com/watch?v=m5OCf_Aldzs>
 - **Semester-Wide Efforts -** The semester-wide efforts for each team member can be found in the [Fall + Spring Timekeeping](./Spring%20Assignments/timekeeping.md) Markdown file.
 
 ## Contact
 
-If you have any questions, feedback, or suggestions regarding this project, please feel free to
-contact us via email at:
+If you have any questions, feedback, or suggestions regarding this project, please feel free to contact us via email at:
 
 - Nehang Patel - <patel3ng@mail.uc.edu>
 - Shruti Asolkar - <asolkasy@mail.uc.edu>
