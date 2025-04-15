@@ -337,7 +337,7 @@ OCRSpace OCR API - $30
 
 - **Project UI Inspiration -** <https://dribbble.com/shots/15560984-Daily-Expense-Tracker>
 - **Help with BLoC architecture -** <https://www.youtube.com/watch?v=pyivtUs4ANo>
-- **Semester-Wide Efforts (Fall) -** The semester-wide efforts for each team member can be found in the ['Fall Timekeeping'](./Fall-Timekeeping.md) Markdown file.
+- **Semester-Wide Efforts -** The semester-wide efforts for each team member can be found in the [Fall + Spring Timekeeping](./Spring%20Assignments/timekeeping.md) Markdown file.
 
 ## Contact
 
