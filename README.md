@@ -341,7 +341,7 @@ OCRSpace OCR API - $30
 
 ## Contact
 
-If you have any questions, feedback, or suggestions regarding this project, please feel free to contact us via email at:
+If you have any questions, feedback, or suggestions regarding this project, please feel free to contact us via email:
 
 - Nehang Patel - <patel3ng@mail.uc.edu>
 - Shruti Asolkar - <asolkasy@mail.uc.edu>
