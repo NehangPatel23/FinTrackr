@@ -1,6 +1,6 @@
 # FinTrackr
 
-FinTrackr is a comprehensive personal finance management app designed to help users track their expenses, monitor subscriptions, set budgeting goals, and receive personalized stock market investment recommendations.
+FinTrackr is a comprehensive personal finance management app designed to help users track their expenses, calculate their taxes, calculate interest owed on debts, and receive up-to-date stock market information.
 
 ## Table of Contents
 
@@ -16,6 +16,17 @@ FinTrackr is a comprehensive personal finance management app designed to help us
     - [D0](#d0)
     - [D1](#d1)
     - [D2](#d2)
+  - [User Interface Specifications](#user-interface-specifications)
+    - [System Overview](#system-overview)
+    - [Landing Page](#landing-page)
+    - [Add Expense](#add-expense)
+    - [Stocks Page](#stocks-page)
+    - [Debt Page](#debt-page)
+    - [Taxes Page](#taxes-page)
+  - [Test Plan \& Results](#test-plan--results)
+  - [User Manual](#user-manual)
+  - [Spring Final Presentation](#spring-final-presentation)
+  - [Expo Poster](#expo-poster)
   - [Project Tasks \& Timeline](#project-tasks--timeline)
     - [Nehang's Tasks](#nehangs-tasks)
     - [Tharun's Tasks](#tharuns-tasks)
@@ -27,17 +38,9 @@ FinTrackr is a comprehensive personal finance management app designed to help us
   - [Fall Design Presentation](#fall-design-presentation)
   - [Self Assessments](#self-assessments)
   - [Professional Biographies](#professional-biographies)
-  - [Budget](#budget)
-  - [Features](#features)
-  - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-  - [Usage](#usage)
-    - [Home Screen](#home-screen)
-    - [Adding Expenses](#adding-expenses)
-  - [Contact](#contact)
+  - [Summary of Expenses](#summary-of-expenses)
   - [Appendix](#appendix)
-    - [Semester-wide efforts for each team member](#semester-wide-efforts-for-each-team-member)
+  - [Contact](#contact)
 
 ## Team Budgeteers
 
@@ -55,26 +58,27 @@ FinTrackr is a comprehensive personal finance management app designed to help us
 
 ## Project Abstract
 
-This project develops a personal finance app to help users manage expenses, track debt, and improve budgeting. It also offers stock market investment tips tailored to user preferences and financial habits. By integrating expense tracking, financial planning, and investment strategies, the app provides a holistic tool for effective personal finance management.
+This project develops a personal finance management app to help users manage expenses, calculate taxes, track debt, and improve budgeting. It also offers real-time stock market information. By integrating expense tracking, financial planning, and investment strategies, the app provides a holistic tool for effective personal finance management.
 
 ## Project Description
 
 This project centers on creating a comprehensive personal finance application designed to empower users in managing their financial well-being. The application offers a user-friendly **Expense Tracker Landing Page** as the main interface, allowing users to efficiently manage and review their expenses. Key features include:
 
 1. **Expense Management:**
-   - Users can easily **add new expenses** via a form or through **OCR technology** for scanning receipts.
-   - A dedicated **View Expenses** feature helps users track spending and identify patterns to improve financial habits.
+   - Users can easily **add new transactions** via a form or through **OCR technology** for scanning receipts.
+   - A dedicated **View Transactions** feature helps users track spending and identify patterns to improve financial habits.
 
 2. **Stock Management:**
-   - The app includes a **Stocks module** offering:
+   - The app includes a **Stocks Module** offering:
      - **Educational content** to help users understand investment strategies.
-     - Options to **save favorite stocks** for quick access.
+     - Options to **save, filter, and favorite stocks** for quick access.
      - Tools to **view stock trends**, enabling informed decision-making.
 
 3. **Debt Tracking:**
-   - A **Debt module** provides insights into:
+   - A **Debt Module** provides insights into:
      - **Outstanding debt and interest calculations**.
      - A **visual representation of monthly payments** using pie charts, simplifying debt management for users.
+     - Ability for users to modify the debt duration to calculate accurate values of debt owed.
 
 4. **Tax Calculation:**
    - The app integrates a **Tax Calculator** to guide users through tax planning, featuring:
@@ -97,19 +101,19 @@ We have identified the following User Stories for our app, FinTrackr:
 
 ### D0
 
-![alt text](./Design%20Diagrams/Design_Diagram_D0.png)
+![alt text](./Fall%20Assignments/Design%20Diagrams/Design_Diagram_D0.png)
 
 The flowchart illustrates a simple user interaction process. It starts with the user deciding whether to utilize the application (decision point). If they do, the application generates an output that is displayed on the UI, concluding with the end of the user flow. The process follows a straightforward, linear path.
 
 ### D1
 
-![alt text](./Design%20Diagrams/Design_Diagram_D1.png)
+![alt text](./Fall%20Assignments/Design%20Diagrams/Design_Diagram_D1.png)
 
 The diagram represents the user flow and system architecture for a personal finance management application, detailing the purpose of its components and conventions used. Rounded rectangles indicate the start and end of the user interaction flow, representing the entry and exit points of the system. Ellipses or ovals represent the primary modules that users interact with, such as "Stocks," "Add Expense," "Tax Calculator," and "Debt." Rectangles signify specific actions or functionalities within these modules, such as stock visualization, keeping track of expenses, inputting tax information, and accessing debt-related data. Arrows illustrate the flow of user interactions, connecting the components and guiding users through the application. The flow begins with the "Expense Tracker Landing Page," which serves as the central navigation hub, leading to different modules based on user needs. Each module outputs its data to the "Display on UI" component, which consolidates and presents information in a user-friendly format. The process concludes with the "User Flow End," marking the completion of the interaction. This diagram ensures a streamlined and intuitive navigation experience, with each component designed to enhance user accessibility and functionality while supporting effective financial management.
 
 ### D2
 
-![alt text](./Design%20Diagrams/Design_Diagram_D2.png)
+![alt text](./Fall%20Assignments/Design%20Diagrams/Design_Diagram_D2.png)
 
 The diagram illustrates the flow and structure of our comprehensive personal finance management application, highlighting its components and conventions.
 
@@ -130,6 +134,48 @@ Key features illustrated in the diagram include:
 - **Tax Calculator:** Estimates federal and state taxes based on user inputs.
 
 The diagram integrates these components seamlessly, conveying a clear and user-friendly structure for the application. Each component is designed to enhance financial literacy, support informed decision-making, and improve the overall user experience.
+
+## User Interface Specifications
+
+### System Overview
+
+![alt text](./assets/design-specs-1.png)
+
+### Landing Page
+
+![alt text](./assets/design-specs-2.png)
+
+### Add Expense
+
+![alt text](./assets/design-specs-3.png)
+
+### Stocks Page
+
+![alt text](./assets/design-specs-4.png)
+
+### Debt Page
+
+![alt text](./assets/design-specs-5.png)
+
+### Taxes Page
+
+![alt text](./assets/design-specs-6.png)
+
+## Test Plan & Results
+
+The test plan and results can be found on [this page.](./Spring%20Assignments/test_plan.md)
+
+## User Manual
+
+The user manual can be found by navigating to [this link.](https://opposite-hamster-e8c.notion.site/FinTrackr-User-Documentation-1c80e5dbb68e80a4a80ae95bc3993177)
+
+## Spring Final Presentation
+
+Our final Spring Presentation can be found [here.](./Senior%20Design%20Expo/Senior%20Design%20Spring%20Presentation.pdf)
+
+## Expo Poster
+
+Our Expo Poster can be found [here.](./Senior%20Design%20Expo/Expo%20Poster.pdf)
 
 ## Project Tasks & Timeline
 
@@ -245,159 +291,53 @@ In designing FinTrackr, our comprehensive personal finance management app, we mu
 
 ## Self Assessments
 
-[Nehang Patel Self Assessment](./Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Nehang%20Patel%20Individual%20Capstone%20Assessment.md)
+<details>
+<summary>Initial Self-Assessments</summary>
 
-[Shruti Asolkar Self Assessment](./Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Shruti%20Asolkar%20Individual%20Capstone%20Assessment.md)
+- [Nehang Patel Self Assessment](./Fall%20Assignments/Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Nehang%20Patel%20Individual%20Capstone%20Assessment.md)
 
-[Tharun Swaminathan Ravi Kumar Self Assessment](./Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Tharun%20Swaminathan%20Individual%20Capstone%20Assessment.md)
+- [Shruti Asolkar Self Assessment](./Fall%20Assignments/Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Shruti%20Asolkar%20Individual%20Capstone%20Assessment.md)
+
+- [Tharun Swaminathan Ravi Kumar Self Assessment](./Fall%20Assignments/Team%20Contract%20&%20Individual%20Capstone%20Assessments/Markdown%20Versions/Tharun%20Swaminathan%20Individual%20Capstone%20Assessment.md)
+
+</details>
+
+<br>
+
+<details>
+<summary>Final Self-Assessments</summary>
+
+- [Nehang Patel Self Assessment](./Spring%20Assignments/Final%20Assessments/Nehang%20Patel%20Final%20Assessment.md)
+
+- [Shruti Asolkar Self Assessment](./Spring%20Assignments/Final%20Assessments/Shruti%20Asolkar%20Final%20Assessment.md)
+
+- [Tharun Swaminathan Ravi Kumar Self Assessment](./Spring%20Assignments/Final%20Assessments/Tharun%20Swaminathan%20Ravi%20Kumar%20Final%20Assessment.md)
+
+</details>
 
 ## Professional Biographies
 
-[Nehang Patel Professional Biography](./Professional%20Bios/Nehang%20Patel%20Professional%20Biography.md)
+[Nehang Patel Professional Biography](./Fall%20Assignments/Professional%20Bios/Nehang%20Patel%20Professional%20Biography.md)
 
-[Shruti Asolkar Professional Biography](./Professional%20Bios/Shruti%20Asolkar%20Professional%20Biography.md)
+[Shruti Asolkar Professional Biography](./Fall%20Assignments/Professional%20Bios/Shruti%20Asolkar%20Professional%20Biography.md)
 
-[Tharun Swaminathan Ravi Kumar Professional Biography](./Professional%20Bios/Tharun%20Swaminathan%20Professional%20Biography.md)
+[Tharun Swaminathan Ravi Kumar Professional Biography](./Fall%20Assignments/Professional%20Bios/Tharun%20Swaminathan%20Professional%20Biography.md)
 
-## Budget
+## Summary of Expenses
 
-We have **no budget** for this project. We aim to use open-source and free software and tools for the entirety of the project.
+We tried to use open-source and free software and tools for the entirety of the project, but we had to get last-minute upgrades to the Pro versions of the APIs we used for OCR and Stocks since the Free version of the APIs were down.
 
-## Features
+AlphaVantage Stocks API - $50
 
-- User interface built with Flutter for a smooth and responsive experience.
-- Ability to add and track expenses - categorized and dated for easier tracking.
+OCRSpace OCR API - $30
 
-## Getting Started
+**Total Expenses - $80**
 
-These instructions will help you set up and run the Flutter application locally on your device.
+## Appendix
 
-### Prerequisites
-
-- **Flutter SDK:** Make sure you have Flutter installed on your system. You can follow the
-  instructions [here](https://flutter.dev/docs/get-started/install) to install Flutter.
-- **IDE:** Choose an IDE for Flutter development. Popular choices include Android Studio, Visual
-  Studio Code, and IntelliJ IDEA.
-- **Git:** Make sure you have [Git](https://git-scm.com/) installed on your device to clone the
-  repository. (This step is optional, in case you are downloading the ZIP file or not contributing
-  to the repository).
-
-### Installation
-
-**NOTE: Install the Flutter SDK first.**
-
-- If you haven't installed Flutter SDK yet, download it from the
-  official [Flutter website](https://docs.flutter.dev/get-started/install).
-- Extract the downloaded ZIP file to a location on your computer.
-- Add the ```flutter/bin``` directory to your system's PATH to      access the Flutter commands globally.
-
-<br>
-
-1. **Clone this repository:**
-
-    Open your terminal or command prompt and navigate to a directory (If running this app on an iOS device, make sure you clone this repository to a directory that does not sync with the cloud, such as the ```Downloads``` directory) where you want to clone the
-    repository. Then, run the following command:
-
-   ```bash
-   git clone https://github.com/NehangPatel23/FinTrackr
-   ```
-
-<br>
-
-2. **Navigate to the project directory and install the dependencies:**
-
-    Flutter projects have certain dependencies that need to be installed before the application can be
-    run. In the project directory, run the following command to install the dependencies specified in
-    the ```pubspec.yaml``` file:
-
-    ```bash
-    cd fintrackr
-    flutter pub get
-    ```
-
-3. **Open the project in your IDE.**
-
-    Open your chosen IDE and open the project directory. You can install the Flutter and Dart extensions
-    for a smoother development experience.
-
-    For example, if you're using Visual Studio Code, you can open the project by running:
-
-    ```bash
-    code .
-    ```
-
-4. **Connect a physical device or start an emulator.**
-
-    Ensure that you have either a physical device connected via USB debugging or an emulator running. You can use any device - iOS or Android.
-
-    Note: For iOS devices, the minimum required version to properly run the application is iOS 12.
-
-5. **Run the app:**
-
-    Run the following command to build and launch the app on your connected device or emulator.
-
-    ```bash
-    flutter run
-    ```
-
-## Usage
-
-***Note: This project currently just focuses on creating the UI and implementing basic dynamic features such as the Transactions List correctly. The app still lacks features such as authentication, adding income to the transactions list, dynamic balance card, etc., which I will implement later.***
-
-### Home Screen
-
-Once you launch the application on your emulator, you will see the following Home Screen:
-
-![alt text](assets/home_screen.png)
-
-The app simulates the expenses for a test user, John Doe.
-
-The Balance Card shows the current balance for the said user, their income and their total expenses.
-
-Below the Balance Card is the Transactions List, that shows all of the user's recent transactions in the form of categories, such as Entertainment, Travel, Food, etc., along with the date on which the transaction occured.
-
-<br>
-
-### Adding Expenses
-
-Clicking on the round ```+``` button next to the ```Home``` button on the bottom navigation bar takes the user to the 'Add Expenses' page:
-
-![alt text](assets/add_expense.png)
-
-Here, the user can add expenses they make and categorize them using the various categories displayed under the 'Categories' menu.
-
-If they are not satisfied with the categories mentioned here, they also have the option to create a new category by clicking the '+' icon on the right side of the Category menu:
-
-![alt text](assets/add_category_incomplete.png)
-
-Here is how this feature works:
-    - The user adds a name to the Category, for example, ```Tech```.
-    - The user then adds a phone icon to depict the Tech category.
-    - Lastly, they add a unique color to identify the category.
-
-This is how the screen would look once they do that:
-
-![alt text](assets/add_category_completed.png)
-
-The newly created category shows up under the Category menu on the previous page:
-
-![alt text](assets/category_menu_new.png)
-
-Now, let's add an expense: Say the user spent $1000 on a laptop today, 25 November 2024.
-
-This is how they would enter it in the app:
-
-![alt text](assets/add_new_expense.png)
-
-Once they click on 'Save', this expense gets added to the Transactions List on the Home Screen:
-
-![alt text](assets/updated_home_page.png)
-
-That's how a user would typically add an expense in the app.
-
-The 'Stats' menu would show the transaction statistics like the spending patterns, which would be depicted as a graph like this:
-
-![alt text](assets/stats.png)
+- **Project UI Inspiration -** <https://dribbble.com/shots/15560984-Daily-Expense-Tracker>
+- **Help with BLoC architecture -** <https://www.youtube.com/watch?v=pyivtUs4ANo>
+- **Semester-Wide Efforts -** The semester-wide efforts for each team member can be found in the [Fall + Spring Timekeeping](./Spring%20Assignments/timekeeping.md) Markdown file.
 
 ## Contact
 
@@ -407,13 +347,3 @@ contact us via email at:
 - Nehang Patel - <patel3ng@mail.uc.edu>
 - Shruti Asolkar - <asolkasy@mail.uc.edu>
 - Tharun Swaminathan Ravi Kumar - <ravikutn@mail.uc.edu>.
-
-## Appendix
-
-- Project UI Inspiration - <https://dribbble.com/shots/15560984-Daily-Expense-Tracker>
-- Help with BLoC architecture - <https://www.youtube.com/watch?v=pyivtUs4ANo>
-- Meeting Notes - **LINK TO COME LATER**
-
-### Semester-wide efforts for each team member
-
-The semester-wide efforts for each team member can be found in the ['Fall Timekeeping' Markdown file](./Fall-Timekeeping.md).
