@@ -307,11 +307,11 @@ In designing FinTrackr, our comprehensive personal finance management app, we mu
 <details>
 <summary>Final Self-Assessments</summary>
 
-- [Nehang Patel Self Assessment]()
+- [Nehang Patel Self Assessment](./Spring%20Assignments/Final%20Assessments/Nehang%20Patel%20Final%20Assessment.md)
 
-- [Shruti Asolkar Self Assessment]()
+- [Shruti Asolkar Self Assessment](./Spring%20Assignments/Final%20Assessments/Shruti%20Asolkar%20Final%20Assessment.md)
 
-- [Tharun Swaminathan Ravi Kumar Self Assessment]()
+- [Tharun Swaminathan Ravi Kumar Self Assessment](./Spring%20Assignments/Final%20Assessments/Tharun%20Swaminathan%20Ravi%20Kumar%20Final%20Assessment.md)
 
 </details>
 
